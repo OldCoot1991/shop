@@ -1,66 +1,80 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+
+import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '../lib/hooks';
+import { toggleTheme } from '../lib/features/theme/themeSlice';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 2rem;
+`;
+
+const Title = styled.h1`
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+`;
+
+const Description = styled.p`
+  font-size: 1.25rem;
+  opacity: 0.8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const Button = styled.button`
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.primary};
+  color: white;
+  transition: transform 0.1s ease;
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
 
 export default function Home() {
+  const { t, i18n } = useTranslation();
+  const dispatch = useAppDispatch();
+  const themeMode = useAppSelector((state) => state.theme.mode);
+
+  const toggleLanguage = () => {
+    const nextLang = i18n.language === 'en' ? 'ru' : 'en';
+    i18n.changeLanguage(nextLang);
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <Container>
+      <Title>{t('welcome')}</Title>
+      <Description>
+        <span>{t('current_theme')}: <strong>{themeMode.toUpperCase()}</strong></span>
+        <span>{t('current_lang')}: <strong>{i18n.language.toUpperCase()}</strong></span>
+      </Description>
+      <ButtonGroup>
+        <Button onClick={() => dispatch(toggleTheme())}>
+          {t('theme_button')}
+        </Button>
+        <Button onClick={toggleLanguage}>
+          {i18n.language === 'en' ? 'RU' : 'EN'}
+        </Button>
+      </ButtonGroup>
+    </Container>
   );
 }

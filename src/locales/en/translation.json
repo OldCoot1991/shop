@@ -1,0 +1,7 @@
+{
+    "welcome": "Welcome to React Redux + Styled Components",
+    "theme_button": "Toggle Theme",
+    "lang_button": "Switch Language (RU)",
+    "current_theme": "Current Theme",
+    "current_lang": "Current Language"
+}

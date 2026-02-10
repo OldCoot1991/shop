@@ -1,0 +1,7 @@
+{
+    "welcome": "Добро пожаловать в React Redux + Styled Components",
+    "theme_button": "Переключить тему",
+    "lang_button": "Сменить язык (EN)",
+    "current_theme": "Текущая тема",
+    "current_lang": "Текущий язык"
+}
