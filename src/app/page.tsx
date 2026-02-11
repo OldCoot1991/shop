@@ -62,16 +62,16 @@ export default function Home() {
 
   return (
     <Container>
-      <Title>{t('welcome')}</Title>
+      <Title suppressHydrationWarning>{t('welcome')}</Title>
       <Description>
-        <span>{t('current_theme')}: <strong>{themeMode.toUpperCase()}</strong></span>
-        <span>{t('current_lang')}: <strong>{i18n.language.toUpperCase()}</strong></span>
+        <span suppressHydrationWarning>{t('current_theme')}: <strong>{themeMode.toUpperCase()}</strong></span>
+        <span suppressHydrationWarning>{t('current_lang')}: <strong>{i18n.language.toUpperCase()}</strong></span>
       </Description>
       <ButtonGroup>
-        <Button onClick={() => dispatch(toggleTheme())}>
+        <Button suppressHydrationWarning onClick={() => dispatch(toggleTheme())}>
           {t('theme_button')}
         </Button>
-        <Button onClick={toggleLanguage}>
+        <Button suppressHydrationWarning onClick={toggleLanguage}>
           {i18n.language === 'en' ? 'RU' : 'EN'}
         </Button>
       </ButtonGroup>
