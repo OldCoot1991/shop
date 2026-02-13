@@ -11,6 +11,7 @@ i18n
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
+        supportedLngs: ['ru', 'en'],
         resources: {
             en: {
                 translation: en,
@@ -19,12 +20,12 @@ i18n
                 translation: ru,
             },
         },
-        fallbackLng: 'en',
+        fallbackLng: 'ru',
         interpolation: {
-            escapeValue: false, // react already safes from xss
+            escapeValue: false,
         },
         detection: {
-            order: ['localStorage', 'navigator'],
+            order: ['localStorage', 'navigator', 'htmlTag'],
             caches: ['localStorage'],
         },
     });

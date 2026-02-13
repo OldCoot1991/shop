@@ -7,9 +7,11 @@ import StyledComponentsRegistry from '../lib/registry';
 import { ThemeProvider } from 'styled-components';
 import { useAppSelector } from '../lib/hooks';
 import { lightTheme, darkTheme, GlobalStyles } from '../styles/theme';
-import '../lib/i18n'; // Initialize i18n
+import { useThemeDetection } from '../hooks/useThemeDetection';
+import '../lib/i18n';
 
 function ThemeWrapper({ children }: { children: React.ReactNode }) {
+    useThemeDetection();
     const mode = useAppSelector((state) => state.theme.mode);
     const theme = mode === 'light' ? lightTheme : darkTheme;
 
@@ -24,7 +26,6 @@ function ThemeWrapper({ children }: { children: React.ReactNode }) {
 export default function Providers({ children }: { children: React.ReactNode }) {
     const storeRef = useRef<AppStore>(undefined);
     if (!storeRef.current) {
-        // Create the store instance the first time this renders
         storeRef.current = makeStore();
     }
 
