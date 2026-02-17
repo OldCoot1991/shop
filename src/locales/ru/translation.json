@@ -1,4 +1,5 @@
 {
+    "app_title": "Мой Магазин",
     "welcome": "Добро пожаловать в React Redux + Styled Components",
     "theme_button": "Переключить тему",
     "lang_button": "Сменить язык (EN)",

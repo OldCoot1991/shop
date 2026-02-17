@@ -1,6 +1,7 @@
 'use client';
 
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 import ThemeToggle from '../../ui/ThemeToggle/ThemeToggle';
 import LanguageSwitcher from '../../ui/LanguageSwitcher/LanguageSwitcher';
 
@@ -22,9 +23,11 @@ const ControlsContainer = styled.div`
 `;
 
 const Header = () => {
+    const { t } = useTranslation();
+
     return (
         <HeaderContainer>
-            <h1>My Shop</h1>
+            <h1>{t('app_title')}</h1>
             <ControlsContainer>
                 <LanguageSwitcher />
                 <ThemeToggle />

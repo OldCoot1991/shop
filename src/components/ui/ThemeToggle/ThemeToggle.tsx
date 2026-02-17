@@ -1,37 +1,54 @@
 'use client';
 
 import styled from 'styled-components';
+import { Sun, Moon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../../lib/hooks';
 import { toggleTheme } from '../../../lib/features/theme/themeSlice';
 
-const ToggleContainer = styled.button`
-    background: ${({ theme }) => theme.text};
-    border: 2px solid ${({ theme }) => theme.body};
-    border-radius: 30px;
+const ToggleButton = styled.button<{ $isDark: boolean }>`
+    background: ${({ $isDark }) => $isDark
+        ? 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)'
+        : 'linear-gradient(135deg, #ffd89b 0%, #19547b 100%)'};
+    border: 2px solid ${({ $isDark }) => $isDark ? '#4a5568' : '#cbd5e0'};
+    width: 60px;
+    height: 32px;
+    border-radius: 20px;
     cursor: pointer;
-    display: flex;
-    font-size: 0.5rem;
-    justify-content: space-between;
-    margin: 0 auto;
-    overflow: hidden;
-    padding: 0.5rem;
+    padding: 0;
     position: relative;
-    width: 4rem;
-    height: 2rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    overflow: visible;
 
-    svg {
-        height: auto;
-        width: 1.5rem;
-        transition: all 0.3s linear;
-        
-        &:first-child {
-            transform: ${({ theme }) => theme.body === '#121212' ? 'translateY(100px)' : 'translateY(0)'};
-        }
-        
-        &:nth-child(2) {
-            transform: ${({ theme }) => theme.body === '#121212' ? 'translateY(0)' : 'translateY(-100px)'};
-        }
+    &:hover {
+        transform: scale(1.05);
+        box-shadow: ${({ $isDark }) => $isDark
+        ? '0 4px 12px rgba(138, 180, 248, 0.3)'
+        : '0 4px 12px rgba(255, 193, 7, 0.4)'};
     }
+    
+    &:focus-visible {
+        outline: 2px solid ${({ theme }) => theme.primary};
+        outline-offset: 2px;
+    }
+`;
+
+const Knob = styled.div<{ $isDark: boolean }>`
+    width: 26px;
+    height: 26px;
+    background: ${({ $isDark }) => $isDark ? '#fff' : '#fff'};
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    left: 3px;
+    transform: translateX(${({ $isDark }) => $isDark ? '28px' : '0'});
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    color: ${({ $isDark }) => $isDark ? '#1a202c' : '#f59e0b'};
 `;
 
 const ThemeToggle = () => {
@@ -40,22 +57,19 @@ const ThemeToggle = () => {
     const isDark = mode === 'dark';
 
     return (
-        <ToggleContainer onClick={() => dispatch(toggleTheme())}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FDB813" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FEFCD7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 'auto' }}>
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-        </ToggleContainer>
+        <ToggleButton
+            $isDark={isDark}
+            onClick={() => dispatch(toggleTheme())}
+            aria-label={isDark ? "Переключить на светлую тему" : "Переключить на темную тему"}
+        >
+            <Knob $isDark={isDark}>
+                {isDark ? (
+                    <Moon size={16} strokeWidth={2.5} />
+                ) : (
+                    <Sun size={16} strokeWidth={2.5} />
+                )}
+            </Knob>
+        </ToggleButton>
     );
 };
 
