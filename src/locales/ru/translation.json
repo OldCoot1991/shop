@@ -4,5 +4,9 @@
     "theme_button": "Переключить тему",
     "lang_button": "Сменить язык (EN)",
     "current_theme": "Текущая тема",
-    "current_lang": "Текущий язык"
+    "current_lang": "Текущий язык",
+    "settings_tooltip": "Настройки сайта",
+    "settings_title": "Настройки",
+    "settings_theme": "Тема",
+    "settings_language": "Язык"
 }

@@ -1,0 +1,71 @@
+.container {
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--color-border);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: visible;
+}
+
+.row1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: visible;
+}
+
+.row2 {
+  display: flex;
+}
+
+.rightGroup {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  margin-left: auto;
+  overflow: visible;
+}
+
+.dotsWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  padding: 4px 10px;
+}
+
+.dotsWrapper::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: rgba(30, 30, 30, 0.9);
+  color: #fff;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 9999;
+}
+
+.dotsWrapper:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dotsSvg {
+  cursor: pointer;
+  color: var(--color-text);
+}

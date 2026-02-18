@@ -4,5 +4,9 @@
     "theme_button": "Toggle Theme",
     "lang_button": "Switch Language (RU)",
     "current_theme": "Current Theme",
-    "current_lang": "Current Language"
+    "current_lang": "Current Language",
+    "settings_tooltip": "Site Settings",
+    "settings_title": "Settings",
+    "settings_theme": "Theme",
+    "settings_language": "Language"
 }

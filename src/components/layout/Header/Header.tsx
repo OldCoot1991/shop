@@ -1,39 +1,67 @@
-'use client';
+"use client";
 
-import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
-import ThemeToggle from '../../ui/ThemeToggle/ThemeToggle';
-import LanguageSwitcher from '../../ui/LanguageSwitcher/LanguageSwitcher';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import SettingsModal from "../../../components/ui/SettingsModal/SettingsModal";
+import styles from "./Header.module.css";
 
-const HeaderContainer = styled.header`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: ${({ theme }) => theme.body};
-    color: ${({ theme }) => theme.text};
-    border-bottom: 1px solid ${({ theme }) => theme.text};
-    transition: all 0.25s linear;
-`;
+const DotsGrid = () => (
+  <svg
+    width="30"
+    height="30"
+    viewBox="0 0 36 36"
+    fill="currentColor"
+    className={styles.dotsSvg}
+    aria-label="Открыть настройки"
+    role="button"
+  >
+    <title>Настройки сайта</title>
+    {[0, 1, 2].map((row) =>
+      [0, 1, 2].map((col) => (
+        <rect
+          key={`${row}-${col}`}
+          x={1 + col * 12}
+          y={1 + row * 12}
+          width={6.5}
+          height={6.5}
+          rx={1.5}
+        />
+      )),
+    )}
+  </svg>
+);
 
-const ControlsContainer = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-`;
+const Header = ({
+  header1,
+  header2,
+}: {
+  header1?: React.ReactNode;
+  header2?: React.ReactNode;
+}) => {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { t } = useTranslation();
 
-const Header = () => {
-    const { t } = useTranslation();
-
-    return (
-        <HeaderContainer>
-            <h1>{t('app_title')}</h1>
-            <ControlsContainer>
-                <LanguageSwitcher />
-                <ThemeToggle />
-            </ControlsContainer>
-        </HeaderContainer>
-    );
+  return (
+    <header className={styles.container}>
+      <div className={styles.row1}>
+        {header1}
+        <div className={styles.rightGroup}>
+          <div
+            className={styles.dotsWrapper}
+            data-tooltip={t("settings_tooltip")}
+            suppressHydrationWarning
+            onClick={() => setIsSettingsOpen((prev) => !prev)}
+          >
+            <DotsGrid />
+          </div>
+        </div>
+      </div>
+      <div className={styles.row2}>{header2}</div>
+      {isSettingsOpen && (
+        <SettingsModal onClose={() => setIsSettingsOpen(false)} />
+      )}
+    </header>
+  );
 };
 
 export default Header;
