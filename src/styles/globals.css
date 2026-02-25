@@ -1,20 +1,44 @@
 /* ===== CSS Variables / Theme ===== */
 html[data-theme="light"] {
-  --color-body: #f7f7f7;
+  --color-body: #f7f7f7; /* Ozon uses #f5f5f5 / #f2f2f2 */
   --color-text: #000000;
-  --color-primary: #0070f3;
+  --color-primary: #005bff; /* Ozon primary blue */
+  --color-accent: #f91155; /* Ozon sale/action red/pink */
   --color-border: #eaeaea;
   --color-modal-bg: #ffffff;
+  --color-card-bg: #ffffff;
+  --color-card-hover: #fcfcfc;
+  --color-muted: #8c8c8c;
+  --color-badge-bg: #f91155;
+  --color-badge-text: #ffffff;
   --color-icon-hover: 0.7;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 html[data-theme="dark"] {
   --color-body: #121111;
   --color-text: #ffffff;
-  --color-primary: #bb86fc;
-  --color-border: #1c1b1b;
+  --color-primary: #005bff; /* Or lighter #3b82f6 for dark mode contrast */
+  --color-accent: #ff4d4f;
+  --color-border: #2c2c2c;
   --color-modal-bg: #1e1e2e;
+  --color-card-bg: #1e1e1e;
+  --color-card-hover: #262626;
+  --color-muted: #a0a0a0;
+  --color-badge-bg: #ff4d4f;
+  --color-badge-text: #ffffff;
   --color-icon-hover: 0.7;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.6);
 }
 
 /* ===== Global Reset ===== */

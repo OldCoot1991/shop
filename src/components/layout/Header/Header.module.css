@@ -1,71 +1,192 @@
-.container {
+.header {
   width: 100%;
-  padding-left: 10%;
-  padding-right: 10%;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--color-border);
-  margin: 0 auto;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-card-bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  overflow: visible;
 }
 
-.row1 {
+/* --- Тонкая верхняя полоса --- */
+.topBar {
+  background: var(--color-body);
+  border-bottom: 1px solid var(--color-border);
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.topContainer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  overflow: visible;
 }
 
-.row2 {
+.topLeft, .topRight {
   display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.rightGroup {
+.location {
+  font-weight: 500;
   display: flex;
-  align-items: stretch;
-  gap: 4px;
-  margin-left: auto;
-  overflow: visible;
+  align-items: center;
 }
 
-.dotsWrapper {
-  position: relative;
+.topLink {
+  color: var(--color-muted);
+  transition: color 0.2s;
+}
+
+.topLink:hover {
+  color: var(--color-primary);
+}
+
+.settingsBtn {
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: var(--color-muted);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.settingsBtn:hover {
+  color: var(--color-primary);
+}
+
+/* --- Основная часть (Search, Logo, Icons) --- */
+.mainContainer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logoAndCatalog {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary);
+}
+
+.logoIcon {
+  width: 36px;
+  height: 36px;
+}
+
+.logoText {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.catalogBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.catalogBtn:hover {
+  background-color: #004ecc;
+}
+
+.actionsBox {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: 16px;
+}
+
+.actionItem {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
-  cursor: pointer;
-  padding: 4px 10px;
-}
-
-.dotsWrapper::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  background: rgba(30, 30, 30, 0.9);
-  color: #fff;
-  font-size: 0.75rem;
-  white-space: nowrap;
-  padding: 5px 10px;
-  border-radius: 6px;
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 9999;
-}
-
-.dotsWrapper:hover::after {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.dotsSvg {
-  cursor: pointer;
+  gap: 4px;
   color: var(--color-text);
+  cursor: pointer;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.actionItem:hover {
+  color: var(--color-primary);
+}
+
+.actionIcon {
+  color: inherit;
+}
+
+.actionText {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Адаптив --- */
+@media (max-width: 1024px) {
+  .topBar {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContainer {
+    flex-wrap: wrap;
+    padding: 12px 16px;
+  }
+  
+  .logoText {
+    display: none;
+  }
+  
+  .catalogBtn span {
+    display: none;
+  }
+  
+  .catalogBtn {
+    padding: 10px;
+  }
+
+  .actionText {
+    display: none;
+  }
 }
