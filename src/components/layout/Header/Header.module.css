@@ -9,58 +9,6 @@
   flex-direction: column;
 }
 
-/* --- Тонкая верхняя полоса --- */
-.topBar {
-  background: var(--color-body);
-  border-bottom: 1px solid var(--color-border);
-  padding: 4px 0;
-  font-size: 13px;
-}
-
-.topContainer {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.topLeft, .topRight {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.location {
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-}
-
-.topLink {
-  color: var(--color-muted);
-  transition: color 0.2s;
-}
-
-.topLink:hover {
-  color: var(--color-primary);
-}
-
-.settingsBtn {
-  background: none;
-  border: none;
-  font-size: 13px;
-  color: var(--color-muted);
-  cursor: pointer;
-  padding: 0;
-  transition: color 0.2s;
-}
-
-.settingsBtn:hover {
-  color: var(--color-primary);
-}
-
 /* --- Основная часть (Search, Logo, Icons) --- */
 .mainContainer {
   max-width: 1440px;
@@ -190,7 +138,7 @@
 
 .actionsBox {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 24px;
   margin-left: 16px;
 }
@@ -199,6 +147,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-end;
   gap: 4px;
   color: var(--color-text);
   cursor: pointer;

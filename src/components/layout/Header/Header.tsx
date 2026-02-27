@@ -10,6 +10,7 @@ import {
   ShoppingCart,
   ShoppingBag,
   Package,
+  Settings,
 } from "lucide-react";
 import SettingsModal from "../../../components/ui/SettingsModal/SettingsModal";
 import CartDrawer from "../../ui/CartDrawer/CartDrawer";
@@ -50,40 +51,6 @@ const Header = () => {
 
   return (
     <header className={styles.header}>
-      {/* Верхняя тонкая полоса с доп.инфо и настройками */}
-      <div className={styles.topBar}>
-        <div className={styles.topContainer}>
-          <div className={styles.topLeft}>
-            <span className={styles.location}>📍 Москва</span>
-            <a href="#" className={styles.topLink}>
-              Магазины
-            </a>
-            <a href="#" className={styles.topLink}>
-              Пункты выдачи
-            </a>
-            <a href="#" className={styles.topLink}>
-              Постоматы
-            </a>
-          </div>
-          <div className={styles.topRight}>
-            <button
-              className={styles.settingsBtn}
-              onClick={() => setIsSettingsOpen(true)}
-              suppressHydrationWarning
-              title={t("settings_tooltip") || "Настройки"}
-            >
-              Настройки сайта
-            </button>
-            <a href="#" className={styles.topLink}>
-              Стать продавцом
-            </a>
-            <a href="#" className={styles.topLink}>
-              Помощь
-            </a>
-          </div>
-        </div>
-      </div>
-
       {/* Основная шапка с лого, каталогом, поиском и иконками профиля */}
       <div
         className={styles.mainContainer}
@@ -134,15 +101,15 @@ const Header = () => {
             >
               <span
                 style={{
-                  width: 32,
-                  height: 32,
+                  width: 28,
+                  height: 28,
                   borderRadius: "50%",
                   background: "var(--color-primary)",
                   color: "#fff",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: 700,
                   flexShrink: 0,
                 }}
@@ -207,6 +174,16 @@ const Header = () => {
             {cartCount > 0 && (
               <span className={styles.cartBadge}>{cartCount}</span>
             )}
+          </div>
+          <div
+            className={styles.actionItem}
+            onClick={() => setIsSettingsOpen(true)}
+            role="button"
+            aria-label={t("settings_tooltip") || "Настройки"}
+            suppressHydrationWarning
+          >
+            <Settings size={24} className={styles.actionIcon} />
+            <span className={styles.actionText}>Настройки</span>
           </div>
         </div>
       </div>
