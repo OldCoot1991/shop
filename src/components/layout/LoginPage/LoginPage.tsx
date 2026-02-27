@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   loginStart,
@@ -9,6 +10,7 @@ import {
   loginFailure,
   clearError,
 } from "@/lib/features/auth/authSlice";
+import { fetchCart } from "@/lib/features/cart/cartSlice";
 import { loginRequest } from "@/services/authService";
 import styles from "./LoginPage.module.css";
 
@@ -167,6 +169,8 @@ export default function LoginPage() {
     try {
       const userData = await loginRequest({ login, password });
       dispatch(loginSuccess(userData));
+      // Immediately fetch cart data after successful login
+      dispatch(fetchCart());
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Ошибка авторизации";
       dispatch(loginFailure(message));
@@ -265,6 +269,19 @@ export default function LoginPage() {
               "Войти"
             )}
           </button>
+
+          <Link
+            href="/register"
+            style={{
+              textAlign: "center",
+              fontSize: 14,
+              color: "var(--color-primary)",
+              marginTop: 8,
+              textDecoration: "none",
+            }}
+          >
+            У вас нет аккаунта? Зарегистрироваться
+          </Link>
         </form>
       </div>
     </div>

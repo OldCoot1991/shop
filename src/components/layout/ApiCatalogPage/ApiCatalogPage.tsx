@@ -1,41 +1,42 @@
 "use client";
-
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { ChevronLeft, SlidersHorizontal } from "lucide-react";
-import { Product } from "@/lib/mockData";
-import ProductCard from "@/components/ui/ProductCard/ProductCard";
-import styles from "./CatalogPage.module.css";
+import { ApiProduct } from "@/services/productService";
+import ApiProductCard from "@/components/ui/ApiProductCard/ApiProductCard";
+import styles from "./ApiCatalogPage.module.css";
 
-type SortOption = "popular" | "price_asc" | "price_desc" | "rating";
+type SortOption = "popular" | "price_asc" | "price_desc";
 
 const SORT_LABELS: Record<SortOption, string> = {
-  popular: "По популярности",
+  popular: "По популярности", // Note: Sorting by popularity works best with server sorting, using price fallback locally
   price_asc: "Сначала дешевле",
   price_desc: "Сначала дороже",
-  rating: "По рейтингу",
 };
 
-interface CatalogPageProps {
+interface ApiCatalogPageProps {
   title: string;
-  products: Product[];
-  section?: string;
+  products: ApiProduct[];
 }
 
-export default function CatalogPage({ title, products }: CatalogPageProps) {
+export default function ApiCatalogPage({
+  title,
+  products,
+}: ApiCatalogPageProps) {
   const [sort, setSort] = useState<SortOption>("popular");
 
+  // Basic local sorting for testing. Actual sort should be a server param if possible.
   const sorted = useMemo(() => {
     const copy = [...products];
     switch (sort) {
       case "price_asc":
-        return copy.sort((a, b) => a.price - b.price);
+        return copy.sort((a, b) => a.salePrice - b.salePrice);
       case "price_desc":
-        return copy.sort((a, b) => b.price - a.price);
-      case "rating":
-        return copy.sort((a, b) => b.rating - a.rating);
+        return copy.sort((a, b) => b.salePrice - a.salePrice);
+      case "popular":
       default:
-        return copy.sort((a, b) => b.reviewsCount - a.reviewsCount);
+        // Assume API returns sorted by popular for the moment
+        return copy;
     }
   }, [products, sort]);
 
@@ -78,7 +79,7 @@ export default function CatalogPage({ title, products }: CatalogPageProps) {
       {/* Product grid */}
       <div className={styles.grid}>
         {sorted.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ApiProductCard key={product.id} product={product} />
         ))}
       </div>
     </div>

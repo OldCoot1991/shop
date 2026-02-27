@@ -5,6 +5,8 @@ import themeReducer from './features/theme/themeSlice';
 import cartReducer from './features/cart/cartSlice';
 import wishlistReducer from './features/wishlist/wishlistSlice';
 import authReducer from './features/auth/authSlice';
+import productsReducer from './features/products/productsSlice';
+import ordersReducer from './features/orders/orderSlice';
 
 const persistConfig = {
     key: 'shophub',
@@ -17,6 +19,8 @@ const rootReducer = combineReducers({
     cart: cartReducer,
     wishlist: wishlistReducer,
     auth: authReducer,
+    products: productsReducer,
+    orders: ordersReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -2,8 +2,10 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { logout } from "@/lib/features/auth/authSlice";
+import { fetchCart, clearServerCart } from "@/lib/features/cart/cartSlice";
 import { logoutRequest } from "@/services/authService";
 import styles from "./ProfilePage.module.css";
 
@@ -185,11 +187,19 @@ export default function ProfilePage() {
     }
   }, [isAuthenticated, router]);
 
+  // Fetch cart on every profile visit (handles direct navigation / page refresh)
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(fetchCart());
+    }
+  }, [isAuthenticated, dispatch]);
+
   if (!isAuthenticated || !user) return null;
 
   const handleLogout = async () => {
     await logoutRequest();
     dispatch(logout());
+    dispatch(clearServerCart());
     router.push("/login");
   };
 
@@ -294,7 +304,11 @@ export default function ProfilePage() {
           <div className={styles.quickCard}>
             <p className={styles.quickTitle}>Быстрый доступ</p>
             <div className={styles.quickLinks}>
-              <div className={styles.quickLink}>
+              <Link
+                href="/payments"
+                className={styles.quickLink}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 <span className={styles.quickLinkIcon}>
                   <IconShoppingBag />
                 </span>
@@ -302,7 +316,7 @@ export default function ProfilePage() {
                 <span className={styles.quickLinkArrow}>
                   <IconChevronRight />
                 </span>
-              </div>
+              </Link>
               <div className={styles.quickLink}>
                 <span className={styles.quickLinkIcon}>
                   <IconHeart />
