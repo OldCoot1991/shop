@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import {
   Menu,
+  X,
   User,
   Heart,
   ShoppingCart,
@@ -19,6 +20,7 @@ import styles from "./Header.module.css";
 import SearchHeader from "../Search/Header";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppStore";
+import { fetchUser } from "@/lib/features/auth/authSlice";
 import { fetchCart, selectCartCount } from "@/lib/features/cart/cartSlice";
 import { selectWishlistCount } from "@/lib/features/wishlist/wishlistSlice";
 import { fetchFilters, ApiFilterItem } from "@/services/productService";
@@ -38,8 +40,10 @@ const Header = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    // 1. Verify session on load: if user is "authenticated" in local storage, fetch cart to confirm with server
+    // 1. Verify session on load: if user is "authenticated" in local storage,
+    // fetch cart and user data to confirm with server and get fresh info
     if (isAuthenticated) {
+      dispatch(fetchUser());
       dispatch(fetchCart());
     }
   }, [isAuthenticated, dispatch]);
@@ -54,41 +58,43 @@ const Header = () => {
     }
   }, [isAuthenticated, pathname, router]);
 
-  useEffect(() => {
-    // Load categories for the Mega Menu
-    const loadCategories = async () => {
-      try {
-        const filters = await fetchFilters();
-        const categoryFilter = filters.find((f) => f.key === "category");
-        if (categoryFilter) {
-          setCategories(categoryFilter.items);
-        }
-      } catch (err) {
-        console.error("Failed to load catalog categories", err);
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(false);
+
+  const toggleCatalogMenu = async () => {
+    if (isCatalogMenuOpen) {
+      setIsCatalogMenuOpen(false);
+      return;
+    }
+
+    // Open menu and fetch fresh categories
+    setIsCatalogMenuOpen(true);
+    setIsCategoriesLoading(true);
+    try {
+      const filters = await fetchFilters();
+      const categoryFilter = filters.find((f) => f.key === "category");
+      if (categoryFilter) {
+        setCategories(categoryFilter.items);
       }
-    };
-    loadCategories();
-  }, []);
+    } catch (err) {
+      console.error("Failed to load catalog categories", err);
+    } finally {
+      setIsCategoriesLoading(false);
+    }
+  };
 
   return (
     <header className={styles.header}>
       {/* Основная шапка с лого, каталогом, поиском и иконками профиля */}
-      <div
-        className={styles.mainContainer}
-        onMouseLeave={() => setIsCatalogMenuOpen(false)}
-      >
+      <div className={styles.mainContainer}>
         <div className={styles.logoAndCatalog}>
           <Link href="/" className={styles.logo}>
             <ShoppingBag className={styles.logoIcon} />
             <span className={styles.logoText}>ShopHub</span>
           </Link>
 
-          <div
-            className={styles.catalogWrapper}
-            onMouseEnter={() => setIsCatalogMenuOpen(true)}
-          >
-            <button className={styles.catalogBtn}>
-              <Menu size={24} />
+          <div className={styles.catalogWrapper}>
+            <button className={styles.catalogBtn} onClick={toggleCatalogMenu}>
+              {isCatalogMenuOpen ? <X size={24} /> : <Menu size={24} />}
               <span>Каталог</span>
             </button>
           </div>
@@ -97,16 +103,30 @@ const Header = () => {
         {isCatalogMenuOpen && (
           <div className={styles.catalogDropdown}>
             <div className={styles.catalogDropdownInner}>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/api-catalog/${cat.id}`}
-                  className={styles.catalogDropdownItem}
-                  onClick={() => setIsCatalogMenuOpen(false)}
+              {isCategoriesLoading && categories.length === 0 ? (
+                <div
+                  style={{ padding: "20px", color: "var(--text-secondary)" }}
                 >
-                  {cat.name}
-                </Link>
-              ))}
+                  Загрузка категорий...
+                </div>
+              ) : categories.length > 0 ? (
+                categories.map((cat) => (
+                  <Link
+                    key={cat.id}
+                    href={`/api-catalog/${cat.id}`}
+                    className={styles.catalogDropdownItem}
+                    onClick={() => setIsCatalogMenuOpen(false)}
+                  >
+                    {cat.name}
+                  </Link>
+                ))
+              ) : (
+                <div
+                  style={{ padding: "20px", color: "var(--text-secondary)" }}
+                >
+                  Нет доступных категорий
+                </div>
+              )}
             </div>
           </div>
         )}
