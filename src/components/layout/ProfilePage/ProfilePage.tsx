@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { logout } from "@/lib/features/auth/authSlice";
+import { logout, fetchUser } from "@/lib/features/auth/authSlice";
 import { fetchCart, clearServerCart } from "@/lib/features/cart/cartSlice";
 import { logoutRequest } from "@/services/authService";
 import styles from "./ProfilePage.module.css";
@@ -187,10 +187,11 @@ export default function ProfilePage() {
     }
   }, [isAuthenticated, router]);
 
-  // Fetch cart on every profile visit (handles direct navigation / page refresh)
+  // Fetch cart and user data on every profile visit (handles direct navigation / page refresh)
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(fetchCart());
+      dispatch(fetchUser());
     }
   }, [isAuthenticated, dispatch]);
 

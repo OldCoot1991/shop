@@ -45,6 +45,24 @@ export async function loginRequest(payload: LoginPayload): Promise<AuthUser> {
     return data.data.user;
 }
 
+export async function getUserRequest(): Promise<AuthUser> {
+    const res = await fetch(`${API_BASE}/api/v1/user`, {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+        },
+        credentials: 'include',
+    });
+
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.error?.title || 'Ошибка получения данных пользователя');
+    }
+
+    const data: LoginSuccessResponse = await res.json();
+    return data.data.user;
+}
+
 // ── Registration Payload Models ────────────────────────────────────────────
 
 export interface RegisterStep1Payload {

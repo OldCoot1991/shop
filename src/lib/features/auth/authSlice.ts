@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { getUserRequest } from '@/services/authService';
 
 interface AuthUser {
     id: number;
@@ -21,6 +22,18 @@ const initialState: AuthState = {
     isLoading: false,
     error: null,
 };
+
+export const fetchUser = createAsyncThunk<AuthUser, void, { rejectValue: string }>(
+    'auth/fetchUser',
+    async (_, { rejectWithValue }) => {
+        try {
+            return await getUserRequest();
+        } catch (err) {
+            const message = err instanceof Error ? err.message : 'Ошибка получения данных пользователя';
+            return rejectWithValue(message);
+        }
+    }
+);
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -49,6 +62,17 @@ export const authSlice = createSlice({
         clearError: (state) => {
             state.error = null;
         },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchUser.fulfilled, (state, action) => {
+                state.user = action.payload;
+                // We don't set isAuthenticated to true here just in case, but it should already be true
+            })
+            // If fetchUser fails (e.g., 401), the authMiddleware in store.ts will catch it and dispatch logout()
+            .addCase(fetchUser.rejected, (state, action) => {
+                console.error('Failed to fetch user profile:', action.payload);
+            });
     },
 });
 
