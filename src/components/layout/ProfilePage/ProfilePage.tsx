@@ -180,10 +180,10 @@ export default function ProfilePage() {
   const dispatch = useAppDispatch();
   const { user, isAuthenticated } = useAppSelector((s) => s.auth);
 
-  // Protect route — redirect to login if not authenticated
+  // Protect route — redirect to home if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      router.replace("/login");
+      router.replace("/");
     }
   }, [isAuthenticated, router]);
 
@@ -200,7 +200,7 @@ export default function ProfilePage() {
     await logoutRequest();
     dispatch(logout());
     dispatch(clearServerCart());
-    router.push("/login");
+    router.push("/");
   };
 
   const initials = getInitials(user.firstName, user.lastName, user.email);

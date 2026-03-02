@@ -1,10 +1,10 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { configureStore, combineReducers, isRejectedWithValue, Middleware } from '@reduxjs/toolkit';
 import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // localStorage
 import themeReducer from './features/theme/themeSlice';
-import cartReducer from './features/cart/cartSlice';
+import cartReducer, { clearServerCart } from './features/cart/cartSlice';
 import wishlistReducer from './features/wishlist/wishlistSlice';
-import authReducer from './features/auth/authSlice';
+import authReducer, { logout } from './features/auth/authSlice';
 import productsReducer from './features/products/productsSlice';
 import ordersReducer from './features/orders/orderSlice';
 
@@ -25,6 +25,20 @@ const rootReducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
+const authMiddleware: Middleware =
+    ({ dispatch }) =>
+        (next) =>
+            (action: unknown) => {
+                if (isRejectedWithValue(action)) {
+                    const payload = action.payload;
+                    if (typeof payload === 'string' && (payload.includes('401') || payload.includes('403'))) {
+                        dispatch(logout());
+                        dispatch(clearServerCart());
+                    }
+                }
+                return next(action);
+            };
+
 export const makeStore = () => {
     const store = configureStore({
         reducer: persistedReducer,
@@ -34,7 +48,7 @@ export const makeStore = () => {
                     // redux-persist dispatches non-serializable actions internally — ignore them
                     ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
                 },
-            }),
+            }).concat(authMiddleware),
     });
     return store;
 };

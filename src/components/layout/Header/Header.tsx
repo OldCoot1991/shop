@@ -17,8 +17,9 @@ import CartDrawer from "../../ui/CartDrawer/CartDrawer";
 import WishlistDrawer from "../../ui/WishlistDrawer/WishlistDrawer";
 import styles from "./Header.module.css";
 import SearchHeader from "../Search/Header";
-import { useAppSelector } from "@/hooks/useAppStore";
-import { selectCartCount } from "@/lib/features/cart/cartSlice";
+import { usePathname, useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/hooks/useAppStore";
+import { fetchCart, selectCartCount } from "@/lib/features/cart/cartSlice";
 import { selectWishlistCount } from "@/lib/features/wishlist/wishlistSlice";
 import { fetchFilters, ApiFilterItem } from "@/services/productService";
 
@@ -32,6 +33,26 @@ const Header = () => {
   const cartCount = useAppSelector(selectCartCount);
   const wishlistCount = useAppSelector(selectWishlistCount);
   const { user, isAuthenticated } = useAppSelector((s) => s.auth);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // 1. Verify session on load: if user is "authenticated" in local storage, fetch cart to confirm with server
+    if (isAuthenticated) {
+      dispatch(fetchCart());
+    }
+  }, [isAuthenticated, dispatch]);
+
+  useEffect(() => {
+    // 2. Global redirect: if user becomes unauthenticated (e.g. 401 error, or logged out),
+    // kick them to the home page if they are on a protected route.
+    if (!isAuthenticated) {
+      if (pathname.startsWith("/profile") || pathname.startsWith("/payments")) {
+        router.replace("/");
+      }
+    }
+  }, [isAuthenticated, pathname, router]);
 
   useEffect(() => {
     // Load categories for the Mega Menu
