@@ -38,29 +38,19 @@
   opacity: 0.8;
 }
 
-/* Horizontal scroll row */
-.row {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
+/* Swiper carousel */
+.swiper {
+  width: 100%;
+  padding-bottom: 8px !important;
 }
 
-.row::-webkit-scrollbar {
-  height: 4px;
+.slide {
+  width: auto !important;
+  /* Don't shrink or stretch — let the card define its own width */
 }
 
-.row::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.row::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 4px;
+.swiper :global(.swiper-wrapper) {
+  align-items: stretch;
 }
 
 /* Skeleton loader */

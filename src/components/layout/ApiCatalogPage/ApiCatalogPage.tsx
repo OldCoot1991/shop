@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import {
   ChevronLeft,
   SlidersHorizontal,
   Loader2,
-  ChevronLeft as PrevIcon,
+  ChevronLeft as Prev,
   ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
 } from "lucide-react";
 import { fetchProductsRequest, ApiProduct } from "@/services/productService";
 import ApiProductCard from "@/components/ui/ApiProductCard/ApiProductCard";
@@ -20,16 +22,17 @@ const SORT_LABELS: Record<SortOption, string> = {
   price_asc: "Сначала дешевле",
   price_desc: "Сначала дороже",
 };
-
 const SORT_API: Record<SortOption, string | undefined> = {
   popular: undefined,
   price_asc: "price_asc",
   price_desc: "price_desc",
 };
 
+const PER_PAGE_OPTIONS = [12, 24, 48] as const;
+type PerPage = (typeof PER_PAGE_OPTIONS)[number];
+
 interface ApiCatalogPageProps {
   title: string;
-  /** Numeric category ID string, e.g. "1009" */
   categoryId: string;
 }
 
@@ -37,62 +40,92 @@ export default function ApiCatalogPage({
   title,
   categoryId,
 }: ApiCatalogPageProps) {
-  const [products, setProducts] = useState<ApiProduct[]>([]);
-  const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState(1);
+  // All products fetched so far (accumulator across server pages)
+  const [allProducts, setAllProducts] = useState<ApiProduct[]>([]);
+
+  // UI state
+  const [page, setPage] = useState(1); // client virtual page
+  const [perPage, setPerPage] = useState<PerPage>(24); // items shown per virtual page
   const [sort, setSort] = useState<SortOption>("popular");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
+  const fetchKey = useRef(0); // cancel stale fetches on sort/category change
+
+  // Fetch ALL products from the API (paginate through server pages)
   useEffect(() => {
+    const key = ++fetchKey.current;
     let cancelled = false;
-    async function fetchData() {
+
+    async function fetchAll() {
       setStatus("loading");
       setError(null);
+      setAllProducts([]);
+      setPage(1);
+
       try {
-        const data = await fetchProductsRequest({
-          category: categoryId,
-          page,
-          sort: SORT_API[sort],
-        });
-        if (cancelled) return;
-        setProducts(data.products);
-        setPageCount(data.pagination.pageCount || 1);
+        const accumulated: ApiProduct[] = [];
+        let serverPage = 1;
+        let total = 1;
+
+        while (serverPage <= total) {
+          if (cancelled || fetchKey.current !== key) return;
+          const data = await fetchProductsRequest({
+            category: categoryId,
+            page: serverPage,
+            sort: SORT_API[sort],
+          });
+          if (cancelled || fetchKey.current !== key) return;
+          accumulated.push(...data.products);
+          total = data.pagination.pageCount || 1;
+          if (serverPage >= total) break;
+          serverPage++;
+        }
+
+        if (cancelled || fetchKey.current !== key) return;
+        setAllProducts(accumulated);
         setStatus("idle");
       } catch (e) {
-        if (cancelled) return;
+        if (cancelled || fetchKey.current !== key) return;
         setError(e instanceof Error ? e.message : "Ошибка загрузки");
         setStatus("error");
       }
     }
-    fetchData();
+
+    fetchAll();
     return () => {
       cancelled = true;
     };
-  }, [categoryId, page, sort]);
-
-  const retryLoad = () => {
-    setStatus("idle"); // triggers re-render which re-runs effect
-    setPage((p) => p); // force dependency change
-  };
+  }, [categoryId, sort]);
 
   const handleSort = (s: SortOption) => {
     setSort(s);
     setPage(1);
   };
+  const handlePerPage = (n: PerPage) => {
+    setPerPage(n);
+    setPage(1);
+  };
 
-  const handlePage = (p: number) => {
-    setPage(p);
+  const totalPages = Math.max(1, Math.ceil(allProducts.length / perPage));
+  const startIdx = (page - 1) * perPage;
+  const visibleProducts = allProducts.slice(startIdx, startIdx + perPage);
+
+  const goToPage = (p: number) => {
+    const clamped = Math.max(1, Math.min(p, totalPages));
+    setPage(clamped);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  // Build page numbers with ellipsis
+  const pageNumbers = buildPageNumbers(page, totalPages);
 
   return (
     <div className={styles.page}>
       {/* Breadcrumb */}
       <nav className={styles.breadcrumb}>
         <Link href="/" className={styles.breadcrumbLink}>
-          <ChevronLeft size={16} />
-          Главная
+          <ChevronLeft size={16} /> Главная
         </Link>
         <span className={styles.breadcrumbSep}>{title}</span>
       </nav>
@@ -100,8 +133,10 @@ export default function ApiCatalogPage({
       {/* Page header */}
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>{title}</h1>
-        {status === "idle" && (
-          <span className={styles.productCount}>{products.length} товаров</span>
+        {status === "idle" && allProducts.length > 0 && (
+          <span className={styles.productCount}>
+            {allProducts.length} товаров
+          </span>
         )}
       </div>
 
@@ -122,6 +157,22 @@ export default function ApiCatalogPage({
             ))}
           </div>
         </div>
+
+        {/* Per-page selector */}
+        <div className={styles.perPageRow}>
+          <span className={styles.sortLabel}>Показывать:</span>
+          <div className={styles.perPageButtons}>
+            {PER_PAGE_OPTIONS.map((n) => (
+              <button
+                key={n}
+                className={`${styles.perPageBtn} ${perPage === n ? styles.perPageBtnActive : ""}`}
+                onClick={() => handlePerPage(n)}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Loading */}
@@ -136,72 +187,116 @@ export default function ApiCatalogPage({
       {status === "error" && (
         <div className={styles.errorState}>
           <p>{error}</p>
-          <button className={styles.retryBtn} onClick={retryLoad}>
+          <button className={styles.retryBtn} onClick={() => setSort((s) => s)}>
             Попробовать снова
           </button>
         </div>
       )}
 
-      {/* Grid */}
-      {status === "idle" && products.length === 0 && (
+      {/* Empty */}
+      {status === "idle" && allProducts.length === 0 && (
         <p className={styles.empty}>Товары не найдены</p>
       )}
 
-      {status === "idle" && products.length > 0 && (
+      {/* Grid */}
+      {status === "idle" && visibleProducts.length > 0 && (
         <div className={styles.grid}>
-          {products.map((product) => (
+          {visibleProducts.map((product) => (
             <ApiProductCard key={product.id} product={product} />
           ))}
         </div>
       )}
 
       {/* Pagination */}
-      {pageCount > 1 && status !== "loading" && (
-        <div className={styles.pagination}>
-          <button
-            className={styles.pageBtn}
-            onClick={() => handlePage(page - 1)}
-            disabled={page <= 1}
-            aria-label="Предыдущая страница"
-          >
-            <PrevIcon size={16} />
-          </button>
+      {status === "idle" && totalPages > 1 && (
+        <div className={styles.paginationWrapper}>
+          <p className={styles.paginationInfo}>
+            Страница <strong>{page}</strong> из <strong>{totalPages}</strong>
+            {" · "}показано {startIdx + 1}–
+            {Math.min(startIdx + perPage, allProducts.length)} из{" "}
+            {allProducts.length}
+          </p>
+          <div className={styles.pagination}>
+            {/* First */}
+            <button
+              className={styles.pageBtn}
+              onClick={() => goToPage(1)}
+              disabled={page === 1}
+              aria-label="Первая страница"
+              title="Первая"
+            >
+              <ChevronsLeft size={15} />
+            </button>
 
-          {Array.from({ length: pageCount }, (_, i) => i + 1)
-            .filter(
-              (p) => p === 1 || p === pageCount || Math.abs(p - page) <= 2,
-            )
-            .reduce<(number | "…")[]>((acc, p, idx, arr) => {
-              if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push("…");
-              acc.push(p);
-              return acc;
-            }, [])
-            .map((p, idx) =>
-              p === "…" ? (
-                <span key={`ellipsis-${idx}`} className={styles.pageEllipsis}>
+            {/* Prev */}
+            <button
+              className={styles.pageBtn}
+              onClick={() => goToPage(page - 1)}
+              disabled={page <= 1}
+              aria-label="Предыдущая"
+            >
+              <Prev size={15} />
+            </button>
+
+            {/* Page numbers */}
+            {pageNumbers.map((item, idx) =>
+              item === "…" ? (
+                <span key={`e${idx}`} className={styles.pageEllipsis}>
                   …
                 </span>
               ) : (
                 <button
-                  key={p}
-                  className={`${styles.pageBtn} ${page === p ? styles.pageBtnActive : ""}`}
-                  onClick={() => handlePage(p as number)}
+                  key={item}
+                  className={`${styles.pageBtn} ${page === item ? styles.pageBtnActive : ""}`}
+                  onClick={() => goToPage(item as number)}
                 >
-                  {p}
+                  {item}
                 </button>
               ),
             )}
 
-          <button
-            className={styles.pageBtn}
-            onClick={() => handlePage(page + 1)}
-            disabled={page >= pageCount}
-            aria-label="Следующая страница"
-          >
-            <ChevronRight size={16} />
-          </button>
+            {/* Next */}
+            <button
+              className={styles.pageBtn}
+              onClick={() => goToPage(page + 1)}
+              disabled={page >= totalPages}
+              aria-label="Следующая"
+            >
+              <ChevronRight size={15} />
+            </button>
+
+            {/* Last */}
+            <button
+              className={styles.pageBtn}
+              onClick={() => goToPage(totalPages)}
+              disabled={page === totalPages}
+              aria-label="Последняя страница"
+              title="Последняя"
+            >
+              <ChevronsRight size={15} />
+            </button>
+          </div>
         </div>
       )}
     </div>
   );
+}
+
+// Helper: build pagination number array with "…"
+function buildPageNumbers(current: number, total: number): (number | "…")[] {
+  const delta = 2;
+  const range: number[] = [];
+  for (
+    let i = Math.max(2, current - delta);
+    i <= Math.min(total - 1, current + delta);
+    i++
+  )
+    range.push(i);
+
+  const result: (number | "…")[] = [1];
+  if (range[0] > 2) result.push("…");
+  result.push(...range);
+  if (range[range.length - 1] < total - 1) result.push("…");
+  if (total > 1) result.push(total);
+  return result;
 }

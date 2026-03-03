@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { X, ShoppingCart, Trash2, Loader2 } from "lucide-react";
 import styles from "./CartDrawer.module.css";
 import { useAppSelector } from "@/hooks/useAppStore";
@@ -13,8 +14,6 @@ import {
 } from "@/lib/features/cart/cartSlice";
 import { useCart } from "@/hooks/useCart";
 import { getProductImageUrl } from "@/services/productService";
-import { createOrderAsync } from "@/lib/features/orders/orderSlice";
-import { useAppDispatch } from "@/hooks/useAppStore";
 import AuthModal from "@/components/ui/AuthModal/AuthModal";
 
 interface CartDrawerProps {
@@ -23,6 +22,7 @@ interface CartDrawerProps {
 }
 
 const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
+  const router = useRouter();
   const localItems = useAppSelector(selectCartItems);
   const serverItems = useAppSelector(selectServerCartItems);
   const total = useAppSelector(selectCartTotal);
@@ -30,8 +30,6 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
   const fetchError = useAppSelector(selectCartFetchError);
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const { addItem, decreaseItem, removeItem, clearAll } = useCart();
-  const dispatch = useAppDispatch();
-  const [isCheckingOut, setIsCheckingOut] = React.useState(false);
   const [authModalOpen, setAuthModalOpen] = React.useState(false);
 
   // Prefer server items once fetched successfully, fall back to local items
@@ -40,24 +38,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
     ? serverItems.reduce((s, i) => s + i.quantity, 0)
     : localItems.reduce((s, i) => s + i.quantity, 0);
 
-  const displayItems = useServerItems ? serverItems : localItems;
-
-  const doCheckout = async () => {
-    setIsCheckingOut(true);
-    try {
-      const payload = displayItems.map((i) => ({
-        id: i.id,
-        quantity: i.quantity,
-      }));
-      const billingUrl = await dispatch(createOrderAsync(payload)).unwrap();
-      if (billingUrl) {
-        window.location.href = billingUrl;
-      }
-    } catch (err) {
-      console.error("Ошибка оформления заказа:", err);
-    } finally {
-      setIsCheckingOut(false);
-    }
+  const goToCheckout = () => {
+    onClose();
+    router.push("/checkout");
   };
 
   const handleCheckout = () => {
@@ -65,7 +48,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
       setAuthModalOpen(true);
       return;
     }
-    doCheckout();
+    goToCheckout();
   };
 
   return (
@@ -264,18 +247,8 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                 {total.toLocaleString("ru-RU")} ₽
               </span>
             </div>
-            <button
-              className={styles.checkoutBtn}
-              onClick={handleCheckout}
-              disabled={isCheckingOut}
-            >
-              {isCheckingOut ? (
-                <>
-                  <Loader2 size={18} className={styles.spinner} /> Оформление...
-                </>
-              ) : (
-                "Перейти к оформлению"
-              )}
+            <button className={styles.checkoutBtn} onClick={handleCheckout}>
+              Перейти к оформлению
             </button>
           </div>
         )}
@@ -286,7 +259,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
         onClose={() => setAuthModalOpen(false)}
         onAuthSuccess={() => {
           setAuthModalOpen(false);
-          doCheckout();
+          goToCheckout();
         }}
       />
     </>

@@ -21,7 +21,8 @@
     "react-i18next": "^16.5.4",
     "react-redux": "^9.2.0",
     "redux-persist": "^6.0.0",
-    "styled-components": "^6.3.9"
+    "styled-components": "^6.3.9",
+    "swiper": "^12.1.2"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.1",

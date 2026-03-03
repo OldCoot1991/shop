@@ -2,6 +2,10 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/free-mode";
 import styles from "./ProductSection.module.css";
 import ApiProductCard from "@/components/ui/ApiProductCard/ApiProductCard";
 import {
@@ -81,11 +85,20 @@ const ProductSection: React.FC<ProductSectionProps> = ({
       )}
 
       {(status === "succeeded" || visible.length > 0) && visible.length > 0 && (
-        <div className={styles.row}>
+        <Swiper
+          modules={[FreeMode]}
+          freeMode={{ enabled: true, momentum: true, momentumRatio: 0.5 }}
+          slidesPerView="auto"
+          spaceBetween={16}
+          grabCursor={true}
+          className={styles.swiper}
+        >
           {visible.map((product) => (
-            <ApiProductCard key={product.id} product={product} />
+            <SwiperSlide key={product.id} className={styles.slide}>
+              <ApiProductCard product={product} />
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       )}
     </section>
   );
