@@ -15,6 +15,7 @@ import { useCart } from "@/hooks/useCart";
 import { getProductImageUrl } from "@/services/productService";
 import { createOrderAsync } from "@/lib/features/orders/orderSlice";
 import { useAppDispatch } from "@/hooks/useAppStore";
+import AuthModal from "@/components/ui/AuthModal/AuthModal";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -27,9 +28,11 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
   const total = useAppSelector(selectCartTotal);
   const fetchStatus = useAppSelector(selectCartFetchStatus);
   const fetchError = useAppSelector(selectCartFetchError);
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const { addItem, decreaseItem, removeItem, clearAll } = useCart();
   const dispatch = useAppDispatch();
   const [isCheckingOut, setIsCheckingOut] = React.useState(false);
+  const [authModalOpen, setAuthModalOpen] = React.useState(false);
 
   // Prefer server items once fetched successfully, fall back to local items
   const useServerItems = fetchStatus === "succeeded";
@@ -39,7 +42,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
 
   const displayItems = useServerItems ? serverItems : localItems;
 
-  const handleCheckout = async () => {
+  const doCheckout = async () => {
     setIsCheckingOut(true);
     try {
       const payload = displayItems.map((i) => ({
@@ -52,10 +55,17 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
       }
     } catch (err) {
       console.error("Ошибка оформления заказа:", err);
-      // alert(err || "Произошла ошибка при оформлении заказа");
     } finally {
       setIsCheckingOut(false);
     }
+  };
+
+  const handleCheckout = () => {
+    if (!isAuthenticated) {
+      setAuthModalOpen(true);
+      return;
+    }
+    doCheckout();
   };
 
   return (
@@ -270,6 +280,15 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
           </div>
         )}
       </div>
+
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onAuthSuccess={() => {
+          setAuthModalOpen(false);
+          doCheckout();
+        }}
+      />
     </>
   );
 };

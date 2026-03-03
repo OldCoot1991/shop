@@ -55,7 +55,9 @@ const ProductSection: React.FC<ProductSectionProps> = ({
       <div className={styles.headerRow}>
         <h3 className={styles.title}>{title}</h3>
         <Link
-          href={`/catalog?category=${categoryFilter ?? ""}`}
+          href={
+            categoryFilter ? `/api-catalog/${categoryFilter}` : "/api-catalog"
+          }
           className={styles.seeAllBtn}
         >
           Смотреть всё
