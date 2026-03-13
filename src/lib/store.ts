@@ -29,6 +29,7 @@ const authMiddleware: Middleware =
     ({ dispatch }) =>
         (next) =>
             (action: unknown) => {
+                const result = next(action); // Call next first!
                 if (isRejectedWithValue(action)) {
                     const payload = action.payload;
                     if (typeof payload === 'string' && (payload.includes('401') || payload.includes('403'))) {
@@ -36,7 +37,7 @@ const authMiddleware: Middleware =
                         dispatch(clearServerCart());
                     }
                 }
-                return next(action);
+                return result;
             };
 
 export const makeStore = () => {

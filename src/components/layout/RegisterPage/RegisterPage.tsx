@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { loginSuccess } from "@/lib/features/auth/authSlice";
-import { fetchCart } from "@/lib/features/cart/cartSlice";
+import { syncCartOnLogin } from "@/lib/features/cart/cartSlice";
 import {
   registerStep1Identification,
   registerStep2Verification,
@@ -237,7 +237,7 @@ export default function RegisterPage() {
     try {
       const userData = await registerStep3Confirmation({ token, password });
       dispatch(loginSuccess(userData));
-      dispatch(fetchCart());
+      dispatch(syncCartOnLogin());
       // Step state isn't advanced because the isAuthenticated flag will render the SuccessScreen
     } catch (err: any) {
       setError(err.message || "Ошибка при создании аккаунта");

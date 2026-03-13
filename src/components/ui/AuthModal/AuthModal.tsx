@@ -18,7 +18,7 @@ import {
   loginSuccess,
   loginFailure,
 } from "@/lib/features/auth/authSlice";
-import { fetchCart } from "@/lib/features/cart/cartSlice";
+import { syncCartOnLogin } from "@/lib/features/cart/cartSlice";
 import {
   loginRequest,
   registerStep1Identification,
@@ -97,7 +97,7 @@ export default function AuthModal({
     try {
       const userData = await loginRequest({ login: loginField, password });
       dispatch(loginSuccess(userData));
-      dispatch(fetchCart());
+      dispatch(syncCartOnLogin());
       handleClose();
       onAuthSuccess?.();
     } catch (err) {
@@ -153,7 +153,7 @@ export default function AuthModal({
         password: regPassword,
       });
       dispatch(loginSuccess(userData));
-      dispatch(fetchCart());
+      dispatch(syncCartOnLogin());
       setRegStep("done");
       // Auto-close & proceed after 1.5 s
       setTimeout(() => {

@@ -4,6 +4,7 @@ import {
     addToCartRequest,
     removeFromCartRequest,
     clearCartRequest,
+    addMultipleToCartRequest,
     AddToCartPayload,
     CartApiProduct,
     CartApiData
@@ -96,6 +97,30 @@ export const clearServerCartAsync = createAsyncThunk<CartApiData, void, { reject
     }
 );
 
+export const syncCartOnLogin = createAsyncThunk<void, void, { state: { cart: CartState }, rejectValue: string }>(
+    'cart/syncCartOnLogin',
+    async (_, { getState, dispatch, rejectWithValue }) => {
+        try {
+            const { items } = getState().cart; // Get local cart items
+
+            if (items.length > 0) {
+                // Send all items to the server cart in one request
+                await addMultipleToCartRequest(
+                    items.map(item => ({ id: item.id, quantity: item.quantity }))
+                );
+                // Clear the local cart
+                dispatch(clearCart());
+            }
+
+            // Finally, fetch the updated server cart
+            await dispatch(fetchCart()).unwrap();
+        } catch (err) {
+            return rejectWithValue(err instanceof Error ? err.message : 'Ошибка синхронизации корзины');
+        }
+    }
+);
+
+
 // ── Slice ─────────────────────────────────────────────────────────────────────
 const cartSlice = createSlice({
     name: 'cart',
@@ -164,6 +189,7 @@ const cartSlice = createSlice({
                     action.type.startsWith('cart/') &&
                     action.type.endsWith('/fulfilled') &&
                     action.type !== 'cart/fetchCart/fulfilled' &&
+                    action.type !== 'cart/syncCartOnLogin/fulfilled' &&
                     action.type !== 'cart/clearServerCartAsync/fulfilled',
                 (state, action: PayloadAction<CartApiData>) => {
                     // Update state with the returned new cart data after mutations

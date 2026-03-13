@@ -10,7 +10,7 @@ import {
   loginFailure,
   clearError,
 } from "@/lib/features/auth/authSlice";
-import { fetchCart } from "@/lib/features/cart/cartSlice";
+import { syncCartOnLogin } from "@/lib/features/cart/cartSlice";
 import { loginRequest } from "@/services/authService";
 import styles from "./LoginPage.module.css";
 
@@ -170,7 +170,7 @@ export default function LoginPage() {
       const userData = await loginRequest({ login, password });
       dispatch(loginSuccess(userData));
       // Immediately fetch cart data after successful login
-      dispatch(fetchCart());
+      dispatch(syncCartOnLogin());
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Ошибка авторизации";
       dispatch(loginFailure(message));

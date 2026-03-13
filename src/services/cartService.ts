@@ -71,6 +71,25 @@ export async function addToCartRequest(payload: AddToCartPayload): Promise<CartA
     return json.data;
 }
 
+export async function addMultipleToCartRequest(payload: AddToCartPayload[]): Promise<CartApiData> {
+    const res = await fetch(`${API_BASE}/api/v1/cart/items`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+        throw new Error(`Ошибка добавления товаров в корзину: ${res.status}`);
+    }
+
+    const json: CartApiResponse = await res.json();
+    return json.data;
+}
+
 export async function removeFromCartRequest(productId: string): Promise<CartApiData> {
     const res = await fetch(`${API_BASE}/api/v1/cart/${productId}`, {
         method: 'DELETE',
