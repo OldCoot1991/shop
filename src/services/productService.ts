@@ -115,7 +115,7 @@ export interface FetchProductsParams {
  * Next.js rewrites (/api/* → https://market.eco07.ru/api/*) work only
  * for browser-initiated requests. Server Components must use the absolute URL.
  */
-export const SERVER_API_BASE = 'https://market.eco07.ru';
+export const SERVER_API_BASE = 'https://ozpro.ru';
 
 export async function fetchProductsRequest(
     params: FetchProductsParams = {},
@@ -150,9 +150,7 @@ export function getProductImageUrl(image: ApiProductImage, size: 'full' | 'minia
     if (url.startsWith('http')) return url;
     // Replace /static/ prefix with /img-proxy/ for our Next.js rewrite
     return url.replace(/^\/static\//, '/img-proxy/');
-}
-
-/** Helper: get attribute value by name */
+}/** Helper: get attribute value by name */
 export function getAttributeValue(attributes: ApiProductAttribute[], name: string): string | undefined {
     return attributes.find((a) => a.name === name)?.value;
 }
