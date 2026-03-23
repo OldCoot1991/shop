@@ -29,19 +29,13 @@
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: var(--color-primary);
 }
 
-.logoIcon {
-  width: 36px;
-  height: 36px;
-}
-
-.logoText {
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -1px;
+.logoImage {
+  object-fit: contain;
+  height: 80px;
+  width: auto;
+  display: block;
 }
 
 .catalogBtn {
@@ -113,6 +107,11 @@
     opacity: 1;
     transform: translateY(0) scale(1);
   }
+}
+
+.catalogDropdownItem.logo {
+  display: flex;
+  align-items: center;
 }
 
 .catalogDropdownItem {

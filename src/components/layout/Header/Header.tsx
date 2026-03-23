@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Menu,
   X,
   User,
   Heart,
   ShoppingCart,
-  ShoppingBag,
   Package,
   Settings,
 } from "lucide-react";
@@ -88,8 +88,14 @@ const Header = () => {
       <div className={styles.mainContainer}>
         <div className={styles.logoAndCatalog}>
           <Link href="/" className={styles.logo}>
-            <ShoppingBag className={styles.logoIcon} />
-            <span className={styles.logoText}>ShopHub</span>
+            <Image
+              src="/logo.svg"
+              alt="Ozpro Store"
+              width={240}
+              height={80}
+              className={styles.logoImage}
+              priority
+            />
           </Link>
 
           <div className={styles.catalogWrapper}>

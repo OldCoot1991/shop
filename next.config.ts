@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'market.eco07.ru',
+        hostname: 'ozpro.ru',
         pathname: '/static/**',
       },
     ],
@@ -15,11 +15,11 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://market.eco07.ru/api/:path*",
+        destination: "https://ozpro.ru/api/:path*",
       },
       {
         source: "/img-proxy/:path*",
-        destination: "https://market.eco07.ru/static/:path*",
+        destination: "https://ozpro.ru/static/:path*",
       },
     ];
   },
