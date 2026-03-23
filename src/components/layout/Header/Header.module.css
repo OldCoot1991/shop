@@ -38,6 +38,10 @@
   display: block;
 }
 
+:global(html[data-theme="dark"]) .logoImage {
+  filter: invert(1) hue-rotate(180deg);
+}
+
 .catalogBtn {
   display: flex;
   align-items: center;
