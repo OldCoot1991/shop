@@ -16,7 +16,9 @@ export default async function ProductPage({ params }: Props) {
     if (err instanceof Error && err.message === "NOT_FOUND") {
       notFound();
     }
-    throw err;
+    // Сеть недоступна или сервер не отвечает — показываем 404
+    console.error(`Ошибка загрузки товара ${id}:`, err);
+    notFound();
   }
 
   return <ApiProductDetail product={product} />;
