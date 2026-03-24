@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import styles from "./Footer.module.css";
 
 const Footer = () => {
@@ -13,7 +14,7 @@ const Footer = () => {
                 <a href="#">Как сделать заказ</a>
               </li>
               <li>
-                <a href="#">Способы оплаты</a>
+                <Link href="/payment-methods">Способы оплаты</Link>
               </li>
               <li>
                 <a href="#">Доставка</a>

@@ -1,0 +1,122 @@
+.wrapper {
+  background: transparent;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.methods {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  padding: 24px 48px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.methods:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.methodCard {
+  display: flex;
+  align-items: center;
+}
+
+.uralsib {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #3b175c; /* Uralsib brand color */
+}
+
+/* Adjust for dark mode */
+:global([data-theme="dark"]) .uralsib {
+  color: #a286ce;
+}
+
+.logoSvg,
+.logoImg {
+  height: 32px;
+  width: auto;
+  transition: filter 0.3s ease;
+  object-fit: contain;
+}
+
+.logoSvg:hover,
+.logoImg:hover {
+  filter: brightness(1.1);
+}
+
+.bankName {
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background: var(--color-border);
+}
+
+.others {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.iconWrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .methods {
+    flex-direction: column;
+    padding: 24px;
+    gap: 24px;
+  }
+  
+  .divider {
+    width: 80%;
+    height: 1px;
+  }
+}

@@ -153,7 +153,7 @@ export default function PaymentsClient() {
                   const absImg = img
                     ? img.startsWith("http")
                       ? img
-                      : `https://market.eco07.ru${img}`
+                      : `https://ozpro.ru${img}`
                     : undefined;
                   return (
                     <div key={p.id} className={styles.productRow}>
