@@ -114,6 +114,14 @@ const RequisitesPage = () => {
                 <span className={styles.detailLabel}>Телефон:</span>
                 <span className={styles.detailValue}>8 (989) 640-05-23</span>
               </div>
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Почта:</span>
+                <span className={styles.detailValue}>
+                  <a href="mailto:info@ozpro.ru" style={{ color: 'inherit', textDecoration: 'none' }}>
+                    info@ozpro.ru
+                  </a>
+                </span>
+              </div>
             </div>
           </div>
         </div>
