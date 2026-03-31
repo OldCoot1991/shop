@@ -1,5 +1,4 @@
 import Banner from "@/components/layout/Banner/Banner";
-import Footer from "@/components/layout/Footer/Footer";
 import ProductSection from "@/components/layout/ProductSection/ProductSection";
 import { CATEGORY_IDS } from "@/services/productService";
 
@@ -57,8 +56,6 @@ export default function Home() {
         categoryKey="mini-cards"
         categoryFilter={String(CATEGORY_IDS.miniCards)}
       />
-
-      <Footer />
     </main>
   );
 }

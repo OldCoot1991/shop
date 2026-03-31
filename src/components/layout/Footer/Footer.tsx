@@ -1,90 +1,113 @@
-import React from "react";
-import Link from "next/link";
-import styles from "./Footer.module.css";
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Mail, Phone, MapPin } from 'lucide-react';
+import styles from './Footer.module.css';
 
 const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.grid}>
+          {/* Brand & Contacts */}
+          <div className={styles.column}>
+            <div className={styles.brandBox}>
+              <Link href="/" className={styles.logoLink}>
+                <Image
+                  src="/logo.svg"
+                  alt="Ozpro"
+                  width={240}
+                  height={80}
+                  className={styles.logoImage}
+                />
+              </Link>
+              <p className={styles.brandDesc}>
+                Мы предлагаем лучшие товары по выгодным ценам. Быстрая доставка, гарантия качества и абсолютная надежность.
+              </p>
+            </div>
+          </div>
+
           <div className={styles.column}>
             <h4 className={styles.title}>Покупателям</h4>
             <ul className={styles.list}>
               <li>
-                <a href="#">Как сделать заказ</a>
+                <Link href="/" className={styles.link}>
+                  Каталог магазина
+                </Link>
               </li>
               <li>
-                <Link href="/payment-methods">Способы оплаты</Link>
+                <Link href="/payment-methods" className={styles.link}>
+                  Способы оплаты
+                </Link>
               </li>
               <li>
-                <a href="#">Доставка</a>
+                <a href="#" className={styles.link}>
+                  Доставка
+                </a>
               </li>
               <li>
-                <a href="#">Возврат товаров</a>
-              </li>
-              <li>
-                <a href="#">Правила продажи</a>
+                <a href="#" className={styles.link}>
+                  Правила возврата
+                </a>
               </li>
             </ul>
           </div>
 
           <div className={styles.column}>
-            <h4 className={styles.title}>Продавцам</h4>
+            <h4 className={styles.title}>О компании</h4>
             <ul className={styles.list}>
               <li>
-                <a href="#">Начать продавать</a>
+                <a href="#" className={styles.link}>
+                  О нас
+                </a>
               </li>
               <li>
-                <a href="#">Правила для партнеров</a>
+                <Link href="/requisites" className={styles.link}>
+                  Реквизиты
+                </Link>
               </li>
               <li>
-                <a href="#">База знаний</a>
+                <a href="#" className={styles.link}>
+                  Контакты
+                </a>
               </li>
               <li>
-                <a href="#">Личный кабинет</a>
+                <a href="#" className={styles.link}>
+                  Стать партнером
+                </a>
               </li>
             </ul>
           </div>
 
           <div className={styles.column}>
-            <h4 className={styles.title}>Компания</h4>
-            <ul className={styles.list}>
-              <li>
-                <a href="#">О нас</a>
+            <h4 className={styles.title}>Связь с нами</h4>
+            <ul className={styles.contactList}>
+              <li className={styles.contactItem}>
+                <Phone size={18} className={styles.contactIcon} style={{ flexShrink: 0 }} />
+                <span>8 (989) 640-05-23</span>
               </li>
-              <li>
-                <Link href="/requisites">Реквизиты</Link>
+              <li className={styles.contactItem}>
+                <Mail size={18} className={styles.contactIcon} style={{ flexShrink: 0 }} />
+                <a href="mailto:info@ozpro.ru" style={{ color: 'inherit', textDecoration: 'none' }}>info@ozpro.ru</a>
               </li>
-              <li>
-                <a href="#">Пресс-центр</a>
-              </li>
-              <li>
-                <a href="#">Контакты</a>
-              </li>
-              <li>
-                <a href="#">Вакансии</a>
+              <li className={styles.contactItem}>
+                <MapPin size={18} className={styles.contactIcon} style={{ flexShrink: 0 }} />
+                <span>
+                  117218, г. Москва, вн.тер.г. муниципальный округ Котловка, ул. Кржижановского, д. 29, к. 5, помещ. 4А/1/5
+                </span>
               </li>
             </ul>
-          </div>
-
-          <div className={styles.column}>
-            <h4 className={styles.title}>Мы в соцсетях</h4>
-            <div className={styles.socials}>
-              <a href="#" className={styles.socialIcon}>
-                VK
-              </a>
-              <a href="#" className={styles.socialIcon}>
-                TG
-              </a>
-              <a href="#" className={styles.socialIcon}>
-                YT
-              </a>
-            </div>
           </div>
         </div>
-
-        <div className={styles.bottom}>
-          <p>© 2026 ShopHub. Все права защищены.</p>
+      </div>
+      
+      <div className={styles.bottomBar}>
+        <div className={styles.bottomContainer}>
+          <p className={styles.copyright}>© 2026 Ozpro. Все права защищены.</p>
+          <div className={styles.legalLinks}>
+            <a href="#">Политика конфиденциальности</a>
+            <a href="#">Публичная оферта</a>
+          </div>
         </div>
       </div>
     </footer>
