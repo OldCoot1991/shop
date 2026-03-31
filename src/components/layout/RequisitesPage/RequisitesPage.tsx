@@ -1,7 +1,7 @@
-import React from 'react';
-import Link from 'next/link';
-import { ChevronLeft, Building2, Landmark, MapPin } from 'lucide-react';
-import styles from './RequisitesPage.module.css';
+import React from "react";
+import Link from "next/link";
+import { ChevronLeft, Building2, Landmark, MapPin } from "lucide-react";
+import styles from "./RequisitesPage.module.css";
 
 const RequisitesPage = () => {
   return (
@@ -29,13 +29,20 @@ const RequisitesPage = () => {
             </div>
             <div className={styles.detailsGrid}>
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Название организации:</span>
-                <span className={styles.detailValue}>ООО &quot;ОЗОН-ПРО&quot;</span>
+                <span className={styles.detailLabel}>
+                  Название организации:
+                </span>
+                <span className={styles.detailValue}>
+                  ООО &quot;ОЗОН-ПРО&quot;
+                </span>
               </div>
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Юридический адрес организации:</span>
+                <span className={styles.detailLabel}>
+                  Юридический адрес организации:
+                </span>
                 <span className={styles.detailValue}>
-                  117218, г. Москва, вн.тер.г. муниципальный округ Котловка, ул. Кржижановского, д. 29, к. 5, помещ. 4А/1/5
+                  117218, г. Москва, вн.тер.г. муниципальный округ Котловка, ул.
+                  Кржижановского, д. 29, к. 5, помещ. 4А/1/5
                 </span>
               </div>
               <div className={styles.detailItem}>
@@ -76,7 +83,9 @@ const RequisitesPage = () => {
                 <span className={styles.detailValue}>7710140679</span>
               </div>
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Корреспондентский счет банка:</span>
+                <span className={styles.detailLabel}>
+                  Корреспондентский счет банка:
+                </span>
                 <span className={styles.detailValue}>30101810145250000974</span>
               </div>
             </div>
@@ -91,16 +100,19 @@ const RequisitesPage = () => {
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Юридический адрес</span>
                 <span className={styles.detailValue}>
-                  117218, г. Москва, вн.тер.г. муниципальный округ Котловка, ул. Кржижановского, д. 29, к. 5, помещ. 4А/1/5
+                  117218, г. Москва, вн.тер.г. муниципальный округ Котловка, ул.
+                  Кржижановского, д. 29, к. 5, помещ. 4А/1/5
                 </span>
               </div>
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Почтовый адрес</span>
-                <span className={styles.detailValue}>360004, КБР, г. Нальчик, ул. Тургенева, д. 21А</span>
+                <span className={styles.detailValue}>
+                  360004, КБР, г. Нальчик, ул. Тургенева, д. 21А
+                </span>
               </div>
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>Телефон:</span>
-                <span className={styles.detailValue}>8 8 (989) 640-05-23</span>
+                <span className={styles.detailValue}>8 (989) 640-05-23</span>
               </div>
             </div>
           </div>
