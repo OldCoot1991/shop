@@ -53,7 +53,7 @@ const Footer = () => {
                 <a href="#">О нас</a>
               </li>
               <li>
-                <a href="#">Реквизиты</a>
+                <Link href="/requisites">Реквизиты</Link>
               </li>
               <li>
                 <a href="#">Пресс-центр</a>
