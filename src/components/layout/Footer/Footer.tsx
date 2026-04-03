@@ -67,6 +67,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/legal" className={styles.link}>
+                  Юридические документы
+                </Link>
+              </li>
+              <li>
                 <a href="#" className={styles.link}>
                   Контакты
                 </a>
