@@ -605,9 +605,18 @@ export default function LegalPage() {
     }
   }, []);
 
-  const handleDocChange = (id: string) => {
+  const handleDocChange = (id: string, isClick = false) => {
     setActiveDoc(id);
     window.history.replaceState(null, '', `#${id}`);
+    
+    if (isClick && window.innerWidth <= 768) {
+      setTimeout(() => {
+        const contentEl = document.getElementById('doc-content');
+        if (contentEl) {
+          contentEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 50);
+    }
   };
 
   const activeDocData = documents.find(d => d.id === activeDoc);
@@ -622,7 +631,7 @@ export default function LegalPage() {
               <li key={doc.id}>
                 <button 
                   className={`${styles.menuButton} ${activeDoc === doc.id ? styles.active : ''}`}
-                  onClick={() => handleDocChange(doc.id)}
+                  onClick={() => handleDocChange(doc.id, true)}
                 >
                   <span className={styles.menuIcon}>{doc.icon}</span>
                   <span>{doc.title}</span>
@@ -631,7 +640,7 @@ export default function LegalPage() {
             ))}
           </ul>
         </aside>
-        <main className={styles.content} key={activeDoc}>
+        <main id="doc-content" className={styles.content} key={activeDoc} style={{ scrollMarginTop: '80px' }}>
           {activeDocData?.content}
         </main>
       </div>
