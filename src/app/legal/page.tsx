@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollText, FileText, Briefcase, Cookie, Shield, Users } from 'lucide-react';
 import styles from './Legal.module.css';
 
@@ -598,6 +598,18 @@ const documents = [
 export default function LegalPage() {
   const [activeDoc, setActiveDoc] = useState(documents[0].id);
 
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && documents.some(d => d.id === hash)) {
+      setTimeout(() => setActiveDoc(hash), 0);
+    }
+  }, []);
+
+  const handleDocChange = (id: string) => {
+    setActiveDoc(id);
+    window.history.replaceState(null, '', `#${id}`);
+  };
+
   const activeDocData = documents.find(d => d.id === activeDoc);
 
   return (
@@ -610,7 +622,7 @@ export default function LegalPage() {
               <li key={doc.id}>
                 <button 
                   className={`${styles.menuButton} ${activeDoc === doc.id ? styles.active : ''}`}
-                  onClick={() => setActiveDoc(doc.id)}
+                  onClick={() => handleDocChange(doc.id)}
                 >
                   <span className={styles.menuIcon}>{doc.icon}</span>
                   <span>{doc.title}</span>
