@@ -1,4 +1,3 @@
-import Banner from "@/components/layout/Banner/Banner";
 import ProductSection from "@/components/layout/ProductSection/ProductSection";
 import { CATEGORY_IDS } from "@/services/productService";
 
@@ -7,8 +6,6 @@ export default function Home() {
     <main
       style={{ maxWidth: "1440px", margin: "0 auto", padding: "24px 16px" }}
     >
-      <Banner />
-
       <ProductSection
         title="Стикеры"
         categoryKey="stickers"
