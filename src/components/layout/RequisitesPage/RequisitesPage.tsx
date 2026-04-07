@@ -37,15 +37,6 @@ const RequisitesPage = () => {
                 </span>
               </div>
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>
-                  Юридический адрес организации:
-                </span>
-                <span className={styles.detailValue}>
-                  117218, г. Москва, вн.тер.г. муниципальный округ Котловка, ул.
-                  Кржижановского, д. 29, к. 5, помещ. 4А/1/5
-                </span>
-              </div>
-              <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>ИНН</span>
                 <span className={styles.detailValue}>9727126450</span>
               </div>
@@ -57,6 +48,13 @@ const RequisitesPage = () => {
                 <span className={styles.detailLabel}>ОГРН</span>
                 <span className={styles.detailValue}>1267700056876</span>
               </div>
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Юридический адрес:</span>
+                <span className={styles.detailValue}>
+                  117218, г. Москва, вн.тер.г. муниципальный округ Котловка, ул.
+                  Кржижановского, д. 29, к. 5, помещ. 4А/1/5
+                </span>
+              </div>
             </div>
           </div>
 
@@ -67,26 +65,22 @@ const RequisitesPage = () => {
             </div>
             <div className={styles.detailsGrid}>
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Банк</span>
-                <span className={styles.detailValue}>АО «ТБанк»</span>
+                <span className={styles.detailLabel}>Банк:</span>
+                <span className={styles.detailValue}>ПАО «БАНК УРАЛСИБ»</span>
               </div>
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Расчетный счет:</span>
-                <span className={styles.detailValue}>40702810310001520851</span>
-              </div>
-              <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>БИК</span>
-                <span className={styles.detailValue}>044525974</span>
-              </div>
-              <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>ИНН банка:</span>
-                <span className={styles.detailValue}>7710140679</span>
+                <span className={styles.detailLabel}>БИК:</span>
+                <span className={styles.detailValue}>040349700</span>
               </div>
               <div className={styles.detailItem}>
                 <span className={styles.detailLabel}>
-                  Корреспондентский счет банка:
+                  Корреспондентский счет:
                 </span>
-                <span className={styles.detailValue}>30101810145250000974</span>
+                <span className={styles.detailValue}>30101810400000000700</span>
+              </div>
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Расчетный счет:</span>
+                <span className={styles.detailValue}>40702810047010002416</span>
               </div>
             </div>
           </div>
@@ -94,30 +88,29 @@ const RequisitesPage = () => {
           <div className={styles.card}>
             <div className={styles.cardHeader}>
               <MapPin className={styles.cardIcon} size={28} />
-              <h2>Контакты и адреса</h2>
+              <h2>Контакты</h2>
             </div>
             <div className={styles.detailsGrid}>
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Юридический адрес</span>
+                <span className={styles.detailLabel}>Юридический адрес:</span>
                 <span className={styles.detailValue}>
                   117218, г. Москва, вн.тер.г. муниципальный округ Котловка, ул.
                   Кржижановского, д. 29, к. 5, помещ. 4А/1/5
                 </span>
               </div>
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Почтовый адрес</span>
+                <span className={styles.detailLabel}>Почтовый адрес:</span>
                 <span className={styles.detailValue}>
                   360004, КБР, г. Нальчик, ул. Тургенева, д. 21А
                 </span>
               </div>
               <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Телефон:</span>
-                <span className={styles.detailValue}>8 (989) 640-05-23</span>
-              </div>
-              <div className={styles.detailItem}>
-                <span className={styles.detailLabel}>Почта:</span>
+                <span className={styles.detailLabel}>Электронная почта:</span>
                 <span className={styles.detailValue}>
-                  <a href="mailto:info@ozpro.ru" style={{ color: 'inherit', textDecoration: 'none' }}>
+                  <a
+                    href="mailto:info@ozpro.ru"
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
                     info@ozpro.ru
                   </a>
                 </span>
