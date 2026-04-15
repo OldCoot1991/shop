@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ChevronLeft, ShieldCheck } from 'lucide-react';
+import { ChevronLeft, ShieldCheck, CreditCard } from 'lucide-react';
 import styles from './PaymentMethodsPage.module.css';
 
 const PaymentMethodsPage = () => {
@@ -24,10 +24,40 @@ const PaymentMethodsPage = () => {
         </header>
 
         <div className={styles.content}>
-          {/* Main Payment Providers */}
+          {/* Electronic Payments */}
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <ShieldCheck className={styles.sectionIcon} size={24} />
+              <h2>Электронные платежи</h2>
+            </div>
+            <p className={styles.sectionText}>
+              Оплачивайте заказы быстро и без комиссии через наши основные платежные шлюзы.
+            </p>
+            <div className={styles.providerGrid}>
+              <div className={styles.providerCard}>
+                <div className={styles.providerLogoWrapper}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/yookassa.svg" alt="ЮKassa" className={styles.providerLogoYoo} />
+                </div>
+                <h3>ЮKassa</h3>
+                <p>Единая касса для оплаты онлайн. Лидер среди платежных агрегаторов России.</p>
+              </div>
+
+              <div className={styles.providerCard}>
+                <div className={styles.providerLogoWrapper}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/uralsib.svg" alt="Уралсиб" className={styles.providerLogoUral} />
+                </div>
+                <h3>ПАО «БАНК УРАЛСИБ»</h3>
+                <p>Надежные и безопасные платежи через систему банка «Уралсиб».</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Main Payment Providers */}
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <CreditCard className={styles.sectionIcon} size={24} />
               <h2>Оплата Банковской картой On-Line</h2>
             </div>
             <p className={styles.sectionText}>
