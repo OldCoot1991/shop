@@ -46,7 +46,7 @@ const PaymentMethodsPage = () => {
               <div className={styles.providerCard}>
                 <div className={styles.providerLogoWrapper}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/uralsib.svg" alt="Уралсиб" className={styles.providerLogoUral} />
+                  <img src="/uralsib.png" alt="Уралсиб" className={styles.providerLogoUral} />
                 </div>
                 <h3>ПАО «БАНК УРАЛСИБ»</h3>
                 <p>Надежные и безопасные платежи через систему банка «Уралсиб».</p>
