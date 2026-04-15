@@ -39,6 +39,21 @@ const PaymentMethodsPage = () => {
             <p className={styles.sectionText}>
               Для оплаты заказов могут быть использованы карты VISA, MASTERCARD, МИР Российских банков. Платежи c карт эмитированных зарубежными банками не принимаются.
             </p>
+
+            <div className={styles.cardsRow}>
+              <div className={styles.cardLogoWrapper} title="Visa">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/visa-logo.svg" alt="Visa" className={styles.cardImg} />
+              </div>
+              <div className={styles.cardLogoWrapper} title="Mastercard">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/mastercard-logo.svg" alt="Mastercard" className={styles.cardImg} />
+              </div>
+              <div className={styles.cardLogoWrapper} title="Мир">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/mir-logo.svg" alt="Мир" className={styles.cardImg} />
+              </div>
+            </div>
           </section>
         </div>
       </div>
