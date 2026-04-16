@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import styles from "./Footer.module.css";
 
 const Footer = () => {
@@ -49,6 +49,16 @@ const Footer = () => {
               <li>
                 <Link href="/returns" className={styles.link}>
                   Правила возврата
+                </Link>
+              </li>
+              <li>
+                <Link href="/legal#privacy-policy" className={styles.link}>
+                  Политика конфиденциальности
+                </Link>
+              </li>
+              <li>
+                <Link href="/legal#public-offer" className={styles.link}>
+                  Публичная оферта
                 </Link>
               </li>
             </ul>
@@ -118,8 +128,8 @@ const Footer = () => {
             © 2026 ОЗОН-ПРО. Все права защищены
           </p>
           <div className={styles.legalLinks}>
-            <a href="#">Политика конфиденциальности</a>
-            <a href="/legal#public-offer">Публичная оферта</a>
+            <Link href="/legal#privacy-policy">Политика конфиденциальности</Link>
+            <Link href="/legal#public-offer">Публичная оферта</Link>
           </div>
         </div>
       </div>
