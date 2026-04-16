@@ -58,9 +58,9 @@ const Footer = () => {
             <h4 className={styles.title}>О компании</h4>
             <ul className={styles.list}>
               <li>
-                <a href="#" className={styles.link}>
+                <Link href="/about" className={styles.link}>
                   О нас
-                </a>
+                </Link>
               </li>
               <li>
                 <Link href="/requisites" className={styles.link}>
