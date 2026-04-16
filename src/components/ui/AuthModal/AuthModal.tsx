@@ -194,7 +194,7 @@ export default function AuthModal({
         {/* Brand */}
         <div className={styles.brand}>
           <div className={styles.brandIcon}>S</div>
-          <span className={styles.brandName}>ShopHub</span>
+          <span className={styles.brandName}>ОЗОН-ПРО</span>
         </div>
 
         {/* Tabs */}

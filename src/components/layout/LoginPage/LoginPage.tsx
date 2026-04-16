@@ -187,7 +187,7 @@ export default function LoginPage() {
         {/* Brand */}
         <div className={styles.brand}>
           <div className={styles.brandIcon}>S</div>
-          <span className={styles.brandName}>ShopHub</span>
+          <span className={styles.brandName}>ОЗОН-ПРО</span>
         </div>
 
         <h1 className={styles.title}>Вход в аккаунт</h1>

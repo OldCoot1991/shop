@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import RequisitesPage from '@/components/layout/RequisitesPage/RequisitesPage';
 
 export const metadata: Metadata = {
-  title: 'Реквизиты - Способы оплаты и данные',
+  title: 'Реквизиты | ОЗОН-ПРО',
   description: 'Юридическая информация, банковские реквизиты и данные компании.',
 };
 

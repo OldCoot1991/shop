@@ -1,7 +1,7 @@
 import PaymentMethodsPage from "@/components/layout/PaymentMethodsPage/PaymentMethodsPage";
 
 export const metadata = {
-  title: "Способы оплаты | ShopHub",
+  title: "Способы оплаты | ОЗОН-ПРО",
   description: "Узнайте о доступных способах оплаты покупок: ЮKassa, Уралсиб, банковские карты.",
 };
 

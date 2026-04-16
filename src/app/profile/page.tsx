@@ -1,8 +1,8 @@
 import ProfilePage from "@/components/layout/ProfilePage/ProfilePage";
 
 export const metadata = {
-  title: "Личный кабинет | ShopHub",
-  description: "Ваш профиль в ShopHub",
+  title: "Личный кабинет | ОЗОН-ПРО",
+  description: "Ваш профиль в ОЗОН-ПРО",
 };
 
 export default function Page() {

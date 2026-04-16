@@ -8,7 +8,7 @@ export default function SearchHeader() {
         <input
           type="text"
           className={styles.input}
-          placeholder="Искать на ShopHub"
+          placeholder="Искать на ОЗОН-ПРО"
         />
         <button className={styles.searchButton}>
           <Search size={20} />

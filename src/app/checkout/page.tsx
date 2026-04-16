@@ -1,7 +1,7 @@
 import CheckoutPage from "./CheckoutPage";
 
 export const metadata = {
-  title: "Оформление заказа | ShopHub",
+  title: "Оформление заказа | ОЗОН-ПРО",
   description: "Оформите и оплатите ваш заказ",
 };
 

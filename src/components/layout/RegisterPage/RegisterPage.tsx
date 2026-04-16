@@ -149,7 +149,7 @@ function SuccessScreen({ email }: { email: string }) {
             <IconCheckCircle />
           </div>
           <h2 className={styles.successTitle}>Регистрация завершена!</h2>
-          <p className={styles.successSub}>Добро пожаловать в ShopHub</p>
+          <p className={styles.successSub}>Добро пожаловать в ОЗОН-ПРО</p>
           <span className={styles.successUser}>{email}</span>
           <p className={styles.successRedirect}>
             Переход в личный кабинет через <strong>{countdown}</strong> сек…
@@ -266,7 +266,7 @@ export default function RegisterPage() {
         {/* Brand */}
         <div className={styles.brand}>
           <div className={styles.brandIcon}>S</div>
-          <span className={styles.brandName}>ShopHub</span>
+          <span className={styles.brandName}>ОЗОН-ПРО</span>
         </div>
 
         <h1 className={styles.title}>Создать аккаунт</h1>

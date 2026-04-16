@@ -3,7 +3,7 @@ import PaymentsClient from "./PaymentsClient";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Мои заказы | Shophub",
+  title: "Мои заказы | ОЗОН-ПРО",
   description: "Управление заказами и оплата",
 };
 
