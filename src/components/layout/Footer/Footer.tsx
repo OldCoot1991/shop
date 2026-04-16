@@ -42,9 +42,9 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className={styles.link}>
+                <Link href="/delivery" className={styles.link}>
                   Доставка
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className={styles.link}>

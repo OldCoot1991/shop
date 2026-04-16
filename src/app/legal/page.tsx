@@ -599,10 +599,28 @@ export default function LegalPage() {
   const [activeDoc, setActiveDoc] = useState(documents[0].id);
 
   useEffect(() => {
-    const hash = window.location.hash.replace('#', '');
-    if (hash && documents.some(d => d.id === hash)) {
-      setTimeout(() => setActiveDoc(hash), 0);
-    }
+    const handleHashUpdate = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && documents.some(d => d.id === hash)) {
+        setActiveDoc(hash);
+        if (window.innerWidth <= 768) {
+          setTimeout(() => {
+            const contentEl = document.getElementById('doc-content');
+            if (contentEl) {
+              contentEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 50);
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+
+    // Run on mount
+    setTimeout(handleHashUpdate, 0);
+
+    // Listen for hash changes (e.g. clicking footer links while already on the page)
+    window.addEventListener('hashchange', handleHashUpdate);
+    return () => window.removeEventListener('hashchange', handleHashUpdate);
   }, []);
 
   const handleDocChange = (id: string, isClick = false) => {
