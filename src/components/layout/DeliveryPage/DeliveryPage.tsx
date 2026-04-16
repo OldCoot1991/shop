@@ -17,6 +17,14 @@ const DeliveryPage = () => {
 
         <header className={styles.header}>
           <h1 className={styles.title}>Доставка</h1>
+          
+          <div className={styles.legalNoticeBox}>
+            <span className={styles.greenDot}></span>
+            <p className={styles.legalNoticeText}>
+              Данная информация основана на документе — <Link href="/legal#rules" className={styles.linkText}>Правила оплаты, доставки, возврата и отмены заказа</Link>
+            </p>
+          </div>
+
           <p className={styles.subtitle}>
             Доставка товаров осуществляется по всей территории Российской Федерации через СДЭК.
           </p>
