@@ -31,46 +31,46 @@ const DeliveryPage = () => {
         </header>
 
         <div className={styles.content}>
-          {/* Delivery Methods */}
-          <section className={styles.section}>
-            <div className={styles.sectionHeader}>
-              <Truck className={styles.sectionIcon} size={24} />
-              <h2>Способы доставки СДЭК</h2>
-            </div>
-            <p className={styles.sectionText}>
-              Доступные способы доставки могут включать:
-            </p>
-            <div className={styles.providerGrid}>
-              <div className={styles.providerCard}>
-                <div className={styles.providerLogoWrapper}>
-                  <Truck size={48} className={styles.providerIcon} />
-                </div>
-                <h3>Курьерская доставка СДЭК</h3>
-                <p>Доставка заказа курьером прямо до вашей двери.</p>
+          <div className={styles.providerGrid}>
+            <div className={styles.providerCard}>
+              <div className={styles.providerLogoWrapper}>
+                <Truck size={48} className={styles.providerIcon} />
               </div>
-
-              <div className={styles.providerCard}>
-                <div className={styles.providerLogoWrapper}>
-                  <Package size={48} className={styles.providerIcon} />
-                </div>
-                <h3>Пункт выдачи заказов СДЭК</h3>
-                <p>Получение заказа в удобном для вас пункте выдачи.</p>
-              </div>
+              <h3 style={{ margin: 0 }}>Курьерская доставка СДЭК</h3>
             </div>
-          </section>
+            
+            <div className={styles.providerCard}>
+              <div className={styles.providerLogoWrapper}>
+                <Package size={48} className={styles.providerIcon} />
+              </div>
+              <h3 style={{ margin: 0 }}>Пункт выдачи заказов СДЭК</h3>
+            </div>
+          </div>
 
-          {/* Terms and Conditions */}
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <Info className={styles.sectionIcon} size={24} />
-              <h2>Стоимость и сроки</h2>
+              <h2>Условия доставки</h2>
             </div>
             <div className={styles.infoContent}>
               <p className={styles.sectionText}>
-                <strong>Расчет доставки:</strong> Стоимость и предполагаемый срок доставки рассчитываются и отображаются при оформлении заказа. Срок доставки зависит от региона доставки, загруженности логистических каналов, характеристик товара и иных обстоятельств, влияющих на перевозку.
+                Доставка товаров осуществляется по всей территории Российской Федерации через СДЭК.
               </p>
               <p className={styles.sectionText}>
-                <strong>Отмена и возврат:</strong> Если Покупатель не получил Заказ по причинам, зависящим от него, в том числе не забрал Заказ из пункта выдачи СДЭК в установленный срок, Продавец вправе отменить Заказ и осуществить возврат денежных средств за вычетом фактически понесённых расходов в случаях, допустимых законодательством РФ.
+                Доступные способы доставки могут включать:
+              </p>
+              <ul style={{ paddingLeft: "24px", margin: 0, color: "var(--color-muted)" }}>
+                <li style={{ marginBottom: "8px", lineHeight: "1.6" }}>курьерскую доставку СДЭК;</li>
+                <li style={{ marginBottom: "8px", lineHeight: "1.6" }}>доставку в пункт выдачи заказов СДЭК.</li>
+              </ul>
+              <p className={styles.sectionText}>
+                Стоимость и предполагаемый срок доставки рассчитываются и отображаются при оформлении заказа.
+              </p>
+              <p className={styles.sectionText}>
+                Срок доставки зависит от региона доставки, загруженности логистических каналов, характеристик товара и иных обстоятельств, влияющих на перевозку.
+              </p>
+              <p className={styles.sectionText}>
+                Если Покупатель не получил Заказ по причинам, зависящим от него, в том числе не забрал Заказ из пункта выдачи СДЭК в установленный срок, Продавец вправе отменить Заказ и осуществить возврат денежных средств за вычетом фактически понесённых расходов в случаях, допустимых законодательством РФ.
               </p>
             </div>
           </section>
