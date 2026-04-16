@@ -51,16 +51,6 @@ const Footer = () => {
                   Правила возврата
                 </Link>
               </li>
-              <li>
-                <Link href="/legal#privacy-policy" className={styles.link}>
-                  Политика конфиденциальности
-                </Link>
-              </li>
-              <li>
-                <Link href="/legal#public-offer" className={styles.link}>
-                  Публичная оферта
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -128,8 +118,8 @@ const Footer = () => {
             © 2026 ОЗОН-ПРО. Все права защищены
           </p>
           <div className={styles.legalLinks}>
-            <Link href="/legal#privacy-policy">Политика конфиденциальности</Link>
-            <Link href="/legal#public-offer">Публичная оферта</Link>
+            <a href="/legal#privacy-policy">Политика конфиденциальности</a>
+            <a href="/legal#public-offer">Публичная оферта</a>
           </div>
         </div>
       </div>
