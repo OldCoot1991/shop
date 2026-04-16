@@ -24,33 +24,13 @@ const DeliveryPage = () => {
               Данная информация основана на документе — <Link href="/legal#rules" className={styles.linkText}>Правила оплаты, доставки, возврата и отмены заказа</Link>
             </p>
           </div>
-
-          <p className={styles.subtitle}>
-            Доставка товаров осуществляется по всей территории Российской Федерации через СДЭК.
-          </p>
         </header>
 
         <div className={styles.content}>
-          <div className={styles.providerGrid}>
-            <div className={styles.providerCard}>
-              <div className={styles.providerLogoWrapper}>
-                <Truck size={48} className={styles.providerIcon} />
-              </div>
-              <h3 style={{ margin: 0 }}>Курьерская доставка СДЭК</h3>
-            </div>
-            
-            <div className={styles.providerCard}>
-              <div className={styles.providerLogoWrapper}>
-                <Package size={48} className={styles.providerIcon} />
-              </div>
-              <h3 style={{ margin: 0 }}>Пункт выдачи заказов СДЭК</h3>
-            </div>
-          </div>
-
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <Info className={styles.sectionIcon} size={24} />
-              <h2>Условия доставки</h2>
+              <h2>Доставка</h2>
             </div>
             <div className={styles.infoContent}>
               <p className={styles.sectionText}>
@@ -74,6 +54,22 @@ const DeliveryPage = () => {
               </p>
             </div>
           </section>
+
+          <div className={styles.providerGrid}>
+            <div className={styles.providerCard}>
+              <div className={styles.providerLogoWrapper}>
+                <Truck size={48} className={styles.providerIcon} />
+              </div>
+              <h3 style={{ margin: 0 }}>Курьерская доставка СДЭК</h3>
+            </div>
+            
+            <div className={styles.providerCard}>
+              <div className={styles.providerLogoWrapper}>
+                <Package size={48} className={styles.providerIcon} />
+              </div>
+              <h3 style={{ margin: 0 }}>Пункт выдачи заказов СДЭК</h3>
+            </div>
+          </div>
         </div>
       </div>
     </div>
