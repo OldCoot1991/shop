@@ -73,9 +73,9 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className={styles.link}>
+                <Link href="/contacts" className={styles.link}>
                   Контакты
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
