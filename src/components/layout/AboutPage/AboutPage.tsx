@@ -32,14 +32,10 @@ const AboutPage = () => {
         {/* Hero Section */}
         <header className={styles.hero}>
           <h2 className={styles.heroTitle}>О НАС</h2>
-          <div className={styles.welcomeBox}>
-            <span className={styles.greenDot}></span>
-            <span className={styles.legalNoticeText}>Добро пожаловать на ОЗОН-ПРО!</span>
-          </div>
           <div className={styles.subtitleWrapper}>
             <h1 className={styles.title}>О НАС</h1>
             <p className={styles.subtitle}>
-              ОЗОН-ПРО — это современный и динамично развивающийся маркетплейс, созданный для того, чтобы связать качественных поставщиков с миллионами покупателей по всей России.
+              ОЗОН-ПРО — это современный и динамично развивающийся интернет-магазин.
             </p>
           </div>
         </header>
