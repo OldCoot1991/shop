@@ -47,9 +47,9 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className={styles.link}>
+                <Link href="/returns" className={styles.link}>
                   Правила возврата
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
