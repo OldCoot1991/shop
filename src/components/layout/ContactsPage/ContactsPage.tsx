@@ -25,10 +25,10 @@ const ContactsPage = () => {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <LifeBuoy className={styles.sectionIcon} size={24} />
-              <h2>Поддержка покупателей</h2>
+              <h2>Покупателям</h2>
             </div>
             <div className={styles.infoContent}>
-              <p className={styles.sectionText}>Если у вас есть вопросы, напишите нам на:</p>
+              <p className={styles.sectionText}>Если у вас есть вопросы, напишите нам на</p>
               <a
                 href="mailto:support@ozpro.ru"
                 className={styles.linkText}
@@ -45,7 +45,7 @@ const ContactsPage = () => {
               <h2>Сотрудничество</h2>
             </div>
             <div className={styles.infoContent}>
-              <p className={styles.sectionText}>По вопросам сотрудничества:</p>
+              <p className={styles.sectionText}>По вопросам сотрудничества напишите на</p>
               <a
                 href="mailto:info@ozpro.ru"
                 className={styles.linkText}
