@@ -44,6 +44,23 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
   const category = getAttributeValue(product.attributes, "Категория");
   const topic = getAttributeValue(product.attributes, "Тематика");
 
+  // Map category name to ID for the link (Case-insensitive)
+  const categoryNamesMap: Record<string, number> = {
+    "двойные открытки": 1000,
+    "значки": 1001,
+    "конверты": 1002,
+    "магниты": 1003,
+    "мини-открытки": 1004,
+    "одинарные открытки": 1005,
+    "подставки": 1006,
+    "почтовые открытки": 1007,
+    "стикерпаки": 1008,
+    "стикеры": 1009,
+    "шевроны": 1010,
+  };
+
+  const categoryId = category ? categoryNamesMap[category.toLowerCase()] : null;
+
   const mainImageUrl =
     images.length > 0
       ? getProductImageUrl(images[selectedImage], "full")
@@ -81,15 +98,18 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
     <div className={styles.page}>
       {/* Breadcrumb */}
       <nav className={styles.breadcrumb}>
-        <Link href="/" className={styles.breadcrumbLink}>
+        <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
           <ChevronLeft size={16} />
           Главная
         </Link>
         {category && (
           <>
             <span className={styles.breadcrumbSep} />
-            <Link href="/catalog" className={styles.breadcrumbLink}>
-              {category}
+            <Link 
+              href={categoryId ? `/api-catalog/${categoryId}` : "/"} 
+              className={styles.breadcrumbLink}
+            >
+              {category.charAt(0).toUpperCase() + category.slice(1)}
             </Link>
           </>
         )}

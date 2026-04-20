@@ -76,17 +76,43 @@ export default function ProductDetail({
     { icon: <RotateCcw size={18} />, text: "Возврат 14 дней" },
   ];
 
+  const categoryNamesMap: Record<string, number> = {
+    "двойные открытки": 1000,
+    "значки": 1001,
+    "конверты": 1002,
+    "магниты": 1003,
+    "мини-открытки": 1004,
+    "одинарные открытки": 1005,
+    "подставки": 1006,
+    "почтовые открытки": 1007,
+    "стикерпаки": 1008,
+    "стикеры": 1009,
+    "шевроны": 1010,
+  };
+
+  const categoryId = product.category ? categoryNamesMap[product.category.toLowerCase()] : null;
+
   return (
     <div className={styles.page}>
       {/* Breadcrumb */}
       <nav className={styles.breadcrumb}>
-        <Link href="/" className={styles.breadcrumbLink}>
+        <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
           <ChevronLeft size={16} />
           Главная
         </Link>
         {product.category && (
-          <span className={styles.breadcrumbSep}>{product.category}</span>
+          <>
+            <span className={styles.breadcrumbSep} />
+            <Link 
+              href={categoryId ? `/api-catalog/${categoryId}` : "/"} 
+              className={styles.breadcrumbLink}
+            >
+              {product.category.charAt(0).toUpperCase() + product.category.slice(1)}
+            </Link>
+          </>
         )}
+        <span className={styles.breadcrumbSep} />
+        <span className={styles.breadcrumbCurrent}>{product.title}</span>
       </nav>
 
       {/* Main block */}

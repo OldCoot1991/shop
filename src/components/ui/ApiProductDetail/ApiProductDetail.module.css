@@ -8,27 +8,32 @@
 .breadcrumb {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 24px;
   font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--color-muted);
-  flex-wrap: wrap;
+  margin-bottom: 24px;
 }
 .breadcrumbLink {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: var(--color-primary);
-  transition: opacity 0.2s;
+  color: var(--color-muted);
   text-decoration: none;
+  transition: opacity 0.2s;
 }
-.breadcrumbLink:hover { opacity: 0.75; }
-.breadcrumbSep::before {
-  content: "/";
-  color: var(--color-muted);
+.breadcrumbFirst {
+  color: var(--color-primary);
 }
+.breadcrumbLink:hover { opacity: 0.8; }
+.breadcrumbSep {
+  display: flex;
+  align-items: center;
+}
+.breadcrumbSep::before { content: "/"; margin: 0 8px; color: var(--color-muted); }
 .breadcrumbCurrent {
-  color: var(--color-muted);
+  color: var(--color-success);
+  font-weight: 600;
   max-width: 320px;
   overflow: hidden;
   text-overflow: ellipsis;

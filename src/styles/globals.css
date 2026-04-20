@@ -9,6 +9,7 @@ html[data-theme="light"] {
   --color-card-bg: #ffffff;
   --color-card-hover: #fcfcfc;
   --color-muted: #8c8c8c;
+  --color-success: #00b011;
   --color-badge-bg: #f91155;
   --color-badge-text: #ffffff;
   --color-icon-hover: 0.7;
@@ -30,6 +31,7 @@ html[data-theme="dark"] {
   --color-card-bg: #1e1e1e;
   --color-card-hover: #262626;
   --color-muted: #a0a0a0;
+  --color-success: #00e616;
   --color-badge-bg: #ff4d4f;
   --color-badge-text: #ffffff;
   --color-icon-hover: 0.7;

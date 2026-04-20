@@ -23,10 +23,11 @@ const AboutPage = () => {
 
       <div className={styles.container}>
         <nav className={styles.breadcrumb}>
-          <Link href="/" className={styles.breadcrumbLink}>
+          <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
             <ChevronLeft size={16} /> Главная
           </Link>
-          <span className={styles.breadcrumbSep}>О нас</span>
+          <span className={styles.breadcrumbSep} />
+          <span className={styles.breadcrumbCurrent}>О нас</span>
         </nav>
 
         {/* Hero Section */}

@@ -106,10 +106,11 @@ export default function ApiCatalogPage({
     <div className={styles.page}>
       {/* Breadcrumb */}
       <nav className={styles.breadcrumb}>
-        <Link href="/" className={styles.breadcrumbLink}>
+        <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
           <ChevronLeft size={16} /> Главная
         </Link>
-        <span className={styles.breadcrumbSep}>
+        <span className={styles.breadcrumbSep} />
+        <span className={styles.breadcrumbCurrent}>
           {title.charAt(0).toUpperCase() + title.slice(1)}
         </span>
       </nav>

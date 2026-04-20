@@ -9,10 +9,11 @@ const ReturnsPage = () => {
       <div className={styles.container}>
         {/* Breadcrumb */}
         <nav className={styles.breadcrumb}>
-          <Link href="/" className={styles.breadcrumbLink}>
+          <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
             <ChevronLeft size={16} /> Главная
           </Link>
-          <span className={styles.breadcrumbSep}>Правила возврата</span>
+          <span className={styles.breadcrumbSep} />
+          <span className={styles.breadcrumbCurrent}>Правила возврата</span>
         </nav>
 
         <header className={styles.header}>

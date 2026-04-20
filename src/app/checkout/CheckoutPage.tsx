@@ -100,10 +100,11 @@ export default function CheckoutPage() {
       <div className={styles.container}>
         {/* Breadcrumb */}
         <nav className={styles.breadcrumb}>
-          <Link href="/" className={styles.breadcrumbLink}>
+          <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
             <ChevronLeft size={16} /> Главная
           </Link>
-          <span className={styles.breadcrumbSep}>Оформление заказа</span>
+          <span className={styles.breadcrumbSep} />
+          <span className={styles.breadcrumbCurrent}>Оформление заказа</span>
         </nav>
 
         <h1 className={styles.title}>Оформление заказа</h1>
