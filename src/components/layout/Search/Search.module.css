@@ -51,10 +51,9 @@
 
 @media (max-width: 768px) {
   .container {
-    margin: 0;
+    margin: 8px 0 4px;
     max-width: 100%;
-    order: 3; /* Сдвигаем поиск на новую строку на мобильных */
+    order: 3; /* Move search to new line on mobile */
     width: 100%;
-    margin-top: 12px;
   }
 }

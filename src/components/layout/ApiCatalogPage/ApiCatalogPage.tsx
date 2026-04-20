@@ -10,9 +10,11 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  ChevronDown,
 } from "lucide-react";
 import { fetchProductsRequest, ApiProduct } from "@/services/productService";
 import ApiProductCard from "@/components/ui/ApiProductCard/ApiProductCard";
+import SortDrawer from "@/components/ui/SortDrawer/SortDrawer";
 import styles from "./ApiCatalogPage.module.css";
 
 type SortOption = "popular" | "price_asc" | "price_desc";
@@ -44,6 +46,7 @@ export default function ApiCatalogPage({
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [sort, setSort] = useState<SortOption>("popular");
+  const [isSortDrawerOpen, setIsSortDrawerOpen] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -106,19 +109,19 @@ export default function ApiCatalogPage({
         <Link href="/" className={styles.breadcrumbLink}>
           <ChevronLeft size={16} /> Главная
         </Link>
-        <span className={styles.breadcrumbSep}>{title}</span>
+        <span className={styles.breadcrumbSep}>
+          {title.charAt(0).toUpperCase() + title.slice(1)}
+        </span>
       </nav>
 
-      {/* Page header */}
-      <div className={styles.pageHeader}>
-        <h1 className={styles.pageTitle}>{title}</h1>
-      </div>
+      {/* Breadcrumb - Title removed as requested */}
 
-      {/* Toolbar */}
       <div className={styles.toolbar}>
         <div className={styles.sortRow}>
           <SlidersHorizontal size={18} className={styles.sortIcon} />
           <span className={styles.sortLabel}>Сортировка:</span>
+          
+          {/* Desktop Version */}
           <div className={styles.sortButtons}>
             {(Object.keys(SORT_LABELS) as SortOption[]).map((key) => (
               <button
@@ -130,8 +133,29 @@ export default function ApiCatalogPage({
               </button>
             ))}
           </div>
+
+          {/* Mobile Version - Single Button */}
+          <button 
+            className={styles.mobileSortTrigger}
+            onClick={() => setIsSortDrawerOpen(true)}
+          >
+            <span className={styles.mobileSortLabel}>Сортировка</span>
+            <ChevronRight size={14} className={styles.mobileSortArrow} />
+            <div className={styles.mobileSortValue}>
+              <span>{SORT_LABELS[sort]}</span>
+              <ChevronDown size={16} />
+            </div>
+          </button>
         </div>
       </div>
+
+      <SortDrawer
+        isOpen={isSortDrawerOpen}
+        onClose={() => setIsSortDrawerOpen(false)}
+        options={Object.entries(SORT_LABELS).map(([key, label]) => ({ key, label }))}
+        currentValue={sort}
+        onSelect={(val) => handleSort(val as SortOption)}
+      />
 
       {/* Loading */}
       {status === "loading" && (

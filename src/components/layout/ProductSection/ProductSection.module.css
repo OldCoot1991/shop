@@ -45,8 +45,8 @@
 }
 
 .slide {
-  width: auto !important;
-  /* Don't shrink or stretch — let the card define its own width */
+  width: 200px !important;
+  /* Fixed width for swiper slides to maintain carousel look */
 }
 
 .swiper :global(.swiper-wrapper) {
