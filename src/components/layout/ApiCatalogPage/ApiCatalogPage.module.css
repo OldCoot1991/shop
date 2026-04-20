@@ -122,11 +122,12 @@
 }
 
 .mobileSortValue {
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 4px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: #16a34a;
 }
 
 @media (max-width: 600px) {
