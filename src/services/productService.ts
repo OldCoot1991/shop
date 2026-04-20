@@ -13,11 +13,6 @@ export const CATEGORY_IDS = {
     stickerPacks: 1008,
     stickers: 1009,
     patches: 1010,
-    aksessuary_dlya_telefonov: 1,
-    igrushki: 2,
-    kantstovary: 3,
-    myachi: 4,
-    obuv_i_aksessuary: 5,
 } as const;
 
 export interface ApiFilterItem {
