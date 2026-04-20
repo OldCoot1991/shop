@@ -7,6 +7,31 @@ export default function Home() {
       style={{ maxWidth: "1440px", margin: "0 auto", padding: "24px 16px" }}
     >
       <ProductSection
+        title="Аксессуары для телефонов"
+        categoryKey="aksessuary_dlya_telefonov"
+        categoryFilter={String(CATEGORY_IDS.aksessuary_dlya_telefonov)}
+      />
+      <ProductSection
+        title="Игрушки"
+        categoryKey="igrushki"
+        categoryFilter={String(CATEGORY_IDS.igrushki)}
+      />
+      <ProductSection
+        title="Канцтовары"
+        categoryKey="kantstovary"
+        categoryFilter={String(CATEGORY_IDS.kantstovary)}
+      />
+      <ProductSection
+        title="Мячи"
+        categoryKey="myachi"
+        categoryFilter={String(CATEGORY_IDS.myachi)}
+      />
+      <ProductSection
+        title="Обувь и аксессуары"
+        categoryKey="obuv_i_aksessuary"
+        categoryFilter={String(CATEGORY_IDS.obuv_i_aksessuary)}
+      />
+      {/* <ProductSection
         title="Стикеры"
         categoryKey="stickers"
         categoryFilter={String(CATEGORY_IDS.stickers)}
@@ -52,7 +77,7 @@ export default function Home() {
         title="Миниоткрытки"
         categoryKey="mini-cards"
         categoryFilter={String(CATEGORY_IDS.miniCards)}
-      />
+      /> */}
     </main>
   );
 }

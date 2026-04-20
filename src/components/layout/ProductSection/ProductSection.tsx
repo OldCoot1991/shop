@@ -19,7 +19,7 @@ interface ProductSectionProps {
   title: string;
   /** Unique key used as Redux cache key (e.g. "stickers") */
   categoryKey: string;
-  /** Value to pass as `category` query param (the name string, e.g. "стикеры") */
+  /** Value to pass as `category` query param (the name string, e.g. "") */
   categoryFilter?: string;
   /** Value to pass as `topic` query param */
   topicFilter?: string;
