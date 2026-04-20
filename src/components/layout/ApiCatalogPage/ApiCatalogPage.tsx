@@ -28,9 +28,6 @@ const SORT_API: Record<SortOption, string | undefined> = {
   price_desc: "price_desc",
 };
 
-const PER_PAGE_OPTIONS = [12, 24, 48] as const;
-type PerPage = (typeof PER_PAGE_OPTIONS)[number];
-
 interface ApiCatalogPageProps {
   title: string;
   categoryId: string;
@@ -40,50 +37,38 @@ export default function ApiCatalogPage({
   title,
   categoryId,
 }: ApiCatalogPageProps) {
-  // All products fetched so far (accumulator across server pages)
-  const [allProducts, setAllProducts] = useState<ApiProduct[]>([]);
+  // Products for the current page
+  const [products, setProducts] = useState<ApiProduct[]>([]);
 
   // UI state
-  const [page, setPage] = useState(1); // client virtual page
-  const [perPage, setPerPage] = useState<PerPage>(24); // items shown per virtual page
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [sort, setSort] = useState<SortOption>("popular");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
   const fetchKey = useRef(0); // cancel stale fetches on sort/category change
 
-  // Fetch ALL products from the API (paginate through server pages)
+  // Fetch products for the current page
   useEffect(() => {
     const key = ++fetchKey.current;
     let cancelled = false;
 
-    async function fetchAll() {
+    async function fetchPage() {
       setStatus("loading");
       setError(null);
-      setAllProducts([]);
-      setPage(1);
 
       try {
-        const accumulated: ApiProduct[] = [];
-        let serverPage = 1;
-        let total = 1;
-
-        while (serverPage <= total) {
-          if (cancelled || fetchKey.current !== key) return;
-          const data = await fetchProductsRequest({
-            category: categoryId,
-            page: serverPage,
-            sort: SORT_API[sort],
-          });
-          if (cancelled || fetchKey.current !== key) return;
-          accumulated.push(...data.products);
-          total = data.pagination.pageCount || 1;
-          if (serverPage >= total) break;
-          serverPage++;
-        }
+        const data = await fetchProductsRequest({
+          category: categoryId,
+          page: page,
+          sort: SORT_API[sort],
+        });
 
         if (cancelled || fetchKey.current !== key) return;
-        setAllProducts(accumulated);
+
+        setProducts(data.products);
+        setTotalPages(data.pagination.pageCount || 1);
         setStatus("idle");
       } catch (e) {
         if (cancelled || fetchKey.current !== key) return;
@@ -92,24 +77,18 @@ export default function ApiCatalogPage({
       }
     }
 
-    fetchAll();
+    fetchPage();
     return () => {
       cancelled = true;
     };
-  }, [categoryId, sort]);
+  }, [categoryId, sort, page]);
 
   const handleSort = (s: SortOption) => {
     setSort(s);
     setPage(1);
   };
-  const handlePerPage = (n: PerPage) => {
-    setPerPage(n);
-    setPage(1);
-  };
 
-  const totalPages = Math.max(1, Math.ceil(allProducts.length / perPage));
-  const startIdx = (page - 1) * perPage;
-  const visibleProducts = allProducts.slice(startIdx, startIdx + perPage);
+  const visibleProducts = products;
 
   const goToPage = (p: number) => {
     const clamped = Math.max(1, Math.min(p, totalPages));
@@ -133,11 +112,6 @@ export default function ApiCatalogPage({
       {/* Page header */}
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>{title}</h1>
-        {status === "idle" && allProducts.length > 0 && (
-          <span className={styles.productCount}>
-            {allProducts.length} товаров
-          </span>
-        )}
       </div>
 
       {/* Toolbar */}
@@ -153,22 +127,6 @@ export default function ApiCatalogPage({
                 onClick={() => handleSort(key)}
               >
                 {SORT_LABELS[key]}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Per-page selector */}
-        <div className={styles.perPageRow}>
-          <span className={styles.sortLabel}>Показывать:</span>
-          <div className={styles.perPageButtons}>
-            {PER_PAGE_OPTIONS.map((n) => (
-              <button
-                key={n}
-                className={`${styles.perPageBtn} ${perPage === n ? styles.perPageBtnActive : ""}`}
-                onClick={() => handlePerPage(n)}
-              >
-                {n}
               </button>
             ))}
           </div>
@@ -194,7 +152,7 @@ export default function ApiCatalogPage({
       )}
 
       {/* Empty */}
-      {status === "idle" && allProducts.length === 0 && (
+      {status === "idle" && products.length === 0 && (
         <p className={styles.empty}>Товары не найдены</p>
       )}
 
@@ -212,9 +170,6 @@ export default function ApiCatalogPage({
         <div className={styles.paginationWrapper}>
           <p className={styles.paginationInfo}>
             Страница <strong>{page}</strong> из <strong>{totalPages}</strong>
-            {" · "}показано {startIdx + 1}–
-            {Math.min(startIdx + perPage, allProducts.length)} из{" "}
-            {allProducts.length}
           </p>
           <div className={styles.pagination}>
             {/* First */}

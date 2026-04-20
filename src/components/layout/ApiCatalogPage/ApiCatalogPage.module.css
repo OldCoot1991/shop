@@ -36,10 +36,7 @@
   color: var(--color-text);
   margin: 0;
 }
-.productCount {
-  font-size: 15px;
-  color: var(--color-muted);
-}
+
 
 /* Toolbar */
 .toolbar {
@@ -57,14 +54,6 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-}
-.perPageRow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  padding-top: 10px;
-  border-top: 1px solid var(--color-border);
 }
 .sortIcon { color: var(--color-muted); flex-shrink: 0; }
 .sortLabel {
@@ -100,33 +89,6 @@
   color: #fff;
 }
 
-/* Per-page */
-.perPageButtons {
-  display: flex;
-  gap: 6px;
-}
-.perPageBtn {
-  width: 48px;
-  padding: 6px 0;
-  font-size: 13px;
-  font-weight: 600;
-  border-radius: 10px;
-  border: 1.5px solid var(--color-border);
-  background: var(--color-body);
-  color: var(--color-muted);
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: center;
-}
-.perPageBtn:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-.perPageBtnActive {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: #fff;
-}
 
 /* Product grid */
 .grid {
