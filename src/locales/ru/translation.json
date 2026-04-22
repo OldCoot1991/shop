@@ -170,6 +170,7 @@
     "order_status_paid": "Оплачен",
     "order_status_canceled": "Отменен",
     "order_status_delivered": "Доставлен",
+    "order_filter_all": "Все",
     "order_item_art": "Арт:",
     "order_item_qty": "шт.",
     "sort_label": "Сортировка:",

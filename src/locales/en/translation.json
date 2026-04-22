@@ -170,6 +170,7 @@
     "order_status_paid": "Paid",
     "order_status_canceled": "Cancelled",
     "order_status_delivered": "Delivered",
+    "order_filter_all": "All",
     "order_item_art": "Art:",
     "order_item_qty": "pcs.",
     "sort_label": "Sort by:",
