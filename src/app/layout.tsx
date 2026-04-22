@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Providers from "./providers";
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer/Footer";
+import DeveloperCard from "@/components/ui/DeveloperCard/DeveloperCard";
 import "../styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -10,6 +11,13 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "ОЗОН-ПРО",
   description: "Интернет-магазин ОЗОН-ПРО",
+  authors: [{ name: "Ахмед", url: "https://vk.ru/id1110743535" }],
+  creator: "Ахмед",
+  keywords: ["ОЗОН-ПРО", "интернет-магазин", "frontend", "Next.js"],
+  other: {
+    "author-telegram": "@AcDcRock32",
+    "author-email": "kochesokov1503@gmail.com",
+  },
 };
 
 export default function RootLayout({
@@ -25,6 +33,7 @@ export default function RootLayout({
             <Header />
             <div style={{ flex: 1 }}>{children}</div>
             <Footer />
+            <DeveloperCard variant="footer" />
           </div>
         </Providers>
       </body>
