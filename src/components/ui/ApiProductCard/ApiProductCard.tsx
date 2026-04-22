@@ -10,26 +10,36 @@ import {
 } from "@/services/productService";
 import { ShoppingCart, Check } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useCart } from "@/hooks/useCart";
+import { useAutoTranslate } from "@/hooks/useAutoTranslate";
 
 interface ApiProductCardProps {
   product: ApiProduct;
 }
 
 const ApiProductCard: React.FC<ApiProductCardProps> = ({ product }) => {
-  const { getItemQuantity, isInCart, addItem, decreaseItem } = useCart();
+  const { isInCart, addItem, decreaseItem, getItemQuantity } = useCart();
+  const { t } = useTranslation();
   const [justAdded, setJustAdded] = useState(false);
 
   const inCart = isInCart(product.id);
   const quantity = getItemQuantity(product.id);
+
+  const { translated: translatedName } = useAutoTranslate(product.name);
+  const categoryStr = getAttributeValue(product.attributes, "Категория") || "";
+  const topicStr = getAttributeValue(product.attributes, "Тематика") || "";
+  
+  const { translated: translatedCategory } = useAutoTranslate(categoryStr);
+  const { translated: translatedTopic } = useAutoTranslate(topicStr);
 
   const imageUrl =
     product.images.length > 0
       ? getProductImageUrl(product.images[0], "full")
       : null;
 
-  const category = getAttributeValue(product.attributes, "Категория");
-  const topic = getAttributeValue(product.attributes, "Тематика");
+  const category = translatedCategory;
+  const topic = translatedTopic;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -63,7 +73,7 @@ const ApiProductCard: React.FC<ApiProductCardProps> = ({ product }) => {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={imageUrl}
-            alt={product.name}
+            alt={translatedName}
             className={styles.image}
             loading="lazy"
           />
@@ -80,15 +90,15 @@ const ApiProductCard: React.FC<ApiProductCardProps> = ({ product }) => {
       <div className={styles.content}>
         <div className={styles.priceRow}>
           <span className={styles.price}>
-            {formatPrice(product.salePrice)} ₽
+            {formatPrice(product.salePrice)}
           </span>
         </div>
 
-        <h4 className={styles.title} title={product.name}>
-          {product.name}
+        <h4 className={styles.title} title={translatedName}>
+          {translatedName}
         </h4>
 
-        <p className={styles.topic}>{topic ?? "\u00A0"}</p>
+        <p className={styles.topic}>{topic || "\u00A0"}</p>
 
         {inCart ? (
           <div className={styles.cartControls}>
@@ -107,11 +117,11 @@ const ApiProductCard: React.FC<ApiProductCardProps> = ({ product }) => {
           >
             {justAdded ? (
               <>
-                <Check size={14} /> Добавлено
+                <Check size={14} /> {t("cart_added")}
               </>
             ) : (
               <>
-                <ShoppingCart size={14} /> В корзину
+                <ShoppingCart size={14} /> {t("cart_add")}
               </>
             )}
           </button>

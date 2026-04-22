@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./DeveloperCard.module.css";
 
 // SVG Icons inline to avoid deps
@@ -31,6 +32,7 @@ interface DeveloperCardProps {
 }
 
 export default function DeveloperCard({ variant = "header" }: DeveloperCardProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -51,8 +53,8 @@ export default function DeveloperCard({ variant = "header" }: DeveloperCardProps
       </div>
 
       <div className={styles.info}>
-        <p className={styles.name}>Ахмед</p>
-        <p className={styles.role}>Frontend Developer</p>
+        <p className={styles.name}>{t("dev_card_name")}</p>
+        <p className={styles.role}>{t("dev_card_role")}</p>
       </div>
 
       <div className={styles.divider} />
@@ -68,7 +70,7 @@ export default function DeveloperCard({ variant = "header" }: DeveloperCardProps
         </a>
         <a href="https://vk.ru/id1110743535" className={styles.contactLink} target="_blank" rel="noopener noreferrer">
           <span className={`${styles.contactIcon} ${styles.iconVk}`}><IconVK /></span>
-          <span>ВКонтакте</span>
+          <span>{t("dev_card_vk")}</span>
         </a>
       </div>
     </div>
@@ -78,7 +80,7 @@ export default function DeveloperCard({ variant = "header" }: DeveloperCardProps
     return (
       <div className={styles.footerBanner} ref={ref}>
         <button className={styles.footerTrigger} onClick={() => setOpen((v) => !v)}>
-          Разработчик сайта
+          {t("dev_card_title")}
         </button>
         {open && card}
       </div>
@@ -90,8 +92,8 @@ export default function DeveloperCard({ variant = "header" }: DeveloperCardProps
       <button
         className={styles.badge}
         onClick={() => setOpen((v) => !v)}
-        aria-label="О разработчике"
-        title="О разработчике"
+        aria-label={t("dev_card_about")}
+        title={t("dev_card_about")}
       >
         <span className={styles.badgeIcon}><IconCode /></span>
         <span className={styles.badgeText}>Dev</span>

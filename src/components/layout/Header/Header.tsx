@@ -24,6 +24,7 @@ import { fetchUser } from "@/lib/features/auth/authSlice";
 import { fetchCart, selectCartCount } from "@/lib/features/cart/cartSlice";
 import { selectWishlistCount } from "@/lib/features/wishlist/wishlistSlice";
 import { fetchFilters, ApiFilterItem } from "@/services/productService";
+import AutoTranslatable from "../../ui/AutoTranslatable/AutoTranslatable";
 
 const Header = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -101,7 +102,7 @@ const Header = () => {
           <div className={styles.catalogWrapper}>
             <button className={styles.catalogBtn} onClick={toggleCatalogMenu}>
               {isCatalogMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              <span>Каталог</span>
+              <span>{t("nav_catalog")}</span>
             </button>
           </div>
         </div>
@@ -113,7 +114,7 @@ const Header = () => {
                 <div
                   style={{ padding: "20px", color: "var(--text-secondary)" }}
                 >
-                  Загрузка категорий...
+                  {t("nav_loading")}
                 </div>
               ) : categories.length > 0 ? (
                 categories.map((cat) => (
@@ -123,14 +124,14 @@ const Header = () => {
                     className={styles.catalogDropdownItem}
                     onClick={() => setIsCatalogMenuOpen(false)}
                   >
-                    {cat.name}
+                    <AutoTranslatable text={cat.name} />
                   </Link>
                 ))
               ) : (
                 <div
                   style={{ padding: "20px", color: "var(--text-secondary)" }}
                 >
-                  Нет доступных категорий
+                  {t("nav_no_categories")}
                 </div>
               )}
             </div>
@@ -144,7 +145,7 @@ const Header = () => {
             <Link
               href="/profile"
               className={styles.actionItem}
-              aria-label="Личный кабинет"
+              aria-label={t("profile_user")}
             >
               <span
                 style={{
@@ -179,10 +180,10 @@ const Header = () => {
             <Link
               href="/login"
               className={styles.actionItem}
-              aria-label="Войти в личный кабинет"
+              aria-label={t("nav_login")}
             >
               <User size={24} className={styles.actionIcon} />
-              <span className={styles.actionText}>Войти</span>
+              <span className={styles.actionText}>{t("nav_login")}</span>
             </Link>
           )}
 
@@ -191,10 +192,10 @@ const Header = () => {
             <Link
               href="/payments"
               className={styles.actionItem}
-              aria-label="Мои заказы"
+              aria-label={t("nav_orders")}
             >
               <Package size={24} className={styles.actionIcon} />
-              <span className={styles.actionText}>Заказы</span>
+              <span className={styles.actionText}>{t("nav_orders")}</span>
             </Link>
           )}
 
@@ -202,10 +203,10 @@ const Header = () => {
             className={styles.actionItem}
             onClick={() => setIsWishlistOpen(true)}
             role="button"
-            aria-label="Открыть избранное"
+            aria-label={t("nav_wishlist")}
           >
             <Heart size={24} className={styles.actionIcon} />
-            <span className={styles.actionText}>Избранное</span>
+            <span className={styles.actionText}>{t("nav_wishlist")}</span>
             {wishlistCount > 0 && (
               <span className={styles.cartBadge}>{wishlistCount}</span>
             )}
@@ -214,10 +215,10 @@ const Header = () => {
             className={styles.actionItem}
             onClick={() => setIsCartOpen(true)}
             role="button"
-            aria-label="Открыть корзину"
+            aria-label={t("nav_cart")}
           >
             <ShoppingCart size={24} className={styles.actionIcon} />
-            <span className={styles.actionText}>Корзина</span>
+            <span className={styles.actionText}>{t("nav_cart")}</span>
             {cartCount > 0 && (
               <span className={styles.cartBadge}>{cartCount}</span>
             )}
@@ -230,7 +231,7 @@ const Header = () => {
             suppressHydrationWarning
           >
             <Settings size={24} className={styles.actionIcon} />
-            <span className={styles.actionText}>Настройки</span>
+            <span className={styles.actionText}>{t("settings_title")}</span>
           </div>
         </div>
       </div>

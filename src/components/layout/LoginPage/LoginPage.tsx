@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import {
   loginStart,
@@ -81,6 +82,7 @@ const IconKey = () => (
 
 // ── Success screen (after login) ─────────────────────────────────────────────
 function SuccessScreen({ email }: { email: string }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const [countdown, setCountdown] = useState(3);
 
@@ -95,11 +97,11 @@ function SuccessScreen({ email }: { email: string }) {
       <div className={styles.card}>
         <div className={styles.success}>
           <div className={styles.successIcon}><IconCheckCircle /></div>
-          <h2 className={styles.successTitle}>Вы вошли в аккаунт</h2>
-          <p className={styles.successSub}>Добро пожаловать!</p>
+          <h2 className={styles.successTitle}>{t("success_login_title", { defaultValue: "Вы вошли в аккаунт" })}</h2>
+          <p className={styles.successSub}>{t("welcome")}</p>
           <span className={styles.successUser}>{email}</span>
           <p className={styles.successRedirect}>
-            Переход в личный кабинет через <strong>{countdown}</strong> сек…
+            {t("redirect_countdown", { count: countdown, defaultValue: "Переход в личный кабинет через {{count}} сек…" })}
           </p>
           <div className={styles.progressBar}>
             <div className={styles.progressFill} style={{ animationDuration: "3s" }} />
@@ -129,6 +131,7 @@ type View = "login" | "reset";
 type ResetStep = 1 | 2 | 3 | "done";
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { isLoading, error, user, isAuthenticated } = useAppSelector((s) => s.auth);
 
@@ -197,7 +200,7 @@ export default function LoginPage() {
       dispatch(loginSuccess(userData));
       dispatch(syncCartOnLogin());
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Ошибка авторизации";
+      const message = err instanceof Error ? err.message : t("auth_error_default");
       dispatch(loginFailure(message));
     }
   };
@@ -213,7 +216,7 @@ export default function LoginPage() {
       startCountdown(timeout);
       setResetStep(2);
     } catch (err) {
-      setResetError(err instanceof Error ? err.message : "Ошибка");
+      setResetError(err instanceof Error ? err.message : t("auth_error"));
     } finally {
       setResetLoading(false);
     }
@@ -230,7 +233,7 @@ export default function LoginPage() {
       setResetCode("");
       startCountdown(timeout);
     } catch (err) {
-      setResetError(err instanceof Error ? err.message : "Ошибка");
+      setResetError(err instanceof Error ? err.message : t("auth_error"));
     } finally {
       setResetLoading(false);
     }
@@ -248,7 +251,7 @@ export default function LoginPage() {
       setCountdown(0);
       setResetStep(3);
     } catch (err) {
-      setResetError(err instanceof Error ? err.message : "Неверный код");
+      setResetError(err instanceof Error ? err.message : t("auth_error_invalid_code"));
     } finally {
       setResetLoading(false);
     }
@@ -265,7 +268,7 @@ export default function LoginPage() {
       dispatch(syncCartOnLogin());
       setResetStep("done");
     } catch (err) {
-      setResetError(err instanceof Error ? err.message : "Ошибка сохранения пароля");
+      setResetError(err instanceof Error ? err.message : t("auth_error_save_pass"));
     } finally {
       setResetLoading(false);
     }
@@ -289,8 +292,8 @@ export default function LoginPage() {
         {/* ── LOGIN VIEW ─────────────────────────────────────────────────── */}
         {view === "login" && (
           <>
-            <h1 className={styles.title}>Вход в аккаунт</h1>
-            <p className={styles.subtitle}>Введите свои данные для продолжения</p>
+            <h1 className={styles.title}>{t("auth_login")}</h1>
+            <p className={styles.subtitle}>{t("login_subtitle", { defaultValue: "Введите свои данные для продолжения" })}</p>
 
             <form className={styles.form} onSubmit={handleSubmit} noValidate>
               {error && (
@@ -301,7 +304,7 @@ export default function LoginPage() {
 
               {/* Login field */}
               <div className={styles.field}>
-                <label className={styles.label} htmlFor="login">Email или телефон</label>
+                <label className={styles.label} htmlFor="login">{t("auth_email_or_phone")}</label>
                 <div className={styles.inputWrapper}>
                   <span className={styles.inputIcon}><IconMail /></span>
                   <input
@@ -319,7 +322,7 @@ export default function LoginPage() {
 
               {/* Password field */}
               <div className={styles.field}>
-                <label className={styles.label} htmlFor="password">Пароль</label>
+                <label className={styles.label} htmlFor="password">{t("auth_password")}</label>
                 <div className={styles.inputWrapper}>
                   <span className={styles.inputIcon}><IconLock /></span>
                   <input
@@ -336,7 +339,7 @@ export default function LoginPage() {
                     type="button"
                     className={styles.togglePassword}
                     onClick={() => setShowPassword((v) => !v)}
-                    aria-label={showPassword ? "Скрыть пароль" : "Показать пароль"}
+                    aria-label={showPassword ? t("auth_hide_pass") : t("auth_show_pass")}
                   >
                     {showPassword ? <IconEyeOff /> : <IconEye />}
                   </button>
@@ -345,19 +348,19 @@ export default function LoginPage() {
 
               {/* Submit */}
               <button type="submit" className={styles.submit} disabled={isLoading || !login || !password}>
-                {isLoading ? (<><span className={styles.spinner} /> Входим...</>) : "Войти"}
+                {isLoading ? (<><span className={styles.spinner} /> {t("auth_logging_in")}</>) : t("auth_login_btn")}
               </button>
 
               {/* Forgot password */}
               <button type="button" className={styles.forgotBtn} onClick={openReset}>
-                Забыли пароль?
+                {t("auth_forgot_pass")}
               </button>
 
               <Link
                 href="/register"
                 style={{ textAlign: "center", fontSize: 14, color: "var(--color-primary)", marginTop: 4, textDecoration: "none" }}
               >
-                У вас нет аккаунта? Зарегистрироваться
+                {t("auth_no_account", { defaultValue: "У вас нет аккаунта? Зарегистрироваться" })}
               </Link>
             </form>
           </>
@@ -373,15 +376,15 @@ export default function LoginPage() {
             {resetStep === 1 && (
               <form className={styles.form} onSubmit={handleResetStep1} noValidate>
                 <button type="button" className={styles.backBtn} onClick={goBackToLogin}>
-                  <IconArrowLeft /> Назад
+                  <IconArrowLeft /> {t("auth_back")}
                 </button>
 
                 <div className={styles.resetHeader}>
                   <span className={styles.resetIcon}><IconKey /></span>
                   <div>
-                    <h1 className={styles.title} style={{ margin: 0 }}>Сброс пароля</h1>
+                    <h1 className={styles.title} style={{ margin: 0 }}>{t("auth_reset_pass")}</h1>
                     <p className={styles.subtitle} style={{ margin: "4px 0 0" }}>
-                      Введите email — мы отправим код подтверждения
+                      {t("auth_enter_email")}
                     </p>
                   </div>
                 </div>
@@ -391,7 +394,7 @@ export default function LoginPage() {
                 )}
 
                 <div className={styles.field}>
-                  <label className={styles.label} htmlFor="rst-login">Email или телефон</label>
+                  <label className={styles.label} htmlFor="rst-login">{t("auth_email_or_phone")}</label>
                   <div className={styles.inputWrapper}>
                     <span className={styles.inputIcon}><IconMail /></span>
                     <input
@@ -408,7 +411,7 @@ export default function LoginPage() {
                 </div>
 
                 <button type="submit" className={styles.submit} disabled={resetLoading || !resetLogin}>
-                  {resetLoading ? (<><span className={styles.spinner} /> Отправляем...</>) : "Получить код"}
+                  {resetLoading ? (<><span className={styles.spinner} /> {t("auth_sending")}</>) : t("auth_send_code")}
                 </button>
               </form>
             )}
@@ -417,11 +420,11 @@ export default function LoginPage() {
             {resetStep === 2 && (
               <form className={styles.form} onSubmit={handleResetStep2} noValidate>
                 <button type="button" className={styles.backBtn} onClick={() => { setResetStep(1); setResetError(null); setResetCode(""); if (countdownRef.current) clearInterval(countdownRef.current); setCountdown(0); }}>
-                  <IconArrowLeft /> Назад
+                  <IconArrowLeft /> {t("auth_back")}
                 </button>
 
-                <h1 className={styles.title}>Введите код</h1>
-                <p className={styles.subtitle}>Код отправлен на {resetLogin}</p>
+                <h1 className={styles.title}>{t("auth_enter_code")}</h1>
+                <p className={styles.subtitle}>{t("auth_code_sent", { email: resetLogin })}</p>
 
                 {resetError && (
                   <div className={styles.errorBanner}><IconAlertCircle /> {resetError}</div>
@@ -442,16 +445,16 @@ export default function LoginPage() {
                 {/* Resend row with countdown */}
                 <div className={styles.resendRow}>
                   {countdown > 0 ? (
-                    <span className={styles.resendTimer}>Повторить через {countdown} с</span>
+                    <span className={styles.resendTimer}>{t("auth_resend_wait", { seconds: countdown })}</span>
                   ) : (
                     <button type="button" className={styles.resendBtn} onClick={handleResend} disabled={resetLoading}>
-                      Отправить повторно
+                      {t("auth_resend_code")}
                     </button>
                   )}
                 </div>
 
                 <button type="submit" className={styles.submit} disabled={resetLoading || resetCode.length < 4}>
-                  {resetLoading ? (<><span className={styles.spinner} /> Проверяем...</>) : "Подтвердить"}
+                  {resetLoading ? (<><span className={styles.spinner} /> {t("auth_verifying")}</>) : t("auth_verify")}
                 </button>
               </form>
             )}
@@ -460,18 +463,18 @@ export default function LoginPage() {
             {resetStep === 3 && (
               <form className={styles.form} onSubmit={handleResetStep3} noValidate>
                 <button type="button" className={styles.backBtn} onClick={() => { setResetStep(2); setResetError(null); }}>
-                  <IconArrowLeft /> Назад
+                  <IconArrowLeft /> {t("auth_back")}
                 </button>
 
-                <h1 className={styles.title}>Новый пароль</h1>
-                <p className={styles.subtitle}>Минимум 8 символов, латинские буквы и цифры</p>
+                <h1 className={styles.title}>{t("auth_new_password")}</h1>
+                <p className={styles.subtitle}>{t("auth_pass_hint")}</p>
 
                 {resetError && (
                   <div className={styles.errorBanner}><IconAlertCircle /> {resetError}</div>
                 )}
 
                 <div className={styles.field}>
-                  <label className={styles.label} htmlFor="rst-pass">Новый пароль</label>
+                  <label className={styles.label} htmlFor="rst-pass">{t("auth_new_password")}</label>
                   <div className={styles.inputWrapper}>
                     <span className={styles.inputIcon}><IconLock /></span>
                     <input
@@ -488,7 +491,7 @@ export default function LoginPage() {
                       type="button"
                       className={styles.togglePassword}
                       onClick={() => setShowResetPass((v) => !v)}
-                      aria-label={showResetPass ? "Скрыть" : "Показать"}
+                      aria-label={showResetPass ? t("auth_hide_pass") : t("auth_show_pass")}
                     >
                       {showResetPass ? <IconEyeOff /> : <IconEye />}
                     </button>
@@ -496,7 +499,7 @@ export default function LoginPage() {
                 </div>
 
                 <button type="submit" className={styles.submit} disabled={resetLoading || resetPassword.length < 8}>
-                  {resetLoading ? (<><span className={styles.spinner} /> Сохраняем...</>) : "Сохранить пароль"}
+                  {resetLoading ? (<><span className={styles.spinner} /> {t("save_password_loading", { defaultValue: "Сохраняем..." })}</>) : t("save_password_btn", { defaultValue: "Сохранить пароль" })}
                 </button>
               </form>
             )}
@@ -507,8 +510,8 @@ export default function LoginPage() {
                 <div className={styles.successIcon} style={{ background: "rgba(34,197,94,0.12)", color: "#16a34a" }}>
                   <IconCheckCircle />
                 </div>
-                <h2 className={styles.successTitle}>Пароль изменён!</h2>
-                <p className={styles.successSub}>Выполняем вход в аккаунт…</p>
+                <h2 className={styles.successTitle}>{t("auth_password_changed", { defaultValue: "Пароль изменён!" })}</h2>
+                <p className={styles.successSub}>{t("auth_logging_in")}</p>
               </div>
             )}
           </>

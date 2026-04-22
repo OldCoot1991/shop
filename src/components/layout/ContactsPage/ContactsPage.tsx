@@ -1,35 +1,37 @@
+"use client";
+
 import React from "react";
-import Link from "next/link";
-import { ChevronLeft, LifeBuoy, Handshake } from "lucide-react";
+import { LifeBuoy, Handshake } from "lucide-react";
+import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
+import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import styles from "./ContactsPage.module.css";
+import { useTranslation } from "react-i18next";
 
 const ContactsPage = () => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <nav className={styles.breadcrumb}>
-          <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
-            <ChevronLeft size={16} /> Главная
-          </Link>
-          <span className={styles.breadcrumbSep} />
-          <span className={styles.breadcrumbCurrent}>Контакты</span>
-        </nav>
+        <Breadcrumbs 
+          items={[
+            { label: t("breadcrumb_contacts"), isCurrent: true }
+          ]} 
+        />
 
         <header className={styles.header}>
-          <h1 className={styles.title}>Контакты</h1>
-          <p className={styles.subtitle}>
-            Свяжитесь с нами удобным для вас способом. Мы всегда рады помочь!
-          </p>
+          <AutoTranslatable as="h1" className={styles.title} text="Контакты" />
+          <AutoTranslatable as="p" className={styles.subtitle} text="Свяжитесь с нами удобным для вас способом. Мы всегда рады помочь!" />
         </header>
 
         <div className={styles.content}>
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <LifeBuoy className={styles.sectionIcon} size={24} />
-              <h2>Покупателям</h2>
+              <AutoTranslatable as="h2" text="Покупателям" />
             </div>
             <div className={styles.infoContent}>
-              <p className={styles.sectionText}>Если у вас есть вопросы, напишите нам на</p>
+              <AutoTranslatable as="p" className={styles.sectionText} text="Если у вас есть вопросы, напишите нам на" />
               <a
                 href="mailto:support@ozpro.ru"
                 className={styles.linkText}
@@ -43,10 +45,10 @@ const ContactsPage = () => {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <Handshake className={styles.sectionIcon} size={24} />
-              <h2>Сотрудничество</h2>
+              <AutoTranslatable as="h2" text="Сотрудничество" />
             </div>
             <div className={styles.infoContent}>
-              <p className={styles.sectionText}>По вопросам сотрудничества напишите на</p>
+              <AutoTranslatable as="p" className={styles.sectionText} text="По вопросам сотрудничества напишите на" />
               <a
                 href="mailto:info@ozpro.ru"
                 className={styles.linkText}

@@ -158,7 +158,7 @@ export function getAttributeValue(attributes: ApiProductAttribute[], name: strin
 /** Price in the API is in kopecks (e.g. 4500 = 45 ₽) */
 export function formatPrice(kopecks: number): string {
     const rubles = kopecks / 100;
-    return rubles.toLocaleString('ru-RU', { maximumFractionDigits: 0 });
+    return rubles.toLocaleString("ru-RU", { maximumFractionDigits: 0 }) + ' ₽';
 }
 
 // ── Single product ────────────────────────────────────────────────────────────

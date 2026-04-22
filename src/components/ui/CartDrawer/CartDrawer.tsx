@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { X, ShoppingCart, Trash2, Loader2 } from "lucide-react";
 import styles from "./CartDrawer.module.css";
 import { useAppSelector } from "@/hooks/useAppStore";
@@ -22,6 +23,7 @@ interface CartDrawerProps {
 }
 
 const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const localItems = useAppSelector(selectCartItems);
   const serverItems = useAppSelector(selectServerCartItems);
@@ -64,21 +66,21 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
         <div className={styles.header}>
           <div className={styles.headerTitle}>
             <ShoppingCart size={22} />
-            <h2>Корзина</h2>
+            <h2>{t("cart_title")}</h2>
             {totalCount > 0 && (
-              <span className={styles.count}>{totalCount} шт.</span>
+              <span className={styles.count}>{t("cart_item_count", { count: totalCount, defaultValue: `${totalCount} шт.` })}</span>
             )}
           </div>
           <div className={styles.headerActions}>
             {totalCount > 0 && (
               <button className={styles.clearBtn} onClick={clearAll}>
-                <Trash2 size={16} /> Очистить
+                <Trash2 size={16} /> {t("cart_clear")}
               </button>
             )}
             <button
               className={styles.closeBtn}
               onClick={onClose}
-              aria-label="Закрыть"
+              aria-label={t("common_close", { defaultValue: "Закрыть" })}
             >
               <X size={24} />
             </button>
@@ -90,7 +92,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
           {fetchStatus === "loading" && (
             <div className={styles.loadingState}>
               <Loader2 size={32} className={styles.spinner} />
-              <p className={styles.loadingText}>Загружаем корзину…</p>
+              <p className={styles.loadingText}>{t("cart_loading")}</p>
             </div>
           )}
 
@@ -107,9 +109,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
             (serverItems.length === 0 ? (
               <div className={styles.empty}>
                 <ShoppingCart size={64} className={styles.emptyIcon} />
-                <p className={styles.emptyText}>Корзина пуста</p>
+                <p className={styles.emptyText}>{t("cart_empty")}</p>
                 <p className={styles.emptySubtext}>
-                  Добавьте товары, чтобы оформить заказ
+                  {t("cart_empty_sub")}
                 </p>
               </div>
             ) : (
@@ -132,7 +134,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                       <div className={styles.itemInfo}>
                         <p className={styles.itemTitle}>{item.name}</p>
                         <p className={styles.itemArticle}>
-                          Арт.: {item.article}
+                          {t("cart_item_article")}: {item.article}
                         </p>
                         <p className={styles.itemPrice}>
                           {(
@@ -165,7 +167,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                           <button
                             className={styles.removeBtn}
                             onClick={() => removeItem(item.id)}
-                            aria-label="Удалить"
+                            aria-label={t("cart_item_remove")}
                           >
                             <Trash2 size={16} />
                           </button>
@@ -183,9 +185,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
             (localItems.length === 0 ? (
               <div className={styles.empty}>
                 <ShoppingCart size={64} className={styles.emptyIcon} />
-                <p className={styles.emptyText}>Корзина пуста</p>
+                <p className={styles.emptyText}>{t("cart_empty")}</p>
                 <p className={styles.emptySubtext}>
-                  Добавьте товары, чтобы оформить заказ
+                  {t("cart_empty_sub")}
                 </p>
               </div>
             ) : (
@@ -227,7 +229,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                         <button
                           className={styles.removeBtn}
                           onClick={() => removeItem(item.id)}
-                          aria-label="Удалить"
+                          aria-label={t("cart_item_remove")}
                         >
                           <Trash2 size={16} />
                         </button>
@@ -242,13 +244,13 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
         {total > 0 && fetchStatus !== "loading" && (
           <div className={styles.footer}>
             <div className={styles.totalRow}>
-              <span>Итого:</span>
+              <span>{t("cart_total")}:</span>
               <span className={styles.totalPrice}>
                 {total.toLocaleString("ru-RU")} ₽
               </span>
             </div>
             <button className={styles.checkoutBtn} onClick={handleCheckout}>
-              Перейти к оформлению
+              {t("cart_checkout")}
             </button>
           </div>
         )}

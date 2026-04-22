@@ -85,7 +85,7 @@
   border-radius: 16px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.14);
   padding: 20px;
-  z-index: 500;
+  z-index: 1000;
   overflow: hidden;
   animation: fadeDown 0.18s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }

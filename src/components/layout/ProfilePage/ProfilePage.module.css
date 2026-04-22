@@ -12,6 +12,10 @@
     gap: 24px;
 }
 
+.breadcrumbWrapper {
+    margin-bottom: 0;
+}
+
 /* ── Hero card ── */
 .heroCard {
     background: var(--color-card-bg);

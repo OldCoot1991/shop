@@ -4,13 +4,14 @@ import React, { useState } from "react";
 import {
   ShoppingCart,
   Heart,
-  ChevronLeft,
   Truck,
   Shield,
   RotateCcw,
   Package,
 } from "lucide-react";
-import Link from "next/link";
+import Image from "next/image";
+import { useTranslation } from "react-i18next";
+import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import {
   ApiProduct,
   getProductImageUrl,
@@ -23,15 +24,31 @@ import {
   selectIsInWishlist,
 } from "@/lib/features/wishlist/wishlistSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppStore";
+import { useAutoTranslate } from "@/hooks/useAutoTranslate";
 import styles from "./ApiProductDetail.module.css";
 
 interface ApiProductDetailProps {
   product: ApiProduct;
 }
 
+/**
+ * Helper component to handle translation of individual attribute rows
+ */
+const AttributeRow = ({ name, value }: { name: string; value: string }) => {
+  const { translated: translatedName } = useAutoTranslate(name);
+  const { translated: translatedValue } = useAutoTranslate(value);
+  return (
+    <tr className={styles.specRow}>
+      <td className={styles.specLabel}>{translatedName}</td>
+      <td className={styles.specValue}>{translatedValue}</td>
+    </tr>
+  );
+};
+
 export default function ApiProductDetail({ product }: ApiProductDetailProps) {
   const dispatch = useAppDispatch();
-  const { getItemQuantity, isInCart, addItem, decreaseItem } = useCart();
+  const { t } = useTranslation();
+  const { isInCart, addItem, decreaseItem, getItemQuantity } = useCart();
   const isInWishlist = useAppSelector(selectIsInWishlist(product.id));
 
   const inCart = isInCart(product.id);
@@ -39,12 +56,22 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
 
   const [selectedImage, setSelectedImage] = useState(0);
 
-  const images = product.images ?? [];
+  // Dynamic content translation
+  const { translated: translatedName } = useAutoTranslate(product.name);
+  const { translated: translatedDesc } = useAutoTranslate(product.description);
+  
+  const categoryStr = getAttributeValue(product.attributes, "Категория") || "";
+  const topicStr = getAttributeValue(product.attributes, "Тематика") || "";
+  
+  const { translated: translatedCategory } = useAutoTranslate(categoryStr);
+  const { translated: translatedTopic } = useAutoTranslate(topicStr);
 
-  const category = getAttributeValue(product.attributes, "Категория");
-  const topic = getAttributeValue(product.attributes, "Тематика");
+  const images = product.images ?? [];
+  const category = translatedCategory;
+  const topic = translatedTopic;
 
   // Map category name to ID for the link (Case-insensitive)
+  // These names come from the API (Russian)
   const categoryNamesMap: Record<string, number> = {
     "двойные открытки": 1000,
     "значки": 1001,
@@ -59,7 +86,7 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
     "шевроны": 1010,
   };
 
-  const categoryId = category ? categoryNamesMap[category.toLowerCase()] : null;
+  const categoryId = categoryStr ? categoryNamesMap[categoryStr.toLowerCase()] : null;
 
   const mainImageUrl =
     images.length > 0
@@ -89,33 +116,23 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
   };
 
   const guarantees = [
-    { icon: <Truck size={18} />, text: "Быстрая доставка" },
-    { icon: <Shield size={18} />, text: "Гарантия качества" },
-    { icon: <RotateCcw size={18} />, text: "Возврат 14 дней" },
+    { icon: <Truck size={18} />, textKey: "guarantee_delivery" },
+    { icon: <Shield size={18} />, textKey: "guarantee_quality" },
+    { icon: <RotateCcw size={18} />, textKey: "guarantee_return" },
   ];
 
   return (
     <div className={styles.page}>
-      {/* Breadcrumb */}
-      <nav className={styles.breadcrumb}>
-        <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
-          <ChevronLeft size={16} />
-          Главная
-        </Link>
-        {category && (
-          <>
-            <span className={styles.breadcrumbSep} />
-            <Link 
-              href={categoryId ? `/api-catalog/${categoryId}` : "/"} 
-              className={styles.breadcrumbLink}
-            >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </Link>
-          </>
-        )}
-        <span className={styles.breadcrumbSep} />
-        <span className={styles.breadcrumbCurrent}>{product.name}</span>
-      </nav>
+      <Breadcrumbs 
+        items={[
+          ...(category ? [{ 
+            label: category.charAt(0).toUpperCase() + category.slice(1), 
+            href: categoryId ? `/api-catalog/${categoryId}` : "/api-catalog" 
+          }] : []),
+          { label: translatedName, isCurrent: true }
+        ]} 
+        className={styles.breadcrumb}
+      />
 
       {/* Main section */}
       <div className={styles.main}>
@@ -128,12 +145,14 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
                   key={i}
                   className={`${styles.thumbnail} ${selectedImage === i ? styles.thumbnailActive : ""}`}
                   onClick={() => setSelectedImage(i)}
-                  aria-label={`Фото ${i + 1}`}
+                  aria-label={t("product_photo", { count: i + 1, defaultValue: `Фото ${i + 1}` })}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={getProductImageUrl(img, "miniature")}
-                    alt={`${product.name} фото ${i + 1}`}
+                    alt={t("product_photo", { count: i + 1, defaultValue: `${translatedName} фото ${i + 1}` })}
+                    width={80}
+                    height={80}
+                    className={styles.thumbImage}
                   />
                 </button>
               ))}
@@ -141,8 +160,14 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
           )}
           <div className={styles.mainImage}>
             {mainImageUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={mainImageUrl} alt={product.name} />
+              <Image 
+                src={mainImageUrl} 
+                alt={translatedName}
+                width={600}
+                height={600}
+                priority
+                className={styles.mainImageFile}
+              />
             ) : (
               <div className={styles.noImage}>
                 <Package size={64} />
@@ -153,40 +178,33 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
 
         {/* Info */}
         <div className={styles.info}>
-          {/* Article */}
-          <p className={styles.article}>Арт.: {product.article}</p>
+          <p className={styles.article}>{t("product_article")} {product.article}</p>
 
-          {/* Title */}
-          <h1 className={styles.title}>{product.name}</h1>
+          <h1 className={styles.title}>{translatedName}</h1>
 
-          {/* Topic badge */}
           {topic && <p className={styles.topic}>{topic}</p>}
 
-          {/* Min count hint */}
           {product.minCount > 1 && (
             <p className={styles.minCount}>
-              Минимальное кол-во для заказа: {product.minCount} шт.
+              {t("product_min_order", { count: product.minCount })}
             </p>
           )}
 
-          {/* Price */}
           <div className={styles.priceBlock}>
             <span className={styles.price}>
-              {formatPrice(product.salePrice)} ₽
+              {formatPrice(product.salePrice)}
             </span>
           </div>
 
-          {/* Guarantees */}
           <ul className={styles.guarantees}>
             {guarantees.map((g, i) => (
               <li key={i} className={styles.guaranteeItem}>
                 {g.icon}
-                <span>{g.text}</span>
+                <span>{t(g.textKey)}</span>
               </li>
             ))}
           </ul>
 
-          {/* Actions */}
           <div className={styles.actions}>
             {inCart ? (
               <>
@@ -203,20 +221,20 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
                   </button>
                 </div>
                 <button className={styles.inCartBtn} disabled>
-                  В корзине
+                  {t("cart_incart")}
                 </button>
               </>
             ) : (
               <button className={styles.addToCartBtn} onClick={handleAddToCart}>
                 <ShoppingCart size={20} />
-                Купить
+                {t("cart_buy")}
               </button>
             )}
 
             <button
               className={`${styles.wishlistBtn} ${isInWishlist ? styles.wishlistBtnActive : ""}`}
               onClick={handleWishlist}
-              aria-label={isInWishlist ? "Убрать из избранного" : "В избранное"}
+              aria-label={isInWishlist ? t("wishlist_remove") : t("wishlist_add")}
             >
               <Heart size={22} fill={isInWishlist ? "currentColor" : "none"} />
             </button>
@@ -225,24 +243,21 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
       </div>
 
       {/* Description */}
-      {product.description && (
+      {translatedDesc && (
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Описание</h2>
-          <p className={styles.description}>{product.description}</p>
+          <h2 className={styles.sectionTitle}>{t("product_desc")}</h2>
+          <p className={styles.description}>{translatedDesc}</p>
         </section>
       )}
 
       {/* Attributes table */}
       {product.attributes.length > 0 && (
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Характеристики</h2>
+          <h2 className={styles.sectionTitle}>{t("product_specs")}</h2>
           <table className={styles.specsTable}>
             <tbody>
               {product.attributes.map((attr, i) => (
-                <tr key={i} className={styles.specRow}>
-                  <td className={styles.specLabel}>{attr.name}</td>
-                  <td className={styles.specValue}>{attr.value}</td>
-                </tr>
+                <AttributeRow key={i} name={attr.name} value={attr.value} />
               ))}
             </tbody>
           </table>

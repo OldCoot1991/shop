@@ -1,11 +1,17 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, MapPin } from "lucide-react";
 import styles from "./Footer.module.css";
 import DeveloperCard from "@/components/ui/DeveloperCard/DeveloperCard";
+import { useTranslation } from "react-i18next";
+import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
 
 const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -22,67 +28,68 @@ const Footer = () => {
                   className={styles.logoImage}
                 />
               </Link>
-              <p className={styles.brandDesc}>
-                Мы предлагаем лучшие товары по выгодным ценам. Быстрая доставка,
-                гарантия качества и абсолютная надежность.
-              </p>
+              <AutoTranslatable 
+                as="p" 
+                className={styles.brandDesc}
+                text="Мы предлагаем лучшие товары по выгодным ценам. Быстрая доставка, гарантия качества и абсолютная надежность."
+              />
             </div>
           </div>
 
           <div className={styles.column}>
-            <h4 className={styles.title}>Покупателям</h4>
+            <h4 className={styles.title}>{t("footer_buyers")}</h4>
             <ul className={styles.list}>
               <li>
                 <Link href="/" className={styles.link}>
-                  Каталог магазина
+                  {t("footer_catalog")}
                 </Link>
               </li>
               <li>
                 <Link href="/payment-methods" className={styles.link}>
-                  Способы оплаты
+                  {t("footer_payment")}
                 </Link>
               </li>
               <li>
                 <Link href="/delivery" className={styles.link}>
-                  Доставка
+                  {t("footer_delivery")}
                 </Link>
               </li>
               <li>
                 <Link href="/returns" className={styles.link}>
-                  Правила возврата
+                  {t("footer_returns")}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div className={styles.column}>
-            <h4 className={styles.title}>О компании</h4>
+            <h4 className={styles.title}>{t("footer_company")}</h4>
             <ul className={styles.list}>
               <li>
                 <Link href="/about" className={styles.link}>
-                  О нас
+                  {t("footer_about")}
                 </Link>
               </li>
               <li>
                 <Link href="/requisites" className={styles.link}>
-                  Реквизиты
+                  {t("footer_requisites")}
                 </Link>
               </li>
               <li>
                 <Link href="/legal" className={styles.link}>
-                  Документы
+                  {t("footer_documents")}
                 </Link>
               </li>
               <li>
                 <Link href="/contacts" className={styles.link}>
-                  Контакты
+                  {t("footer_contacts")}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div className={styles.column}>
-            <h4 className={styles.title}>Связь с нами</h4>
+            <h4 className={styles.title}>{t("footer_contact_us")}</h4>
             <ul className={styles.contactList}>
               <li className={styles.contactItem}>
                 <Mail
@@ -103,10 +110,9 @@ const Footer = () => {
                   className={styles.contactIcon}
                   style={{ flexShrink: 0 }}
                 />
-                <span>
-                  117218, г. Москва, вн.тер.г. муниципальный округ Котловка, ул.
-                  Кржижановского, д. 29, к. 5, помещ. 4А/1/5
-                </span>
+                <AutoTranslatable 
+                  text="117218, г. Москва, вн.тер.г. муниципальный округ Котловка, ул. Кржижановского, д. 29, к. 5, помещ. 4А/1/5"
+                />
               </li>
             </ul>
           </div>
@@ -116,12 +122,12 @@ const Footer = () => {
       <div className={styles.bottomBar}>
         <div className={styles.bottomContainer}>
           <p className={styles.copyright}>
-            © 2026 ОЗОН-ПРО. Все права защищены
+            {t("footer_copyright")}
           </p>
           <DeveloperCard variant="footer" />
           <div className={styles.legalLinks}>
-            <a href="/legal#privacy-policy">Политика конфиденциальности</a>
-            <a href="/legal#public-offer">Публичная оферта</a>
+            <a href="/legal#privacy-policy">{t("footer_privacy")}</a>
+            <a href="/legal#public-offer">{t("footer_offer")}</a>
           </div>
         </div>
       </div>

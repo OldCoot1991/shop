@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper/modules";
 import "swiper/css";
@@ -34,6 +35,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
   topicFilter,
   limit = 8,
 }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { items, status, error } = useAppSelector(
     selectCategoryProducts(categoryKey),
@@ -64,7 +66,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
           }
           className={styles.seeAllBtn}
         >
-          Смотреть всё
+          {t("common_view_all")}
         </Link>
       </div>
 
@@ -77,11 +79,11 @@ const ProductSection: React.FC<ProductSectionProps> = ({
       )}
 
       {status === "failed" && (
-        <p className={styles.error}>Не удалось загрузить товары: {error}</p>
+        <p className={styles.error}>{t("auth_error_default")}: {error}</p>
       )}
 
       {status === "succeeded" && visible.length === 0 && (
-        <p className={styles.empty}>Товары не найдены</p>
+        <p className={styles.empty}>{t("nav_no_categories")}</p>
       )}
 
       {(status === "succeeded" || visible.length > 0) && visible.length > 0 && (

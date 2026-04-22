@@ -5,7 +5,7 @@
   color: var(--color-text, #111827);
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.02);
   position: relative;
-  overflow: hidden;
+  /* Removed overflow: hidden to allow DeveloperCard popup to be visible */
 }
 
 /* Beautiful top gradient strip */

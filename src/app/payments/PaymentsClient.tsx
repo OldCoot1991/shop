@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/hooks/useAppStore";
 import {
@@ -20,18 +20,14 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
+import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
 import styles from "./Payments.module.css";
 import { OrderStatus } from "@/services/orderService";
 
-const statusConfig: Record<OrderStatus, { label: string; colorClass: string }> =
-  {
-    CREATED: { label: "Ожидает оплаты", colorClass: styles.statusCreated },
-    PAID: { label: "Оплачен", colorClass: styles.statusPaid },
-    CANCELED: { label: "Отменен", colorClass: styles.statusCanceled },
-    DELIVERED: { label: "Доставлен", colorClass: styles.statusDelivered },
-  };
-
 export default function PaymentsClient() {
+  const { t, i18n } = useTranslation();
   const dispatch = useAppDispatch();
   const orders = useAppSelector(selectOrders);
   const status = useAppSelector(selectOrderStatus);
@@ -39,6 +35,14 @@ export default function PaymentsClient() {
   const { currentPage, pageCount } = useAppSelector(selectOrderPagination);
 
   const [processingId, setProcessingId] = useState<number | null>(null);
+
+  const statusConfig: Record<OrderStatus, { label: string; colorClass: string }> =
+    useMemo(() => ({
+      CREATED: { label: t("order_status_created"), colorClass: styles.statusCreated },
+      PAID: { label: t("order_status_paid"), colorClass: styles.statusPaid },
+      CANCELED: { label: t("order_status_canceled"), colorClass: styles.statusCanceled },
+      DELIVERED: { label: t("order_status_delivered"), colorClass: styles.statusDelivered },
+    }), [t]);
 
   useEffect(() => {
     dispatch(fetchOrdersAsync(1));
@@ -59,18 +63,18 @@ export default function PaymentsClient() {
         window.location.href = url;
       }
     } catch (err) {
-      alert("Не удалось перейти к оплате. Ошибка: " + err);
+      alert(t("order_pay_error") + err);
       setProcessingId(null);
     }
   };
 
   const handleCancel = async (orderId: number) => {
-    if (!confirm("Вы уверены, что хотите отменить этот заказ?")) return;
+    if (!confirm(t("order_cancel_confirm"))) return;
     setProcessingId(orderId);
     try {
       await dispatch(cancelOrderAsync(orderId)).unwrap();
     } catch (err) {
-      alert("Не удалось отменить заказ. Ошибка: " + err);
+      alert(t("order_cancel_error") + err);
     } finally {
       setProcessingId(null);
     }
@@ -80,7 +84,7 @@ export default function PaymentsClient() {
     return (
       <div className={styles.loadingContainer}>
         <Loader2 size={40} className={styles.spinner} />
-        <p>Загрузка заказов...</p>
+        <p>{t("payments_loading")}</p>
       </div>
     );
   }
@@ -89,13 +93,13 @@ export default function PaymentsClient() {
     return (
       <div className={styles.errorContainer}>
         <PackageX size={48} className={styles.errorIcon} />
-        <h2>Произошла ошибка</h2>
+        <h2>{t("payments_error_title")}</h2>
         <p>{error}</p>
         <button
           className={styles.retryBtn}
           onClick={() => dispatch(fetchOrdersAsync(1))}
         >
-          Попробовать снова
+          {t("payments_retry")}
         </button>
       </div>
     );
@@ -105,21 +109,40 @@ export default function PaymentsClient() {
     return (
       <div className={styles.emptyContainer}>
         <PackageX size={64} className={styles.emptyIcon} />
-        <h2>Заказов пока нет</h2>
-        <p>Вы еще ничего не заказывали или ваша корзина пуста.</p>
+        <h2>{t("payments_empty_title")}</h2>
+        <p>{t("payments_empty_desc")}</p>
         <Link href="/catalog" className={styles.shopBtn}>
-          Перейти в каталог
+          {t("payments_go_catalog")}
         </Link>
       </div>
     );
   }
 
+  const isRu = i18n.language === "ru";
+
   return (
     <div className={styles.container}>
-      <h1 className={styles.pageTitle}>Мои заказы</h1>
+      <Breadcrumbs 
+        items={[
+          { label: t("breadcrumb_profile"), href: "/profile" },
+          { label: t("payments_title"), isCurrent: true }
+        ]}
+        className={styles.breadcrumb}
+      />
+      <h1 className={styles.pageTitle}>{t("payments_title")}</h1>
 
       <div className={styles.ordersList}>
-        {orders.map((order) => {
+        {[...orders]
+          .sort((a, b) => {
+            const priority: Record<string, number> = {
+              PAID: 1,
+              CREATED: 2,
+              CANCELED: 3,
+              DELIVERED: 4,
+            };
+            return (priority[a.status] || 99) - (priority[b.status] || 99);
+          })
+          .map((order) => {
           const config = statusConfig[order.status] || {
             label: order.status,
             colorClass: "",
@@ -130,9 +153,9 @@ export default function PaymentsClient() {
             <div key={order.id} className={styles.orderCard}>
               <div className={styles.orderHeader}>
                 <div className={styles.orderMeta}>
-                  <h3 className={styles.orderId}>Заказ №{order.id}</h3>
+                  <h3 className={styles.orderId}>{t("order_num")}{order.id}</h3>
                   <span className={styles.orderDate}>
-                    {new Date(order.createdAt).toLocaleDateString("ru-RU", {
+                    {new Date(order.createdAt).toLocaleDateString(isRu ? "ru-RU" : "en-US", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
@@ -170,9 +193,11 @@ export default function PaymentsClient() {
                         )}
                       </div>
                       <div className={styles.productInfo}>
-                        <p className={styles.productName}>{p.name}</p>
+                        <p className={styles.productName}>
+                          <AutoTranslatable text={p.name} />
+                        </p>
                         <p className={styles.productMeta}>
-                          Арт: {p.article} • {p.quantity} шт.
+                          {t("order_item_art")} {p.article} • {p.quantity} {t("order_item_qty")}
                         </p>
                       </div>
                       <div className={styles.productPrice}>
@@ -188,7 +213,7 @@ export default function PaymentsClient() {
 
               <div className={styles.orderFooter}>
                 <div className={styles.orderTotal}>
-                  <span>Сумма:</span>
+                  <span>{t("order_sum")}</span>
                   <span className={styles.totalAmount}>
                     {(order.amount / 100).toLocaleString("ru-RU")} ₽
                   </span>
@@ -201,7 +226,7 @@ export default function PaymentsClient() {
                         onClick={() => handleCancel(order.id)}
                         disabled={isProcessing}
                       >
-                        <XCircle size={18} /> Отменить
+                        <XCircle size={18} /> {t("order_cancel")}
                       </button>
                       <button
                         className={styles.payBtn}
@@ -213,7 +238,7 @@ export default function PaymentsClient() {
                         ) : (
                           <CreditCard size={18} />
                         )}
-                        Оплатить
+                        {t("order_pay")}
                       </button>
                     </>
                   )}
@@ -234,7 +259,7 @@ export default function PaymentsClient() {
             <ChevronLeft size={18} />
           </button>
           <span className={styles.pageInfo}>
-            Страница {currentPage} из {pageCount}
+            {t("pagination_page")} {currentPage} {t("pagination_of")} {pageCount}
           </span>
           <button
             className={styles.pageBtn}

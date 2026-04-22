@@ -10,11 +10,19 @@
 .container {
   display: flex;
   width: 100%;
+  gap: 48px;
+}
+
+.outerContainer {
+  width: 100%;
   max-width: 1240px;
   margin: 0 auto;
   padding: 0 20px;
-  gap: 48px;
   animation: fadeIn 0.8s ease-out forwards;
+}
+
+.breadcrumbWrapper {
+  margin-bottom: 32px;
 }
 
 @keyframes fadeIn {

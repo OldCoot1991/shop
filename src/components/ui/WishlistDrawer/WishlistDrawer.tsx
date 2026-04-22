@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { X, Heart, Trash2, ShoppingCart } from "lucide-react";
 import styles from "./WishlistDrawer.module.css";
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppStore";
@@ -16,6 +17,7 @@ interface WishlistDrawerProps {
 }
 
 const WishlistDrawer: React.FC<WishlistDrawerProps> = ({ isOpen, onClose }) => {
+  const { t, i18n } = useTranslation();
   const items = useAppSelector(selectWishlistItems);
   const dispatch = useAppDispatch();
 
@@ -42,18 +44,24 @@ const WishlistDrawer: React.FC<WishlistDrawerProps> = ({ isOpen, onClose }) => {
         <div className={styles.header}>
           <div className={styles.headerTitle}>
             <Heart size={22} />
-            <h2>Избранное</h2>
+            <h2>{t("wishlist_title")}</h2>
             {items.length > 0 && (
               <span className={styles.count}>
-                {items.length} товар
-                {items.length > 1 ? (items.length < 5 ? "а" : "ов") : ""}
+                {i18n.language === "ru" ? (
+                  <>
+                    {items.length} товар
+                    {items.length > 1 ? (items.length < 5 ? "а" : "ов") : ""}
+                  </>
+                ) : (
+                  t("wishlist_item_count", { count: items.length })
+                )}
               </span>
             )}
           </div>
           <button
             className={styles.closeBtn}
             onClick={onClose}
-            aria-label="Закрыть"
+            aria-label={t("common_close", { defaultValue: "Закрыть" })}
           >
             <X size={24} />
           </button>
@@ -63,9 +71,9 @@ const WishlistDrawer: React.FC<WishlistDrawerProps> = ({ isOpen, onClose }) => {
           {items.length === 0 ? (
             <div className={styles.empty}>
               <Heart size={64} className={styles.emptyIcon} />
-              <p className={styles.emptyText}>Список пуст</p>
+              <p className={styles.emptyText}>{t("wishlist_empty")}</p>
               <p className={styles.emptySubtext}>
-                Добавляйте товары в избранное, нажимая на ♡
+                {t("wishlist_empty_sub")}
               </p>
             </div>
           ) : (
@@ -88,12 +96,12 @@ const WishlistDrawer: React.FC<WishlistDrawerProps> = ({ isOpen, onClose }) => {
                         className={styles.moveToCartBtn}
                         onClick={() => handleMoveToCart(item)}
                       >
-                        <ShoppingCart size={14} />В корзину
+                        <ShoppingCart size={14} />{t("wishlist_move_to_cart")}
                       </button>
                       <button
                         className={styles.removeBtn}
                         onClick={() => dispatch(removeFromWishlist(item.id))}
-                        aria-label="Удалить из избранного"
+                        aria-label={t("wishlist_item_remove", { defaultValue: "Удалить из избранного" })}
                       >
                         <Trash2 size={16} />
                       </button>

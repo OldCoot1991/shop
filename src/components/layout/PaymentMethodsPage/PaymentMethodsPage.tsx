@@ -1,27 +1,26 @@
+"use client";
+
 import React from 'react';
-import Link from 'next/link';
-import { ChevronLeft, ShieldCheck, CreditCard } from 'lucide-react';
+import { useTranslation } from "react-i18next";
+import { ShieldCheck, CreditCard } from 'lucide-react';
+import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
+import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import styles from './PaymentMethodsPage.module.css';
 
 const PaymentMethodsPage = () => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        {/* Breadcrumb */}
-        <nav className={styles.breadcrumb}>
-          <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
-            <ChevronLeft size={16} /> Главная
-          </Link>
-          <span className={styles.breadcrumbSep} />
-          <span className={styles.breadcrumbCurrent}>Способы оплаты</span>
-        </nav>
+        <Breadcrumbs 
+          items={[{ label: t("breadcrumb_payment"), isCurrent: true }]} 
+          className={styles.breadcrumb}
+        />
 
         <header className={styles.header}>
-          <h1 className={styles.title}>Способы оплаты</h1>
-          <p className={styles.subtitle}>
-            Мы предлагаем безопасные и удобные способы оплаты для ваших покупок. 
-            Все транзакции защищены современными протоколами шифрования.
-          </p>
+          <AutoTranslatable as="h1" className={styles.title} text="Способы оплаты" />
+          <AutoTranslatable as="p" className={styles.subtitle} text="Мы предлагаем безопасные и удобные способы оплаты для ваших покупок. Все транзакции защищены современными протоколами шифрования." />
         </header>
 
         <div className={styles.content}>
@@ -29,11 +28,10 @@ const PaymentMethodsPage = () => {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <ShieldCheck className={styles.sectionIcon} size={24} />
-              <h2>Электронные платежи</h2>
+              <AutoTranslatable as="h2" text="Электронные платежи" />
             </div>
-            <p className={styles.sectionText}>
-              Оплачивайте заказы быстро и без комиссии через наши основные платежные шлюзы.
-            </p>
+            <AutoTranslatable as="p" className={styles.sectionText} text="Оплачивайте заказы быстро и без комиссии через наши основные платежные шлюзы." />
+            
             <div className={styles.providerGrid}>
               <div className={styles.providerCard}>
                 <div className={styles.providerLogoWrapper}>
@@ -41,7 +39,7 @@ const PaymentMethodsPage = () => {
                   <img src="/yookassa.svg" alt="ЮKassa" className={styles.providerLogoYoo} />
                 </div>
                 <h3>ЮKassa</h3>
-                <p>Единая касса для оплаты онлайн. Лидер среди платежных агрегаторов России.</p>
+                <AutoTranslatable as="p" text="Единая касса для оплаты онлайн. Лидер среди платежных агрегаторов России." />
               </div>
 
               <div className={styles.providerCard}>
@@ -49,8 +47,8 @@ const PaymentMethodsPage = () => {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/uralsib.png" alt="Уралсиб" className={styles.providerLogoUral} />
                 </div>
-                <h3>ПАО «БАНК УРАЛСИБ»</h3>
-                <p>Надежные и безопасные платежи через систему банка «Уралсиб».</p>
+                <AutoTranslatable as="h3" text="ПАО «БАНК УРАЛСИБ»" />
+                <AutoTranslatable as="p" text="Надежные и безопасные платежи через систему банка «Уралсиб»." />
               </div>
             </div>
           </section>
@@ -59,17 +57,11 @@ const PaymentMethodsPage = () => {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <CreditCard className={styles.sectionIcon} size={24} />
-              <h2>Оплата Банковской картой On-Line</h2>
+              <AutoTranslatable as="h2" text="Оплата Банковской картой On-Line" />
             </div>
-            <p className={styles.sectionText}>
-              При оформлении заказа выберите способ оплаты &quot;Банковской картой&quot;. По окончании оформления заказа вам будет доступна форма оплаты. Использовать для оплаты разрешается только вашу личную банковскую карту. Все действия с персональными данными осуществляются при помощи защищенного канала на сервере платежной системы. В случае, если осуществить платеж не удается, свяжитесь, пожалуйста, с представителем вашего банка для выяснения причины отказа в платеже.
-            </p>
-            <p className={styles.sectionText}>
-              Для платежа используйте только вашу карту. Платежи выполненные при помощи банковской карты не принадлежащей вам приняты не будут.
-            </p>
-            <p className={styles.sectionText}>
-              Для оплаты заказов могут быть использованы карты VISA, MASTERCARD, МИР Российских банков. Платежи c карт эмитированных зарубежными банками не принимаются.
-            </p>
+            <AutoTranslatable as="p" className={styles.sectionText} text="При оформлении заказа выберите способ оплаты &quot;Банковской картой&quot;. По окончании оформления заказа вам будет доступна форма оплаты. Использовать для оплаты разрешается только вашу личную банковской карту. Все действия с персональными данными осуществляются при помощи защищенного канала на сервере платежной системы. В случае, если осуществить платеж не удается, свяжитесь, пожалуйста, с представителем вашего банка для выяснения причины отказа в платеже." />
+            <AutoTranslatable as="p" className={styles.sectionText} text="Для платежа используйте только вашу карту. Платежи выполненные при помощи банковской карты не принадлежащей вам приняты не будут." />
+            <AutoTranslatable as="p" className={styles.sectionText} text="Для оплаты заказов могут быть использованы карты VISA, MASTERCARD, МИР Российских банков. Платежи c карт эмитированных зарубежными банками не принимаются." />
 
             <div className={styles.cardsRow}>
               <div className={styles.cardLogoWrapper} title="Visa">

@@ -1,28 +1,34 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
-import { ChevronLeft, Truck, Package, Info } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { Truck, Package, Info } from "lucide-react";
+import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
+import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import styles from "./DeliveryPage.module.css";
 
 const DeliveryPage = () => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        {/* Breadcrumb */}
-        <nav className={styles.breadcrumb}>
-          <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
-            <ChevronLeft size={16} /> Главная
-          </Link>
-          <span className={styles.breadcrumbSep} />
-          <span className={styles.breadcrumbCurrent}>Доставка</span>
-        </nav>
+        <Breadcrumbs 
+          items={[{ label: t("breadcrumb_delivery"), isCurrent: true }]} 
+          className={styles.breadcrumb}
+        />
 
         <header className={styles.header}>
-          <h1 className={styles.title}>Доставка</h1>
+          <AutoTranslatable as="h1" className={styles.title} text="Доставка" />
           
           <div className={styles.legalNoticeBox}>
             <span className={styles.greenDot}></span>
             <p className={styles.legalNoticeText}>
-              Данная информация основана на документе — <Link href="/legal#rules" className={styles.linkText}>Правила оплаты, доставки, возврата и отмены заказа</Link>
+              {t("legal_notice")}{" "}
+              <Link href="/legal#rules" className={styles.linkText}>
+                {t("legal_notice_link")}
+              </Link>
             </p>
           </div>
         </header>
@@ -31,28 +37,22 @@ const DeliveryPage = () => {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <Info className={styles.sectionIcon} size={24} />
-              <h2>Доставка</h2>
+              <AutoTranslatable as="h2" text="Доставка" />
             </div>
             <div className={styles.infoContent}>
-              <p className={styles.sectionText}>
-                Доставка товаров осуществляется по всей территории Российской Федерации через СДЭК.
-              </p>
-              <p className={styles.sectionText}>
-                Доступные способы доставки могут включать:
-              </p>
+              <AutoTranslatable as="p" className={styles.sectionText} text="Доставка товаров осуществляется по всей территории Российской Федерации через СДЭК." />
+              <AutoTranslatable as="p" className={styles.sectionText} text="Доступные способы доставки могут включать:" />
               <ul style={{ paddingLeft: "24px", margin: 0, color: "var(--color-muted)" }}>
-                <li style={{ marginBottom: "8px", lineHeight: "1.6" }}>курьерскую доставку СДЭК;</li>
-                <li style={{ marginBottom: "8px", lineHeight: "1.6" }}>доставку в пункт выдачи заказов СДЭК.</li>
+                <li style={{ marginBottom: "8px", lineHeight: "1.6" }}>
+                  <AutoTranslatable text="курьерскую доставку СДЭК;" />
+                </li>
+                <li style={{ marginBottom: "8px", lineHeight: "1.6" }}>
+                  <AutoTranslatable text="доставку в пункт выдачи заказов СДЭК." />
+                </li>
               </ul>
-              <p className={styles.sectionText}>
-                Стоимость и предполагаемый срок доставки рассчитываются и отображаются при оформлении заказа.
-              </p>
-              <p className={styles.sectionText}>
-                Срок доставки зависит от региона доставки, загруженности логистических каналов, характеристик товара и иных обстоятельств, влияющих на перевозку.
-              </p>
-              <p className={styles.sectionText}>
-                Если Покупатель не получил Заказ по причинам, зависящим от него, в том числе не забрал Заказ из пункта выдачи СДЭК в установленный срок, Продавец вправе отменить Заказ и осуществить возврат денежных средств за вычетом фактически понесённых расходов в случаях, допустимых законодательством РФ.
-              </p>
+              <AutoTranslatable as="p" className={styles.sectionText} text="Стоимость и предполагаемый срок доставки рассчитываются и отображаются при оформлении заказа." />
+              <AutoTranslatable as="p" className={styles.sectionText} text="Срок доставки зависит от региона доставки, загруженности логистических каналов, характеристик товара и иных обстоятельств, влияющих на перевозку." />
+              <AutoTranslatable as="p" className={styles.sectionText} text="Если Покупатель не получил Заказ по причинам, зависящим от него, в том числе не забрал Заказ из пункта выдачи СДЭК в установленный срок, Продавец вправе отменить Заказ и осуществить возврат денежных средств за вычетом фактически понесённых расходов в случаях, допустимых законодательством РФ." />
             </div>
           </section>
 
@@ -61,14 +61,14 @@ const DeliveryPage = () => {
               <div className={styles.providerLogoWrapper}>
                 <Truck size={48} className={styles.providerIcon} />
               </div>
-              <h3 style={{ margin: 0 }}>Курьерская доставка СДЭК</h3>
+              <AutoTranslatable as="h3" style={{ margin: 0 }} text="Курьерская доставка СДЭК" />
             </div>
             
             <div className={styles.providerCard}>
               <div className={styles.providerLogoWrapper}>
                 <Package size={48} className={styles.providerIcon} />
               </div>
-              <h3 style={{ margin: 0 }}>Пункт выдачи заказов СДЭК</h3>
+              <AutoTranslatable as="h3" style={{ margin: 0 }} text="Пункт выдачи заказов СДЭК" />
             </div>
           </div>
         </div>

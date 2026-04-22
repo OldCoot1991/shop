@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
+import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { loginSuccess } from "@/lib/features/auth/authSlice";
 import { syncCartOnLogin } from "@/lib/features/cart/cartSlice";
@@ -129,6 +131,7 @@ const IconCheckCircle = () => (
 );
 
 function SuccessScreen({ email }: { email: string }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const [countdown, setCountdown] = useState(3);
 
@@ -148,11 +151,11 @@ function SuccessScreen({ email }: { email: string }) {
           <div className={styles.successIcon}>
             <IconCheckCircle />
           </div>
-          <h2 className={styles.successTitle}>Регистрация завершена!</h2>
-          <p className={styles.successSub}>Добро пожаловать в ОЗОН-ПРО</p>
+          <h2 className={styles.successTitle}>{t("auth_success_reg")}</h2>
+          <p className={styles.successSub}>{t("success_reg_welcome", { defaultValue: "Добро пожаловать в ОЗОН-ПРО" })}</p>
           <span className={styles.successUser}>{email}</span>
           <p className={styles.successRedirect}>
-            Переход в личный кабинет через <strong>{countdown}</strong> сек…
+            {t("redirect_countdown", { count: countdown, defaultValue: "Переход в личный кабинет через {{count}} сек…" })}
           </p>
           <div className={styles.progressBar}>
             <div
@@ -167,6 +170,7 @@ function SuccessScreen({ email }: { email: string }) {
 }
 
 export default function RegisterPage() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { isAuthenticated, user } = useAppSelector((s) => s.auth);
 
@@ -186,7 +190,7 @@ export default function RegisterPage() {
   // Clear errors when inputs change
   useEffect(() => {
     if (error) setError(null);
-  }, [login, code, password, confirmPassword]);
+  }, [login, code, password, confirmPassword, error]);
 
   // Handle Step 1: Request Verification Code by Email
   const handleStep1 = async (e: React.FormEvent) => {
@@ -199,8 +203,8 @@ export default function RegisterPage() {
       const data = await registerStep1Identification({ login });
       setToken(data.token);
       setStep(2);
-    } catch (err: any) {
-      setError(err.message || "Ошибка отправки кода");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : t("auth_error_send_code", { defaultValue: "Ошибка отправки кода" }));
     } finally {
       setIsLoading(false);
     }
@@ -217,8 +221,8 @@ export default function RegisterPage() {
       const data = await registerStep2Verification({ token, code });
       setToken(data.token);
       setStep(3);
-    } catch (err: any) {
-      setError(err.message || "Неверный код верификации");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : t("auth_error_invalid_code"));
     } finally {
       setIsLoading(false);
     }
@@ -228,7 +232,7 @@ export default function RegisterPage() {
   const handleStep3 = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!password || password !== confirmPassword) {
-      setError("Пароли не совпадают");
+      setError(t("auth_error_pass_mismatch", { defaultValue: "Пароли не совпадают" }));
       return;
     }
 
@@ -239,8 +243,8 @@ export default function RegisterPage() {
       dispatch(loginSuccess(userData));
       dispatch(syncCartOnLogin());
       // Step state isn't advanced because the isAuthenticated flag will render the SuccessScreen
-    } catch (err: any) {
-      setError(err.message || "Ошибка при создании аккаунта");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : t("auth_error_default"));
     } finally {
       setIsLoading(false);
     }
@@ -265,15 +269,14 @@ export default function RegisterPage() {
       <div className={styles.card}>
         {/* Brand */}
         <div className={styles.brand}>
-          <div className={styles.brandIcon}>S</div>
-          <span className={styles.brandName}>ОЗОН-ПРО</span>
+          <Image src="/logo.svg" alt="ОЗОН-ПРО" width={160} height={54} className={styles.logoImg} priority />
         </div>
 
-        <h1 className={styles.title}>Создать аккаунт</h1>
+        <h1 className={styles.title}>{t("auth_register")}</h1>
         <p className={styles.subtitle}>
-          {step === 1 && "Введите email для получения кода"}
-          {step === 2 && "Код отправлен на ваш email"}
-          {step === 3 && "Придумайте надежный пароль"}
+          {step === 1 && t("reg_step1_sub", { defaultValue: "Введите email для получения кода" })}
+          {step === 2 && t("auth_code_sent_simple", { defaultValue: "Код отправлен на ваш email" })}
+          {step === 3 && t("auth_create_pass")}
         </p>
 
         {/* Steps indicator */}
@@ -308,7 +311,7 @@ export default function RegisterPage() {
           {step === 1 && (
             <div className={styles.field}>
               <label className={styles.label} htmlFor="login">
-                Email или телефон
+                {t("auth_email_or_phone")}
               </label>
               <div className={styles.inputWrapper}>
                 <span className={styles.inputIcon}>
@@ -333,7 +336,7 @@ export default function RegisterPage() {
           {step === 2 && (
             <div className={styles.field}>
               <label className={styles.label} htmlFor="code">
-                Код подтверждения
+                {t("auth_enter_code")}
               </label>
               <div className={styles.inputWrapper}>
                 <span className={styles.inputIcon}>
@@ -359,7 +362,7 @@ export default function RegisterPage() {
             <>
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="password">
-                  Пароль
+                  {t("auth_password")}
                 </label>
                 <div className={styles.inputWrapper}>
                   <span className={styles.inputIcon}>
@@ -381,7 +384,7 @@ export default function RegisterPage() {
                     className={styles.togglePassword}
                     onClick={() => setShowPassword((v) => !v)}
                     aria-label={
-                      showPassword ? "Скрыть пароль" : "Показать пароль"
+                      showPassword ? t("auth_hide_pass") : t("auth_show_pass")
                     }
                   >
                     {showPassword ? <IconEyeOff /> : <IconEye />}
@@ -390,7 +393,7 @@ export default function RegisterPage() {
               </div>
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="confirmPassword">
-                  Повторите пароль
+                  {t("auth_confirm_password")}
                 </label>
                 <div className={styles.inputWrapper}>
                   <span className={styles.inputIcon}>
@@ -420,14 +423,14 @@ export default function RegisterPage() {
           >
             {isLoading ? (
               <>
-                <span className={styles.spinner} /> Обработка...
+                <span className={styles.spinner} /> {t("common_processing", { defaultValue: "Обработка..." })}
               </>
             ) : step === 1 ? (
-              "Получить код"
+              t("auth_send_code")
             ) : step === 2 ? (
-              "Подтвердить"
+              t("auth_verify")
             ) : (
-              "Зарегистрироваться"
+              t("auth_register_btn")
             )}
           </button>
 
@@ -442,7 +445,7 @@ export default function RegisterPage() {
                 textDecoration: "none",
               }}
             >
-              Уже есть аккаунт? Войти
+              {t("auth_already_have_account", { defaultValue: "Уже есть аккаунт? Войти" })}
             </Link>
           )}
         </form>

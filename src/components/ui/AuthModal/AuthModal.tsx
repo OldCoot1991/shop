@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import {
   X,
   Mail,
@@ -47,6 +48,7 @@ export default function AuthModal({
   onClose,
   onAuthSuccess,
 }: AuthModalProps) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [tab, setTab] = useState<Tab>("login");
@@ -161,7 +163,7 @@ export default function AuthModal({
       handleClose();
       onAuthSuccess?.();
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Ошибка авторизации";
+      const msg = err instanceof Error ? err.message : t("auth_error_default");
       setLoginError(msg);
       dispatch(loginFailure(msg));
     } finally {
@@ -180,7 +182,7 @@ export default function AuthModal({
       startCountdown(timeout);
       setResetStep(2);
     } catch (err) {
-      setResetError(err instanceof Error ? err.message : "Ошибка");
+      setResetError(err instanceof Error ? err.message : t("auth_error"));
     } finally {
       setResetLoading(false);
     }
@@ -196,7 +198,7 @@ export default function AuthModal({
       setResetCode("");
       startCountdown(timeout);
     } catch (err) {
-      setResetError(err instanceof Error ? err.message : "Ошибка");
+      setResetError(err instanceof Error ? err.message : t("auth_error"));
     } finally {
       setResetLoading(false);
     }
@@ -216,7 +218,7 @@ export default function AuthModal({
       setResetCountdown(timeout); // store but don't tick (not needed on step 3)
       setResetStep(3);
     } catch (err) {
-      setResetError(err instanceof Error ? err.message : "Неверный код");
+      setResetError(err instanceof Error ? err.message : t("auth_error_invalid_code"));
     } finally {
       setResetLoading(false);
     }
@@ -240,7 +242,7 @@ export default function AuthModal({
       }, 1500);
     } catch (err) {
       setResetError(
-        err instanceof Error ? err.message : "Ошибка сохранения пароля",
+        err instanceof Error ? err.message : t("auth_error_save_pass"),
       );
     } finally {
       setResetLoading(false);
@@ -257,7 +259,7 @@ export default function AuthModal({
       setRegToken(token);
       setRegStep(2);
     } catch (err) {
-      setRegError(err instanceof Error ? err.message : "Ошибка");
+      setRegError(err instanceof Error ? err.message : t("auth_error"));
     } finally {
       setRegLoading(false);
     }
@@ -275,7 +277,7 @@ export default function AuthModal({
       setRegToken(token);
       setRegStep(3);
     } catch (err) {
-      setRegError(err instanceof Error ? err.message : "Неверный код");
+      setRegError(err instanceof Error ? err.message : t("auth_error_invalid_code"));
     } finally {
       setRegLoading(false);
     }
@@ -300,7 +302,7 @@ export default function AuthModal({
       }, 1500);
     } catch (err) {
       setRegError(
-        err instanceof Error ? err.message : "Ошибка создания аккаунта",
+        err instanceof Error ? err.message : t("auth_error_default"),
       );
     } finally {
       setRegLoading(false);
@@ -324,7 +326,7 @@ export default function AuthModal({
         <button
           className={styles.closeBtn}
           onClick={handleClose}
-          aria-label="Закрыть"
+          aria-label={t("common_close", { defaultValue: "Закрыть" })}
         >
           <X size={20} />
         </button>
@@ -340,13 +342,13 @@ export default function AuthModal({
             className={`${styles.tab} ${tab === "login" ? styles.tabActive : ""}`}
             onClick={() => switchTab("login")}
           >
-            Войти
+            {t("auth_login")}
           </button>
           <button
             className={`${styles.tab} ${tab === "register" ? styles.tabActive : ""}`}
             onClick={() => switchTab("register")}
           >
-            Регистрация
+            {t("auth_register")}
           </button>
         </div>
 
@@ -360,7 +362,7 @@ export default function AuthModal({
             )}
             <div className={styles.field}>
               <label className={styles.label} htmlFor="am-login">
-                Email или телефон
+                {t("auth_email_or_phone")}
               </label>
               <div className={styles.inputWrapper}>
                 <span className={styles.inputIcon}>
@@ -380,7 +382,7 @@ export default function AuthModal({
             </div>
             <div className={styles.field}>
               <label className={styles.label} htmlFor="am-password">
-                Пароль
+                {t("auth_password")}
               </label>
               <div className={styles.inputWrapper}>
                 <span className={styles.inputIcon}>
@@ -400,7 +402,7 @@ export default function AuthModal({
                   type="button"
                   className={styles.togglePassword}
                   onClick={() => setShowPass((v) => !v)}
-                  aria-label={showPass ? "Скрыть пароль" : "Показать пароль"}
+                  aria-label={showPass ? t("auth_hide_pass") : t("auth_show_pass")}
                 >
                   {showPass ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
@@ -413,10 +415,10 @@ export default function AuthModal({
             >
               {loginLoading ? (
                 <>
-                  <span className={styles.spinner} /> Входим...
+                  <span className={styles.spinner} /> {t("auth_logging_in")}
                 </>
               ) : (
-                "Войти"
+                t("auth_login_btn")
               )}
             </button>
             <button
@@ -424,7 +426,7 @@ export default function AuthModal({
               className={styles.forgotBtn}
               onClick={() => switchTab("reset")}
             >
-              Забыли пароль?
+              {t("auth_forgot_pass")}
             </button>
           </form>
         )}
@@ -451,8 +453,8 @@ export default function AuthModal({
                 onSubmit={handleRegStep1}
                 noValidate
               >
-                <p className={styles.stepTitle}>Введите email</p>
-                <p className={styles.stepSub}>Мы отправим код подтверждения</p>
+                <p className={styles.stepTitle}>{t("auth_enter_email")}</p>
+                <p className={styles.stepSub}>{t("reg_email_sub", { defaultValue: "Мы отправим код подтверждения" })}</p>
                 {regError && (
                   <div className={styles.errorBanner}>
                     <AlertCircle size={15} /> {regError}
@@ -485,10 +487,10 @@ export default function AuthModal({
                 >
                   {regLoading ? (
                     <>
-                      <span className={styles.spinner} /> Отправляем...
+                      <span className={styles.spinner} /> {t("auth_sending")}
                     </>
                   ) : (
-                    "Получить код"
+                    t("auth_send_code")
                   )}
                 </button>
               </form>
@@ -509,10 +511,10 @@ export default function AuthModal({
                     setRegError(null);
                   }}
                 >
-                  <ArrowLeft size={13} /> Назад
+                  <ArrowLeft size={13} /> {t("auth_back")}
                 </button>
-                <p className={styles.stepTitle}>Введите код</p>
-                <p className={styles.stepSub}>Код отправлен на {regEmail}</p>
+                <p className={styles.stepTitle}>{t("auth_enter_code")}</p>
+                <p className={styles.stepSub}>{t("auth_code_sent", { email: regEmail })}</p>
                 {regError && (
                   <div className={styles.errorBanner}>
                     <AlertCircle size={15} /> {regError}
@@ -538,10 +540,10 @@ export default function AuthModal({
                 >
                   {regLoading ? (
                     <>
-                      <span className={styles.spinner} /> Проверяем...
+                      <span className={styles.spinner} /> {t("auth_verifying")}
                     </>
                   ) : (
-                    "Подтвердить"
+                    t("auth_verify")
                   )}
                 </button>
               </form>
@@ -562,11 +564,11 @@ export default function AuthModal({
                     setRegError(null);
                   }}
                 >
-                  <ArrowLeft size={13} /> Назад
+                  <ArrowLeft size={13} /> {t("auth_back")}
                 </button>
-                <p className={styles.stepTitle}>Придумайте пароль</p>
+                <p className={styles.stepTitle}>{t("auth_create_pass")}</p>
                 <p className={styles.stepSub}>
-                  Минимум 8 символов, латинские буквы и цифры
+                  {t("auth_pass_hint")}
                 </p>
                 {regError && (
                   <div className={styles.errorBanner}>
@@ -575,7 +577,7 @@ export default function AuthModal({
                 )}
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="reg-pass">
-                    Пароль
+                    {t("auth_password")}
                   </label>
                   <div className={styles.inputWrapper}>
                     <span className={styles.inputIcon}>
@@ -595,7 +597,7 @@ export default function AuthModal({
                       type="button"
                       className={styles.togglePassword}
                       onClick={() => setShowRegPass((v) => !v)}
-                      aria-label={showRegPass ? "Скрыть" : "Показать"}
+                      aria-label={showRegPass ? t("auth_hide_pass") : t("auth_show_pass")}
                     >
                       {showRegPass ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
@@ -608,10 +610,10 @@ export default function AuthModal({
                 >
                   {regLoading ? (
                     <>
-                      <span className={styles.spinner} /> Создаём аккаунт...
+                      <span className={styles.spinner} /> {t("auth_creating_acc")}
                     </>
                   ) : (
-                    "Создать аккаунт"
+                    t("auth_register_btn")
                   )}
                 </button>
               </form>
@@ -623,9 +625,9 @@ export default function AuthModal({
                 <div className={styles.successIcon}>
                   <CheckCircle size={30} />
                 </div>
-                <p className={styles.successTitle}>Аккаунт создан!</p>
+                <p className={styles.successTitle}>{t("auth_success_reg")}</p>
                 <p className={styles.successSub}>
-                  Выполняем вход и переходим к оплате…
+                  {t("auth_proceeding")}
                 </p>
               </div>
             )}
@@ -660,14 +662,14 @@ export default function AuthModal({
                   className={styles.backBtn}
                   onClick={() => switchTab("login")}
                 >
-                  <ArrowLeft size={13} /> Назад
+                  <ArrowLeft size={13} /> {t("auth_back")}
                 </button>
                 <p className={styles.stepTitle}>
                   <KeyRound size={16} style={{ display: "inline", marginRight: 6, verticalAlign: "middle" }} />
-                  Сброс пароля
+                  {t("auth_reset_pass")}
                 </p>
                 <p className={styles.stepSub}>
-                  Введите email — мы отправим код подтверждения
+                  {t("auth_enter_email")}
                 </p>
                 {resetError && (
                   <div className={styles.errorBanner}>
@@ -676,7 +678,7 @@ export default function AuthModal({
                 )}
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="rst-login">
-                    Email или телефон
+                    {t("auth_email_or_phone")}
                   </label>
                   <div className={styles.inputWrapper}>
                     <span className={styles.inputIcon}>
@@ -700,9 +702,9 @@ export default function AuthModal({
                   disabled={resetLoading || !resetLogin}
                 >
                   {resetLoading ? (
-                    <><span className={styles.spinner} /> Отправляем...</>
+                    <><span className={styles.spinner} /> {t("auth_sending")}</>
                   ) : (
-                    "Получить код"
+                    t("auth_send_code")
                   )}
                 </button>
               </form>
@@ -722,10 +724,10 @@ export default function AuthModal({
                     setResetCountdown(0);
                   }}
                 >
-                  <ArrowLeft size={13} /> Назад
+                  <ArrowLeft size={13} /> {t("auth_back")}
                 </button>
-                <p className={styles.stepTitle}>Введите код</p>
-                <p className={styles.stepSub}>Код отправлен на {resetLogin}</p>
+                <p className={styles.stepTitle}>{t("auth_enter_code")}</p>
+                <p className={styles.stepSub}>{t("auth_code_sent", { email: resetLogin })}</p>
                 {resetError && (
                   <div className={styles.errorBanner}>
                     <AlertCircle size={15} /> {resetError}
@@ -745,7 +747,7 @@ export default function AuthModal({
                 <div className={styles.resendRow}>
                   {resetCountdown > 0 ? (
                     <span className={styles.resendTimer}>
-                      Повторить через {resetCountdown} с
+                      {t("auth_resend_wait", { seconds: resetCountdown })}
                     </span>
                   ) : (
                     <button
@@ -754,7 +756,7 @@ export default function AuthModal({
                       onClick={handleResetResend}
                       disabled={resetLoading}
                     >
-                      Отправить повторно
+                      {t("auth_resend_code")}
                     </button>
                   )}
                 </div>
@@ -764,9 +766,9 @@ export default function AuthModal({
                   disabled={resetLoading || resetCode.length < 4}
                 >
                   {resetLoading ? (
-                    <><span className={styles.spinner} /> Проверяем...</>
+                    <><span className={styles.spinner} /> {t("auth_verifying")}</>
                   ) : (
-                    "Подтвердить"
+                    t("auth_verify")
                   )}
                 </button>
               </form>
@@ -783,11 +785,11 @@ export default function AuthModal({
                     setResetError(null);
                   }}
                 >
-                  <ArrowLeft size={13} /> Назад
+                  <ArrowLeft size={13} /> {t("auth_back")}
                 </button>
-                <p className={styles.stepTitle}>Новый пароль</p>
+                <p className={styles.stepTitle}>{t("auth_new_password")}</p>
                 <p className={styles.stepSub}>
-                  Минимум 8 символов, латинские буквы и цифры
+                  {t("auth_pass_hint")}
                 </p>
                 {resetError && (
                   <div className={styles.errorBanner}>
@@ -796,7 +798,7 @@ export default function AuthModal({
                 )}
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="rst-pass">
-                    Новый пароль
+                    {t("auth_new_password")}
                   </label>
                   <div className={styles.inputWrapper}>
                     <span className={styles.inputIcon}>

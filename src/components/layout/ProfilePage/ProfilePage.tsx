@@ -3,10 +3,12 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { logout } from "@/lib/features/auth/authSlice";
 import { clearServerCart } from "@/lib/features/cart/cartSlice";
 import { logoutRequest } from "@/services/authService";
+import Breadcrumbs from "@/components/ui/Breadcrumbs/Breadcrumbs";
 import styles from "./ProfilePage.module.css";
 
 // SVG icons
@@ -169,13 +171,15 @@ function getDisplayName(
   firstName?: string | null,
   lastName?: string | null,
   email?: string,
+  fallback?: string,
 ) {
   if (firstName || lastName)
     return [firstName, lastName].filter(Boolean).join(" ");
-  return email ?? "Пользователь";
+  return email ?? fallback ?? "User";
 }
 
 export default function ProfilePage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { user, isAuthenticated } = useAppSelector((s) => s.auth);
@@ -199,11 +203,16 @@ export default function ProfilePage() {
   };
 
   const initials = getInitials(user.firstName, user.lastName, user.email);
-  const displayName = getDisplayName(user.firstName, user.lastName, user.email);
+  const displayName = getDisplayName(user.firstName, user.lastName, user.email, t("profile_user"));
 
   return (
     <div className={styles.page}>
       <div className={styles.container}>
+        <div className={styles.breadcrumbWrapper}>
+          <Breadcrumbs 
+            items={[{ label: t("breadcrumb_profile"), isCurrent: true }]} 
+          />
+        </div>
         {/* ── Hero ── */}
         <div className={styles.heroCard}>
           <div className={styles.avatar}>{initials}</div>
@@ -212,12 +221,12 @@ export default function ProfilePage() {
             <h1 className={styles.heroName}>{displayName}</h1>
             <p className={styles.heroEmail}>{user.email}</p>
             <span className={styles.heroBadge}>
-              <IconCheck /> Аккаунт подтверждён
+              <IconCheck /> {t("profile_verified")}
             </span>
           </div>
 
           <button className={styles.logoutBtn} onClick={handleLogout}>
-            Выйти
+            {t("profile_logout")}
           </button>
         </div>
 
@@ -225,18 +234,18 @@ export default function ProfilePage() {
         <div className={styles.grid}>
           {/* Personal info */}
           <div className={styles.infoCard}>
-            <p className={styles.infoCardTitle}>Личные данные</p>
+            <p className={styles.infoCardTitle}>{t("profile_personal_info")}</p>
 
             <div className={styles.infoRow}>
               <span className={styles.infoIcon}>
                 <IconUser />
               </span>
               <div>
-                <p className={styles.infoLabel}>Имя</p>
+                <p className={styles.infoLabel}>{t("profile_first_name")}</p>
                 {user.firstName ? (
                   <p className={styles.infoValue}>{user.firstName}</p>
                 ) : (
-                  <p className={styles.infoValueEmpty}>Не указано</p>
+                  <p className={styles.infoValueEmpty}>{t("profile_not_specified")}</p>
                 )}
               </div>
             </div>
@@ -246,11 +255,11 @@ export default function ProfilePage() {
                 <IconUser />
               </span>
               <div>
-                <p className={styles.infoLabel}>Фамилия</p>
+                <p className={styles.infoLabel}>{t("profile_last_name")}</p>
                 {user.lastName ? (
                   <p className={styles.infoValue}>{user.lastName}</p>
                 ) : (
-                  <p className={styles.infoValueEmpty}>Не указано</p>
+                  <p className={styles.infoValueEmpty}>{t("profile_not_specified")}</p>
                 )}
               </div>
             </div>
@@ -260,7 +269,7 @@ export default function ProfilePage() {
                 <IconHash />
               </span>
               <div>
-                <p className={styles.infoLabel}>ID пользователя</p>
+                <p className={styles.infoLabel}>{t("profile_user_id")}</p>
                 <p className={styles.infoValue}>#{user.id}</p>
               </div>
             </div>
@@ -268,7 +277,7 @@ export default function ProfilePage() {
 
           {/* Contacts */}
           <div className={styles.infoCard}>
-            <p className={styles.infoCardTitle}>Контакты</p>
+            <p className={styles.infoCardTitle}>{t("profile_contacts")}</p>
 
             <div className={styles.infoRow}>
               <span className={styles.infoIcon}>
@@ -285,11 +294,11 @@ export default function ProfilePage() {
                 <IconPhone />
               </span>
               <div>
-                <p className={styles.infoLabel}>Телефон</p>
+                <p className={styles.infoLabel}>{t("profile_phone")}</p>
                 {user.phone ? (
                   <p className={styles.infoValue}>{user.phone}</p>
                 ) : (
-                  <p className={styles.infoValueEmpty}>Не указан</p>
+                  <p className={styles.infoValueEmpty}>{t("profile_not_specified")}</p>
                 )}
               </div>
             </div>
@@ -297,7 +306,7 @@ export default function ProfilePage() {
 
           {/* Quick Links */}
           <div className={styles.quickCard}>
-            <p className={styles.quickTitle}>Быстрый доступ</p>
+            <p className={styles.quickTitle}>{t("profile_quick_links")}</p>
             <div className={styles.quickLinks}>
               <Link
                 href="/payments"
@@ -307,7 +316,7 @@ export default function ProfilePage() {
                 <span className={styles.quickLinkIcon}>
                   <IconShoppingBag />
                 </span>
-                Мои заказы
+                {t("profile_my_orders")}
                 <span className={styles.quickLinkArrow}>
                   <IconChevronRight />
                 </span>
@@ -316,7 +325,7 @@ export default function ProfilePage() {
                 <span className={styles.quickLinkIcon}>
                   <IconHeart />
                 </span>
-                Избранное
+                {t("nav_wishlist")}
                 <span className={styles.quickLinkArrow}>
                   <IconChevronRight />
                 </span>
@@ -325,7 +334,7 @@ export default function ProfilePage() {
                 <span className={styles.quickLinkIcon}>
                   <IconSettings />
                 </span>
-                Настройки аккаунта
+                {t("profile_account_settings")}
                 <span className={styles.quickLinkArrow}>
                   <IconChevronRight />
                 </span>

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { X, Check } from "lucide-react";
 import styles from "./SortDrawer.module.css";
 
@@ -24,8 +25,11 @@ const SortDrawer: React.FC<SortDrawerProps> = ({
   options,
   currentValue,
   onSelect,
-  title = "Сортировка",
+  title,
 }) => {
+  const { t } = useTranslation();
+  const drawerTitle = title || t("sort_title", { defaultValue: "Сортировка" });
+
   return (
     <>
       {/* Overlay */}
@@ -39,8 +43,8 @@ const SortDrawer: React.FC<SortDrawerProps> = ({
         <div className={styles.header}>
           <div className={styles.indicator} />
           <div className={styles.headerRow}>
-            <h2 className={styles.title}>{title}</h2>
-            <button className={styles.closeBtn} onClick={onClose} aria-label="Закрыть">
+            <h2 className={styles.title}>{drawerTitle}</h2>
+            <button className={styles.closeBtn} onClick={onClose} aria-label={t("common_close", { defaultValue: "Закрыть" })}>
               <X size={24} />
             </button>
           </div>
