@@ -10,6 +10,7 @@ import {
   removeFromWishlist,
 } from "@/lib/features/wishlist/wishlistSlice";
 import { addToCart } from "@/lib/features/cart/cartSlice";
+import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
 
 interface WishlistDrawerProps {
   isOpen: boolean;
@@ -87,7 +88,9 @@ const WishlistDrawer: React.FC<WishlistDrawerProps> = ({ isOpen, onClose }) => {
                     className={styles.itemImage}
                   />
                   <div className={styles.itemInfo}>
-                    <p className={styles.itemTitle}>{item.title}</p>
+                    <p className={styles.itemTitle}>
+                      <AutoTranslatable text={item.title ? item.title.charAt(0).toUpperCase() + item.title.slice(1) : ""} />
+                    </p>
                     <p className={styles.itemPrice}>
                       {item.price.toLocaleString("ru-RU")} ₽
                     </p>

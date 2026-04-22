@@ -95,7 +95,7 @@ const ApiProductCard: React.FC<ApiProductCardProps> = ({ product }) => {
         </div>
 
         <h4 className={styles.title} title={translatedName}>
-          {translatedName}
+          {translatedName ? translatedName.charAt(0).toUpperCase() + translatedName.slice(1) : ""}
         </h4>
 
         <p className={styles.topic}>{topic || "\u00A0"}</p>

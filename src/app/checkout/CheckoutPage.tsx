@@ -21,6 +21,7 @@ import {
 import { getProductImageUrl } from "@/services/productService";
 import { createOrderAsync } from "@/lib/features/orders/orderSlice";
 import styles from "./CheckoutPage.module.css";
+import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -69,7 +70,7 @@ export default function CheckoutPage() {
         <div className={styles.container}>
           <div className={styles.loadingState}>
             <Loader2 size={36} className={styles.loadingSpinner} />
-            <p>Загружаем корзину…</p>
+            <AutoTranslatable as="p" text="Загружаем корзину…" />
           </div>
         </div>
       </div>
@@ -83,9 +84,9 @@ export default function CheckoutPage() {
         <div className={styles.container}>
           <div className={styles.empty}>
             <ShoppingCart size={64} strokeWidth={1.2} />
-            <p>Ваша корзина пуста</p>
+            <AutoTranslatable as="p" text="Ваша корзина пуста" />
             <Link href="/" className={styles.backHomeBtn}>
-              <ChevronLeft size={18} /> На главную
+              <ChevronLeft size={18} /> <AutoTranslatable text="На главную" />
             </Link>
           </div>
         </div>
@@ -101,13 +102,13 @@ export default function CheckoutPage() {
         {/* Breadcrumb */}
         <nav className={styles.breadcrumb}>
           <Link href="/" className={`${styles.breadcrumbLink} ${styles.breadcrumbFirst}`}>
-            <ChevronLeft size={16} /> Главная
+            <ChevronLeft size={16} /> <AutoTranslatable text="Главная" />
           </Link>
           <span className={styles.breadcrumbSep} />
-          <span className={styles.breadcrumbCurrent}>Оформление заказа</span>
+          <AutoTranslatable as="span" className={styles.breadcrumbCurrent} text="Оформление заказа" />
         </nav>
 
-        <h1 className={styles.title}>Оформление заказа</h1>
+        <AutoTranslatable as="h1" className={styles.title} text="Оформление заказа" />
 
         <div className={styles.layout}>
           {/* Items */}
@@ -122,7 +123,7 @@ export default function CheckoutPage() {
                     verticalAlign: "middle",
                   }}
                 />
-                Товары ({itemCount} шт.)
+                <AutoTranslatable text="Товары" /> ({itemCount} <AutoTranslatable text="шт." />)
               </p>
             </div>
 
@@ -163,11 +164,11 @@ export default function CheckoutPage() {
                     </div>
                   )}
                   <div className={styles.itemInfo}>
-                    <p className={styles.itemName}>{name}</p>
+                    <p className={styles.itemName}><AutoTranslatable text={name ? name.charAt(0).toUpperCase() + name.slice(1) : ""} /></p>
                     {article && (
-                      <p className={styles.itemArticle}>Арт.: {article}</p>
+                      <p className={styles.itemArticle}><AutoTranslatable text="Арт.:" /> {article}</p>
                     )}
-                    <p className={styles.itemQty}>Кол-во: {item.quantity}</p>
+                    <p className={styles.itemQty}><AutoTranslatable text="Кол-во:" /> {item.quantity}</p>
                   </div>
                   <span className={styles.itemPrice}>
                     {priceRub.toLocaleString("ru-RU")} ₽
@@ -179,27 +180,27 @@ export default function CheckoutPage() {
 
           {/* Summary */}
           <div className={styles.summary}>
-            <p className={styles.summaryTitle}>Итого</p>
+            <AutoTranslatable as="p" className={styles.summaryTitle} text="Итого" />
 
             <div className={styles.summaryRow}>
-              <span>Товары ({itemCount} шт.)</span>
-              <span>{total.toLocaleString("ru-RU")} ₽</span>
+              <span><AutoTranslatable text="Товары" /> ({itemCount} <AutoTranslatable text="шт." />)</span>
+              <span>{total.toLocaleString("ru-RU")} <AutoTranslatable text="₽" /></span>
             </div>
             <div className={styles.summaryRow}>
-              <span>Доставка</span>
-              <span>по договорённости</span>
+              <AutoTranslatable as="span" text="Доставка" />
+              <AutoTranslatable as="span" text="по договорённости" />
             </div>
 
             <hr className={styles.summaryDivider} />
 
             <div className={styles.summaryTotal}>
-              <span>К оплате</span>
-              <span>{total.toLocaleString("ru-RU")} ₽</span>
+              <AutoTranslatable as="span" text="К оплате" />
+              <span>{total.toLocaleString("ru-RU")} <AutoTranslatable text="₽" /></span>
             </div>
 
             {error && (
               <div className={styles.errorBanner}>
-                <AlertCircle size={15} /> {error}
+                <AlertCircle size={15} /> <AutoTranslatable text={error} />
               </div>
             )}
 
@@ -210,12 +211,12 @@ export default function CheckoutPage() {
             >
               {isProcessing ? (
                 <>
-                  <Loader2 size={18} className={styles.spinner} /> Обработка…
+                  <Loader2 size={18} className={styles.spinner} /> <AutoTranslatable text="Обработка…" />
                 </>
               ) : (
                 <>
-                  <CreditCard size={18} /> Оплатить{" "}
-                  {total.toLocaleString("ru-RU")} ₽
+                  <CreditCard size={18} /> <AutoTranslatable text="Оплатить" />{" "}
+                  {total.toLocaleString("ru-RU")} <AutoTranslatable text="₽" />
                 </>
               )}
             </button>

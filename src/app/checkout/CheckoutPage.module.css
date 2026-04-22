@@ -33,7 +33,7 @@
 .breadcrumbLink:hover { opacity: 0.75; }
 .breadcrumbSep::before {
   content: "/";
-  margin-right: 8px;
+  margin: 0 8px;
   color: var(--color-muted);
 }
 .breadcrumbCurrent {

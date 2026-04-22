@@ -57,7 +57,8 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
   const [selectedImage, setSelectedImage] = useState(0);
 
   // Dynamic content translation
-  const { translated: translatedName } = useAutoTranslate(product.name);
+  const { translated: rawTranslatedName } = useAutoTranslate(product.name);
+  const translatedName = rawTranslatedName ? rawTranslatedName.charAt(0).toUpperCase() + rawTranslatedName.slice(1) : "";
   const { translated: translatedDesc } = useAutoTranslate(product.description);
   
   const categoryStr = getAttributeValue(product.attributes, "Категория") || "";

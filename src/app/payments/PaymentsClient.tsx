@@ -35,6 +35,7 @@ export default function PaymentsClient() {
   const { currentPage, pageCount } = useAppSelector(selectOrderPagination);
 
   const [processingId, setProcessingId] = useState<number | null>(null);
+  const [filterStatus, setFilterStatus] = useState<OrderStatus | "ALL">("ALL");
 
   const statusConfig: Record<OrderStatus, { label: string; colorClass: string }> =
     useMemo(() => ({
@@ -131,8 +132,29 @@ export default function PaymentsClient() {
       />
       <h1 className={styles.pageTitle}>{t("payments_title")}</h1>
 
+      {orders.length > 0 && (
+        <div className={styles.filterRow}>
+          <button
+            className={`${styles.filterBtn} ${filterStatus === "ALL" ? styles.filterBtnActive : ""}`}
+            onClick={() => setFilterStatus("ALL")}
+          >
+            {t("order_filter_all", { defaultValue: "Все" })}
+          </button>
+          {(["CREATED", "PAID", "CANCELED"] as OrderStatus[]).map((s) => (
+            <button
+              key={s}
+              className={`${styles.filterBtn} ${filterStatus === s ? styles.filterBtnActive : ""}`}
+              onClick={() => setFilterStatus(s)}
+            >
+              {statusConfig[s].label}
+            </button>
+          ))}
+        </div>
+      )}
+
       <div className={styles.ordersList}>
         {[...orders]
+          .filter((o) => filterStatus === "ALL" || o.status === filterStatus)
           .sort((a, b) => {
             const priority: Record<string, number> = {
               PAID: 1,
@@ -194,7 +216,7 @@ export default function PaymentsClient() {
                       </div>
                       <div className={styles.productInfo}>
                         <p className={styles.productName}>
-                          <AutoTranslatable text={p.name} />
+                          <AutoTranslatable text={p.name ? p.name.charAt(0).toUpperCase() + p.name.slice(1) : ""} />
                         </p>
                         <p className={styles.productMeta}>
                           {t("order_item_art")} {p.article} • {p.quantity} {t("order_item_qty")}

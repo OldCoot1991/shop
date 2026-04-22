@@ -16,6 +16,7 @@ import {
 import { useCart } from "@/hooks/useCart";
 import { getProductImageUrl } from "@/services/productService";
 import AuthModal from "@/components/ui/AuthModal/AuthModal";
+import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -132,45 +133,49 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                         />
                       )}
                       <div className={styles.itemInfo}>
-                        <p className={styles.itemTitle}>{item.name}</p>
+                        <p className={styles.itemTitle}>
+                          <AutoTranslatable text={item.name ? item.name.charAt(0).toUpperCase() + item.name.slice(1) : ""} />
+                        </p>
                         <p className={styles.itemArticle}>
                           {t("cart_item_article")}: {item.article}
                         </p>
-                        <p className={styles.itemPrice}>
-                          {(
-                            (item.salePrice / 100) *
-                            item.quantity
-                          ).toLocaleString("ru-RU")}{" "}
-                          ₽
-                        </p>
-                        <div className={styles.itemControls}>
-                          <button
-                            className={styles.qtyBtn}
-                            onClick={() => decreaseItem(item.id)}
-                          >
-                            −
-                          </button>
-                          <span className={styles.qty}>{item.quantity}</span>
-                          <button
-                            className={styles.qtyBtn}
-                            onClick={() =>
-                              addItem({
-                                id: item.id,
-                                title: item.name,
-                                price: item.salePrice / 100,
-                                image: img,
-                              })
-                            }
-                          >
-                            +
-                          </button>
-                          <button
-                            className={styles.removeBtn}
-                            onClick={() => removeItem(item.id)}
-                            aria-label={t("cart_item_remove")}
-                          >
-                            <Trash2 size={16} />
-                          </button>
+                        <div className={styles.itemBottomRow}>
+                          <p className={styles.itemPrice}>
+                            {(
+                              (item.salePrice / 100) *
+                              item.quantity
+                            ).toLocaleString("ru-RU")}{" "}
+                            ₽
+                          </p>
+                          <div className={styles.itemControls}>
+                            <button
+                              className={styles.qtyBtn}
+                              onClick={() => decreaseItem(item.id)}
+                            >
+                              −
+                            </button>
+                            <span className={styles.qty}>{item.quantity}</span>
+                            <button
+                              className={styles.qtyBtn}
+                              onClick={() =>
+                                addItem({
+                                  id: item.id,
+                                  title: item.name,
+                                  price: item.salePrice / 100,
+                                  image: img,
+                                })
+                              }
+                            >
+                              +
+                            </button>
+                            <button
+                              className={styles.removeBtn}
+                              onClick={() => removeItem(item.id)}
+                              aria-label={t("cart_item_remove")}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </li>
@@ -201,38 +206,42 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                       className={styles.itemImage}
                     />
                     <div className={styles.itemInfo}>
-                      <p className={styles.itemTitle}>{item.title}</p>
-                      <p className={styles.itemPrice}>
-                        {(item.price * item.quantity).toLocaleString("ru-RU")} ₽
+                      <p className={styles.itemTitle}>
+                        <AutoTranslatable text={item.title ? item.title.charAt(0).toUpperCase() + item.title.slice(1) : ""} />
                       </p>
-                      <div className={styles.itemControls}>
-                        <button
-                          className={styles.qtyBtn}
-                          onClick={() => decreaseItem(item.id)}
-                        >
-                          −
-                        </button>
-                        <span className={styles.qty}>{item.quantity}</span>
-                        <button
-                          className={styles.qtyBtn}
-                          onClick={() =>
-                            addItem({
-                              id: item.id,
-                              title: item.title,
-                              price: item.price,
-                              image: item.image,
-                            })
-                          }
-                        >
-                          +
-                        </button>
-                        <button
-                          className={styles.removeBtn}
-                          onClick={() => removeItem(item.id)}
-                          aria-label={t("cart_item_remove")}
-                        >
-                          <Trash2 size={16} />
-                        </button>
+                      <div className={styles.itemBottomRow}>
+                        <p className={styles.itemPrice}>
+                          {(item.price * item.quantity).toLocaleString("ru-RU")} ℝ
+                        </p>
+                        <div className={styles.itemControls}>
+                          <button
+                            className={styles.qtyBtn}
+                            onClick={() => decreaseItem(item.id)}
+                          >
+                            −
+                          </button>
+                          <span className={styles.qty}>{item.quantity}</span>
+                          <button
+                            className={styles.qtyBtn}
+                            onClick={() =>
+                              addItem({
+                                id: item.id,
+                                title: item.title,
+                                price: item.price,
+                                image: item.image,
+                              })
+                            }
+                          >
+                            +
+                          </button>
+                          <button
+                            className={styles.removeBtn}
+                            onClick={() => removeItem(item.id)}
+                            aria-label={t("cart_item_remove")}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </li>

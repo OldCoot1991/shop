@@ -1,7 +1,7 @@
 .page {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 24px 24px 64px;
+  padding: 0 24px 64px;
 }
 
 /* Breadcrumb */
@@ -137,7 +137,7 @@
 
 @media (max-width: 600px) {
   .page {
-    padding: 16px 16px 48px;
+    padding: 0 16px 48px;
   }
   .grid {
     grid-template-columns: repeat(2, 1fr);
