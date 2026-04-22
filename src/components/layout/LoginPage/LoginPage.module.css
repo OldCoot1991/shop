@@ -66,30 +66,13 @@
 .brand {
     display: flex;
     align-items: center;
-    gap: 10px;
     margin-bottom: 28px;
 }
 
-.brandIcon {
-    width: 40px;
-    height: 40px;
-    background: var(--color-primary);
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    flex-shrink: 0;
-}
-
-.brandName {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--color-text);
-    letter-spacing: -0.5px;
+.logoImg {
+    height: 68px;
+    width: auto;
+    object-fit: contain;
 }
 
 /* ── Headings ── */
@@ -328,3 +311,133 @@
     to   { transform: scaleX(0); }
 }
 
+/* ── Forgot password link ── */
+.forgotBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--color-primary);
+    padding: 0;
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+    transition: opacity 0.15s;
+    margin-top: -4px;
+}
+.forgotBtn:hover {
+    opacity: 0.72;
+    text-decoration: underline;
+}
+
+/* ── Back button ── */
+.backBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--color-primary);
+    padding: 0;
+    font-weight: 500;
+    width: fit-content;
+    transition: opacity 0.15s;
+    margin-bottom: 4px;
+}
+.backBtn:hover { opacity: 0.72; text-decoration: underline; }
+
+/* ── Step dots ── */
+.stepDots {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+.stepDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-border);
+    transition: background 0.2s, width 0.2s, border-radius 0.2s;
+}
+.stepDotActive {
+    background: var(--color-primary);
+    width: 22px;
+    border-radius: 4px;
+}
+.stepDotDone {
+    background: #22c55e;
+}
+
+/* ── Reset header (icon + title) ── */
+.resetHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+.resetIcon {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    background: rgba(0, 91, 255, 0.08);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    margin-top: 2px;
+}
+
+/* ── Code input ── */
+.codeInput {
+    width: 100%;
+    padding: 16px;
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-align: center;
+    background: var(--color-body);
+    color: var(--color-text);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    box-sizing: border-box;
+}
+.codeInput:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 91, 255, 0.12);
+}
+
+/* ── Resend row ── */
+.resendRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 24px;
+}
+.resendTimer {
+    font-size: 13px;
+    color: var(--color-muted);
+}
+.resendBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--color-primary);
+    padding: 0;
+    font-weight: 500;
+    transition: opacity 0.15s;
+}
+.resendBtn:hover:not(:disabled) {
+    opacity: 0.72;
+    text-decoration: underline;
+}
+.resendBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

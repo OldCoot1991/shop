@@ -152,3 +152,50 @@ export async function logoutRequest(): Promise<void> {
         headers: { accept: '*/*' },
     }).catch(() => { });
 }
+
+// ── Restore Password API Functions ───────────────────────────────────────────
+
+/** Step 1 – send login, receive verification token + timeout (seconds) */
+export async function restorePasswordStep1(payload: RegisterStep1Payload): Promise<RegisterTokenResponse['data']> {
+    const res = await fetch(`${API_BASE}/api/v1/auth/restore-password/step1/identification`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.error?.title || 'Ошибка: пользователь не найден');
+    }
+    const data: RegisterTokenResponse = await res.json();
+    return data.data;
+}
+
+/** Step 2 – verify email code, receive new token + timeout */
+export async function restorePasswordStep2(payload: RegisterStep2Payload): Promise<RegisterTokenResponse['data']> {
+    const res = await fetch(`${API_BASE}/api/v1/auth/restore-password/step2/verification`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.error?.title || 'Неверный или истёкший код');
+    }
+    const data: RegisterTokenResponse = await res.json();
+    return data.data;
+}
+
+/** Step 3 – set new password, returns the now-logged-in user */
+export async function restorePasswordStep3(payload: RegisterStep3Payload): Promise<AuthUser> {
+    const res = await fetch(`${API_BASE}/api/v1/auth/restore-password/step3/confirmation`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => null);
+        throw new Error(errorData?.error?.title || 'Ошибка установки пароля');
+    }
+    const data: LoginSuccessResponse = await res.json();
+    return data.data.user;
+}

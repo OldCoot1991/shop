@@ -65,26 +65,12 @@
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
   margin-bottom: 22px;
 }
-.brandIcon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--color-primary, #6366f1), #8b5cf6);
-  color: #fff;
-  font-weight: 800;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-}
-.brandName {
-  font-weight: 700;
-  font-size: 18px;
-  color: var(--color-text, #111);
+.logoImg {
+  height: 58px;
+  width: auto;
+  object-fit: contain;
 }
 
 /* Tabs */
@@ -347,4 +333,53 @@
   font-size: 12px;
   color: var(--color-text-secondary, #999);
   text-align: center;
+}
+
+/* Forgot-password link (shown below login submit btn) */
+.forgotBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--color-primary, #6366f1);
+  padding: 0;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+  margin-top: -4px;
+  transition: opacity 0.15s;
+}
+.forgotBtn:hover {
+  opacity: 0.75;
+  text-decoration: underline;
+}
+
+/* Resend row on OTP step */
+.resendRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+}
+.resendTimer {
+  font-size: 13px;
+  color: var(--color-text-secondary, #999);
+}
+.resendBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--color-primary, #6366f1);
+  padding: 0;
+  font-weight: 500;
+  transition: opacity 0.15s;
+}
+.resendBtn:hover:not(:disabled) {
+  opacity: 0.75;
+  text-decoration: underline;
+}
+.resendBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }

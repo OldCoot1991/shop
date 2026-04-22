@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   X,
   Mail,
@@ -10,8 +10,10 @@ import {
   AlertCircle,
   CheckCircle,
   ArrowLeft,
+  KeyRound,
 } from "lucide-react";
 import styles from "./AuthModal.module.css";
+import Image from "next/image";
 import { useAppDispatch } from "@/hooks/useAppStore";
 import {
   loginStart,
@@ -24,10 +26,14 @@ import {
   registerStep1Identification,
   registerStep2Verification,
   registerStep3Confirmation,
+  restorePasswordStep1,
+  restorePasswordStep2,
+  restorePasswordStep3,
 } from "@/services/authService";
 
-type Tab = "login" | "register";
+type Tab = "login" | "register" | "reset";
 type RegStep = 1 | 2 | 3 | "done";
+type ResetStep = 1 | 2 | 3 | "done";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -62,6 +68,40 @@ export default function AuthModal({
   const [regLoading, setRegLoading] = useState(false);
   const [regError, setRegError] = useState<string | null>(null);
 
+  // ── Reset-password state ────────────────────────────────────────────────────
+  const [resetStep, setResetStep] = useState<ResetStep>(1);
+  const [resetLogin, setResetLogin] = useState("");
+  const [resetToken, setResetToken] = useState("");
+  const [resetCode, setResetCode] = useState("");
+  const [resetPassword, setResetPassword] = useState("");
+  const [showResetPass, setShowResetPass] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetError, setResetError] = useState<string | null>(null);
+  const [resetCountdown, setResetCountdown] = useState(0);
+  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startCountdown = (seconds: number) => {
+    if (countdownRef.current) clearInterval(countdownRef.current);
+    setResetCountdown(seconds);
+    countdownRef.current = setInterval(() => {
+      setResetCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(countdownRef.current!);
+          countdownRef.current = null;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (countdownRef.current) clearInterval(countdownRef.current);
+    };
+  }, []);
+
   const resetAll = () => {
     setTab("login");
     setLoginField("");
@@ -75,6 +115,16 @@ export default function AuthModal({
     setRegPassword("");
     setShowRegPass(false);
     setRegError(null);
+    // reset-password
+    setResetStep(1);
+    setResetLogin("");
+    setResetToken("");
+    setResetCode("");
+    setResetPassword("");
+    setShowResetPass(false);
+    setResetError(null);
+    setResetCountdown(0);
+    if (countdownRef.current) clearInterval(countdownRef.current);
   };
 
   const handleClose = () => {
@@ -86,6 +136,16 @@ export default function AuthModal({
     setTab(t);
     setLoginError(null);
     setRegError(null);
+    setResetError(null);
+    if (t !== "reset") {
+      setResetStep(1);
+      setResetLogin("");
+      setResetToken("");
+      setResetCode("");
+      setResetPassword("");
+      setResetCountdown(0);
+      if (countdownRef.current) clearInterval(countdownRef.current);
+    }
   };
 
   // ── Login submit ───────────────────────────────────────────────────────────
@@ -106,6 +166,84 @@ export default function AuthModal({
       dispatch(loginFailure(msg));
     } finally {
       setLoginLoading(false);
+    }
+  };
+
+  // ── Reset-password steps ───────────────────────────────────────────────────
+  const handleResetStep1 = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetLoading(true);
+    setResetError(null);
+    try {
+      const { token, timeout } = await restorePasswordStep1({ login: resetLogin });
+      setResetToken(token);
+      startCountdown(timeout);
+      setResetStep(2);
+    } catch (err) {
+      setResetError(err instanceof Error ? err.message : "Ошибка");
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
+  const handleResetResend = async () => {
+    if (resetCountdown > 0) return;
+    setResetLoading(true);
+    setResetError(null);
+    try {
+      const { token, timeout } = await restorePasswordStep1({ login: resetLogin });
+      setResetToken(token);
+      setResetCode("");
+      startCountdown(timeout);
+    } catch (err) {
+      setResetError(err instanceof Error ? err.message : "Ошибка");
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
+  const handleResetStep2 = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetLoading(true);
+    setResetError(null);
+    try {
+      const { token, timeout } = await restorePasswordStep2({
+        token: resetToken,
+        code: resetCode,
+      });
+      setResetToken(token);
+      if (countdownRef.current) clearInterval(countdownRef.current);
+      setResetCountdown(timeout); // store but don't tick (not needed on step 3)
+      setResetStep(3);
+    } catch (err) {
+      setResetError(err instanceof Error ? err.message : "Неверный код");
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
+  const handleResetStep3 = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetLoading(true);
+    setResetError(null);
+    try {
+      const userData = await restorePasswordStep3({
+        token: resetToken,
+        password: resetPassword,
+      });
+      dispatch(loginSuccess(userData));
+      dispatch(syncCartOnLogin());
+      setResetStep("done");
+      setTimeout(() => {
+        handleClose();
+        onAuthSuccess?.();
+      }, 1500);
+    } catch (err) {
+      setResetError(
+        err instanceof Error ? err.message : "Ошибка сохранения пароля",
+      );
+    } finally {
+      setResetLoading(false);
     }
   };
 
@@ -193,8 +331,7 @@ export default function AuthModal({
 
         {/* Brand */}
         <div className={styles.brand}>
-          <div className={styles.brandIcon}>S</div>
-          <span className={styles.brandName}>ОЗОН-ПРО</span>
+          <Image src="/logo.svg" alt="ОЗОН-ПРО" width={140} height={46} className={styles.logoImg} priority />
         </div>
 
         {/* Tabs */}
@@ -281,6 +418,13 @@ export default function AuthModal({
               ) : (
                 "Войти"
               )}
+            </button>
+            <button
+              type="button"
+              className={styles.forgotBtn}
+              onClick={() => switchTab("reset")}
+            >
+              Забыли пароль?
             </button>
           </form>
         )}
@@ -482,6 +626,225 @@ export default function AuthModal({
                 <p className={styles.successTitle}>Аккаунт создан!</p>
                 <p className={styles.successSub}>
                   Выполняем вход и переходим к оплате…
+                </p>
+              </div>
+            )}
+          </>
+        )}
+        {/* ── RESET PASSWORD ─────────────────────────────────────────── */}
+        {tab === "reset" && (
+          <>
+            {/* Step dots */}
+            {resetStep !== "done" && (
+              <div className={styles.stepIndicator}>
+                {([1, 2, 3] as const).map((s) => (
+                  <div
+                    key={s}
+                    className={`${styles.stepDot} ${
+                      resetStep === s ? styles.stepDotActive : ""
+                    } ${
+                      typeof resetStep === "number" && resetStep > s
+                        ? styles.stepDotDone
+                        : ""
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Step 1: Enter email / login */}
+            {resetStep === 1 && (
+              <form className={styles.form} onSubmit={handleResetStep1} noValidate>
+                <button
+                  type="button"
+                  className={styles.backBtn}
+                  onClick={() => switchTab("login")}
+                >
+                  <ArrowLeft size={13} /> Назад
+                </button>
+                <p className={styles.stepTitle}>
+                  <KeyRound size={16} style={{ display: "inline", marginRight: 6, verticalAlign: "middle" }} />
+                  Сброс пароля
+                </p>
+                <p className={styles.stepSub}>
+                  Введите email — мы отправим код подтверждения
+                </p>
+                {resetError && (
+                  <div className={styles.errorBanner}>
+                    <AlertCircle size={15} /> {resetError}
+                  </div>
+                )}
+                <div className={styles.field}>
+                  <label className={styles.label} htmlFor="rst-login">
+                    Email или телефон
+                  </label>
+                  <div className={styles.inputWrapper}>
+                    <span className={styles.inputIcon}>
+                      <Mail size={15} />
+                    </span>
+                    <input
+                      id="rst-login"
+                      className={styles.input}
+                      type="text"
+                      placeholder="email@example.com"
+                      value={resetLogin}
+                      onChange={(e) => setResetLogin(e.target.value)}
+                      autoComplete="username"
+                      required
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  disabled={resetLoading || !resetLogin}
+                >
+                  {resetLoading ? (
+                    <><span className={styles.spinner} /> Отправляем...</>
+                  ) : (
+                    "Получить код"
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* Step 2: Enter code */}
+            {resetStep === 2 && (
+              <form className={styles.form} onSubmit={handleResetStep2} noValidate>
+                <button
+                  type="button"
+                  className={styles.backBtn}
+                  onClick={() => {
+                    setResetStep(1);
+                    setResetError(null);
+                    setResetCode("");
+                    if (countdownRef.current) clearInterval(countdownRef.current);
+                    setResetCountdown(0);
+                  }}
+                >
+                  <ArrowLeft size={13} /> Назад
+                </button>
+                <p className={styles.stepTitle}>Введите код</p>
+                <p className={styles.stepSub}>Код отправлен на {resetLogin}</p>
+                {resetError && (
+                  <div className={styles.errorBanner}>
+                    <AlertCircle size={15} /> {resetError}
+                  </div>
+                )}
+                <input
+                  className={styles.codeInput}
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  placeholder="0000"
+                  value={resetCode}
+                  onChange={(e) => setResetCode(e.target.value.replace(/\D/g, ""))}
+                  autoFocus
+                  required
+                />
+                <div className={styles.resendRow}>
+                  {resetCountdown > 0 ? (
+                    <span className={styles.resendTimer}>
+                      Повторить через {resetCountdown} с
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      className={styles.resendBtn}
+                      onClick={handleResetResend}
+                      disabled={resetLoading}
+                    >
+                      Отправить повторно
+                    </button>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  disabled={resetLoading || resetCode.length < 4}
+                >
+                  {resetLoading ? (
+                    <><span className={styles.spinner} /> Проверяем...</>
+                  ) : (
+                    "Подтвердить"
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* Step 3: New password */}
+            {resetStep === 3 && (
+              <form className={styles.form} onSubmit={handleResetStep3} noValidate>
+                <button
+                  type="button"
+                  className={styles.backBtn}
+                  onClick={() => {
+                    setResetStep(2);
+                    setResetError(null);
+                  }}
+                >
+                  <ArrowLeft size={13} /> Назад
+                </button>
+                <p className={styles.stepTitle}>Новый пароль</p>
+                <p className={styles.stepSub}>
+                  Минимум 8 символов, латинские буквы и цифры
+                </p>
+                {resetError && (
+                  <div className={styles.errorBanner}>
+                    <AlertCircle size={15} /> {resetError}
+                  </div>
+                )}
+                <div className={styles.field}>
+                  <label className={styles.label} htmlFor="rst-pass">
+                    Новый пароль
+                  </label>
+                  <div className={styles.inputWrapper}>
+                    <span className={styles.inputIcon}>
+                      <Lock size={15} />
+                    </span>
+                    <input
+                      id="rst-pass"
+                      className={styles.input}
+                      type={showResetPass ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={resetPassword}
+                      onChange={(e) => setResetPassword(e.target.value)}
+                      autoComplete="new-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      className={styles.togglePassword}
+                      onClick={() => setShowResetPass((v) => !v)}
+                      aria-label={showResetPass ? "Скрыть" : "Показать"}
+                    >
+                      {showResetPass ? <EyeOff size={15} /> : <Eye size={15} />}
+                    </button>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  disabled={resetLoading || resetPassword.length < 8}
+                >
+                  {resetLoading ? (
+                    <><span className={styles.spinner} /> Сохраняем...</>
+                  ) : (
+                    "Сохранить пароль"
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* Done */}
+            {resetStep === "done" && (
+              <div className={styles.successBlock}>
+                <div className={styles.successIcon}>
+                  <CheckCircle size={30} />
+                </div>
+                <p className={styles.successTitle}>Пароль изменён!</p>
+                <p className={styles.successSub}>
+                  Выполняем вход в аккаунт…
                 </p>
               </div>
             )}
