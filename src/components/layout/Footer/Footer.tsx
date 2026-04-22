@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Mail, MapPin } from "lucide-react";
 import styles from "./Footer.module.css";
+import DeveloperCard from "@/components/ui/DeveloperCard/DeveloperCard";
 
 const Footer = () => {
   return (
@@ -117,6 +118,7 @@ const Footer = () => {
           <p className={styles.copyright}>
             © 2026 ОЗОН-ПРО. Все права защищены
           </p>
+          <DeveloperCard variant="footer" />
           <div className={styles.legalLinks}>
             <a href="/legal#privacy-policy">Политика конфиденциальности</a>
             <a href="/legal#public-offer">Публичная оферта</a>

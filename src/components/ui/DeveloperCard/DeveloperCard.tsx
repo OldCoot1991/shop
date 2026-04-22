@@ -78,9 +78,7 @@ export default function DeveloperCard({ variant = "header" }: DeveloperCardProps
     return (
       <div className={styles.footerBanner} ref={ref}>
         <button className={styles.footerTrigger} onClick={() => setOpen((v) => !v)}>
-          <span className={styles.footerTriggerIcon}><IconCode /></span>
           Разработчик сайта
-          <span className={`${styles.chevron} ${open ? styles.chevronOpen : ""}`}>▾</span>
         </button>
         {open && card}
       </div>

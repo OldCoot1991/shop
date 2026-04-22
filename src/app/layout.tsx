@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import Providers from "./providers";
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer/Footer";
-import DeveloperCard from "@/components/ui/DeveloperCard/DeveloperCard";
 import "../styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -33,7 +32,6 @@ export default function RootLayout({
             <Header />
             <div style={{ flex: 1 }}>{children}</div>
             <Footer />
-            <DeveloperCard variant="footer" />
           </div>
         </Providers>
       </body>
