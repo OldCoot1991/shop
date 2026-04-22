@@ -88,7 +88,7 @@ const ApiProductCard: React.FC<ApiProductCardProps> = ({ product }) => {
           {product.name}
         </h4>
 
-        {topic && <p className={styles.topic}>{topic}</p>}
+        <p className={styles.topic}>{topic ?? "\u00A0"}</p>
 
         {inCart ? (
           <div className={styles.cartControls}>

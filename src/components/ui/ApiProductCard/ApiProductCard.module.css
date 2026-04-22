@@ -1,6 +1,6 @@
 .card {
   background: var(--color-card-bg);
-  border-radius: 16px;
+  border-radius: 4px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -99,6 +99,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.4;
+  text-transform: capitalize;
 }
 
 .topic {
