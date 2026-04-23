@@ -1,7 +1,7 @@
 .pageWrapper {
   min-height: calc(100vh - 100px);
   background: linear-gradient(180deg, var(--color-body) 0%, var(--color-bg) 100%);
-  padding: 60px 0;
+  padding: 0 0 60px 0;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -19,7 +19,7 @@
 
 .outerContainer {
   width: 100%;
-  max-width: 1240px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 20px;
   animation: fadeIn 0.8s ease-out forwards;
@@ -31,6 +31,12 @@
   margin-bottom: 32px;
   color: var(--color-text);
   letter-spacing: -0.5px;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .menuButton {
@@ -63,12 +69,16 @@
 }
 
 .menuButton.active {
-  background: var(--color-card-hover);
-  color: var(--color-success);
-  border-left: 4px solid var(--color-success);
-  padding-left: 16px; /* Offset to compensate for border */
-  box-shadow: none;
-  transform: none;
+  background: var(--color-success);
+  color: #fff;
+  border: 1px solid var(--color-success);
+  padding-left: 20px;
+  box-shadow: 0 4px 12px rgba(0, 176, 17, 0.2);
+  transform: translateY(-1px);
+}
+
+.menuButton.active .menuIcon {
+  color: #fff;
 }
 
 
@@ -112,23 +122,29 @@
   gap: 12px;
   letter-spacing: -0.5px;
 }
+.documentBody ul {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 32px 0;
+}
+
+.documentBody li {
+  position: relative;
+  padding-left: 32px;
+  margin-bottom: 12px;
+}
 
 .documentBody li::before {
   content: '';
   position: absolute;
-  left: 8px;
-  top: 10px;
+  left: 4px;
+  top: 9px;
   width: 10px;
   height: 10px;
-  background: var(--color-border);
-  border-radius: 50%;
-  border: 2px solid var(--color-success);
-  transition: all 0.3s ease;
-}
-
-.documentBodyActive li::before {
   background: var(--color-success);
-  box-shadow: 0 0 12px rgba(0, 176, 17, 0.4);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0, 176, 17, 0.3);
+  transition: all 0.3s ease;
 }
 
 
