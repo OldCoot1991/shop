@@ -75,6 +75,10 @@
     object-fit: contain;
 }
 
+:global(html[data-theme="dark"]) .logoImg {
+    filter: invert(1) hue-rotate(180deg);
+}
+
 /* ── Headings ── */
 .title {
     font-size: 26px;

@@ -22,7 +22,8 @@
   transform: translate(-50%, -48%) scale(0.96);
   z-index: 201;
   width: min(460px, 96vw);
-  background: var(--color-surface, #fff);
+  background: var(--color-modal-bg);
+  border: 1px solid var(--color-border);
   border-radius: 20px;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
   padding: 36px 32px 32px;
@@ -73,10 +74,15 @@
   object-fit: contain;
 }
 
+:global(html[data-theme="dark"]) .logoImg {
+  filter: invert(1) hue-rotate(180deg);
+}
+
 /* Tabs */
 .tabs {
   display: flex;
-  background: var(--color-surface-secondary, #f4f4f5);
+  background: var(--color-body);
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 4px;
   margin-bottom: 24px;
@@ -97,8 +103,8 @@
     color 0.15s;
 }
 .tabActive {
-  background: var(--color-surface, #fff);
-  color: var(--color-text, #111);
+  background: var(--color-modal-bg);
+  color: var(--color-text);
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
   font-weight: 600;
 }
@@ -135,11 +141,11 @@
 .input {
   width: 100%;
   padding: 11px 14px 11px 40px;
-  border: 1.5px solid var(--color-border, #e4e4e7);
+  border: 1.5px solid var(--color-border);
   border-radius: 10px;
   font-size: 14px;
-  background: var(--color-bg, #fff);
-  color: var(--color-text, #111);
+  background: var(--color-body);
+  color: var(--color-text);
   outline: none;
   transition:
     border-color 0.15s,
@@ -147,11 +153,11 @@
   box-sizing: border-box;
 }
 .input:focus {
-  border-color: var(--color-primary, #6366f1);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 91, 255, 0.12);
 }
 .input::placeholder {
-  color: var(--color-text-muted, #bbb);
+  color: var(--color-muted);
 }
 .togglePassword {
   position: absolute;

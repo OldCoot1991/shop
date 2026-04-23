@@ -70,6 +70,7 @@
   margin: 0 0 24px 0;
   color: var(--color-text, #111827);
   letter-spacing: 0.02em;
+  text-transform: capitalize;
 }
 
 .list {
@@ -88,6 +89,7 @@
   transition: all 0.2s ease;
   position: relative;
   display: inline-block;
+  text-transform: capitalize;
 }
 
 .link::after {
@@ -172,6 +174,7 @@
   font-size: 13px;
   text-decoration: none;
   transition: color 0.2s ease;
+  text-transform: capitalize;
 }
 
 .legalLinks a:hover {

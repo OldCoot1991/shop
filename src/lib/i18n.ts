@@ -25,7 +25,7 @@ i18n
             escapeValue: false,
         },
         detection: {
-            order: ['localStorage', 'navigator', 'htmlTag'],
+            order: ['localStorage', 'htmlTag'],
             caches: ['localStorage'],
         },
     });
