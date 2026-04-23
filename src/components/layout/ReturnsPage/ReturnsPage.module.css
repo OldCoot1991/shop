@@ -75,18 +75,19 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background-color: var(--color-card-bg);
-  border: 1px solid var(--color-border);
+  background-color: var(--color-glass);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-glass-border);
   padding: 12px 24px;
   border-radius: 999px;
   margin: 0 auto 24px auto;
-  box-shadow: var(--shadow-sm, 0 4px 12px rgba(0, 0, 0, 0.03));
+  box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .legalNoticeBox:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-md);
 }
 
 .greenDot {
@@ -94,7 +95,7 @@
   height: 10px;
   background-color: #10b981;
   border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
   flex-shrink: 0;
 }
 
@@ -125,11 +126,11 @@
 }
 
 .section {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 100%), var(--color-card-bg);
+  background: var(--color-card-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 40px;
-  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.05); /* Subtle top highlight for depth */
+  box-shadow: var(--shadow-sm);
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 

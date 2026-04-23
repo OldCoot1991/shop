@@ -16,7 +16,7 @@ const T = ({ children, as = "span", className }: { children: string; as?: React.
 );
 
 const rulesText = (
-  <div className={styles.documentBody}>
+  <div className={`${styles.documentBody} ${styles.documentBodyActive}`}>
     <T as="h1">Правила оплаты, доставки, возврата и отмены заказа</T>
     <div className={styles.revision}><AutoTranslatable text="Редакция от 01.04.2026" /></div>
     <T as="p">Настоящие Правила являются неотъемлемой частью публичной оферты ООО «Озон-ПРО».</T>
@@ -90,7 +90,7 @@ const rulesText = (
 );
 
 const publicOfferText = (
-  <div className={styles.documentBody}>
+  <div className={`${styles.documentBody} ${styles.documentBodyActive}`}>
     <T as="h1">Публичная оферта для покупателей — физических лиц</T>
     <div className={styles.revision}><AutoTranslatable text="Редакция от 01.04.2026" /></div>
     <T as="p">Общество с ограниченной ответственностью «Озон-ПРО», ОГРН 1267700056876, ИНН 9727126450, адрес места нахождения: 117218, г. Москва, ул. Кржижановского, д.29, к.5, помещ. 4А/1/5, адрес электронной почты: info@ozpro.ru, именуемое в дальнейшем «Продавец», публикует настоящую публичную оферту о продаже товаров дистанционным способом.</T>
@@ -253,7 +253,7 @@ const publicOfferText = (
 );
 
 const b2bOfferText = (
-  <div className={styles.documentBody}>
+  <div className={`${styles.documentBody} ${styles.documentBodyActive}`}>
     <T as="h1">Оферта для покупателей — ИП и юридических лиц</T>
     <div className={styles.revision}><AutoTranslatable text="Редакция от 01.04.2026" /></div>
     <T as="p">Общество с ограниченной ответственностью «Озон-ПРО», ОГРН 1267700056876, ИНН 9727126450, адрес: 117218, г. Москва, ул. Кржижановского, д.29, к.5, помещ. 4А/1/5, именуемое в дальнейшем «Поставщик», предлагает индивидуальным предпринимателям и юридическим лицам заключить договор поставки на условиях настоящей оферты.</T>
@@ -326,7 +326,7 @@ const b2bOfferText = (
 );
 
 const cookiePolicyText = (
-  <div className={styles.documentBody}>
+  <div className={`${styles.documentBody} ${styles.documentBodyActive}`}>
     <T as="h1">Политика использования файлов cookie</T>
     <div className={styles.revision}><AutoTranslatable text="Редакция от 01.04.2026" /></div>
     <T as="p">Сайт https://ozpro.ru использует файлы cookie и аналогичные технологии.</T>
@@ -373,7 +373,7 @@ const cookiePolicyText = (
 );
 
 const privacyPolicyText = (
-  <div className={styles.documentBody}>
+  <div className={`${styles.documentBody} ${styles.documentBodyActive}`}>
     <T as="h1">Политика конфиденциальности</T>
     <div className={styles.revision}><AutoTranslatable text="Дата вступления в силу: 01.04.2026" /></div>
     <T as="p">ООО &quot;ОЗОН-ПРО&quot; уважает право пользователей на конфиденциальность и обязуется защищать персональные данные в соответствии с применимым законодательством.</T>
@@ -459,7 +459,7 @@ const privacyPolicyText = (
 );
 
 const userAgreementText = (
-  <div className={styles.documentBody}>
+  <div className={`${styles.documentBody} ${styles.documentBodyActive}`}>
     <T as="h1">Пользовательское соглашение</T>
     <div className={styles.revision}><AutoTranslatable text="Редакция от 01.04.2026" /></div>
     <T as="p">Настоящее Пользовательское соглашение регулирует порядок использования сайта https://ozpro.ru.</T>

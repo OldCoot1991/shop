@@ -145,7 +145,8 @@
   background: #ffffff;
   padding: 16px 32px;
   border-radius: var(--radius-sm);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
   margin-bottom: 24px;
   display: flex;
   justify-content: center;
@@ -201,6 +202,13 @@
   min-width: 120px;
   box-shadow: var(--shadow-sm);
 }
+
+:global(html[data-theme="dark"]) .providerLogoWrapper,
+:global(html[data-theme="dark"]) .cardLogoWrapper {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
 
 .cardLogoWrapper:hover {
   transform: translateY(-2px);
