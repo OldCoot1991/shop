@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./ProductCard.module.css";
 import { Product } from "@/lib/mockData";
 import { addToCart } from "@/lib/features/cart/cartSlice";
@@ -47,8 +48,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <div className={styles.card}>
       <Link href={`/product/${product.id}`} className={styles.imageContainer}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={product.image} alt={product.title} className={styles.image} />
+        <Image
+          src={product.image}
+          alt={product.title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className={styles.image}
+        />
         <button
           className={`${styles.wishlistBtn} ${isInWishlist ? styles.wishlistBtnActive : ""}`}
           onClick={(e) => {

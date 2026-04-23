@@ -10,6 +10,7 @@ import {
 } from "@/services/productService";
 import { ShoppingCart, Check } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { useCart } from "@/hooks/useCart";
 import { useAutoTranslate } from "@/hooks/useAutoTranslate";
@@ -70,12 +71,12 @@ const ApiProductCard: React.FC<ApiProductCardProps> = ({ product }) => {
     <Link href={`/product/${product.id}`} className={styles.card}>
       <div className={styles.imageContainer}>
         {imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={imageUrl}
             alt={translatedName}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className={styles.image}
-            loading="lazy"
           />
         ) : (
           <div className={styles.noImage}>🖼️</div>
