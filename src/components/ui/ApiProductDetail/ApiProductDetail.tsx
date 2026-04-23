@@ -245,15 +245,17 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
 
       {/* Description */}
       {translatedDesc && (
-        <section className={styles.section}>
+        <section className={styles.sectionBlock}>
           <h2 className={styles.sectionTitle}>{t("product_desc")}</h2>
-          <p className={styles.description}>{translatedDesc}</p>
+          <div className={styles.descriptionWrapper}>
+            <p className={styles.description}>{translatedDesc}</p>
+          </div>
         </section>
       )}
 
       {/* Attributes table */}
       {product.attributes.length > 0 && (
-        <section className={styles.section}>
+        <section className={styles.sectionBlock}>
           <h2 className={styles.sectionTitle}>{t("product_specs")}</h2>
           <table className={styles.specsTable}>
             <tbody>
