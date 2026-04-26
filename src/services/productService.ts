@@ -13,6 +13,18 @@ export const CATEGORY_IDS = {
     stickerPacks: 1008,
     stickers: 1009,
     patches: 1010,
+
+    audio_kolonki: 2,
+    batareyki_i_akkumulyatory: 3,
+    derzhateli_i_podstavki_dlya_telefona: 4,
+    zaryadnye_ustroystva: 5,
+    kabeli_dlya_telefona: 6,
+    kompyuternye_komplektuyushchie: 7,
+    naushniki: 8,
+    stekla_zashchitnye_dlya_telefonov: 9,
+    telefony: 10,
+    fleshki_i_karty_pamyati_optom: 12,
+    elektronika_gadzhety_aksessuary: 13,
 } as const;
 
 export interface ApiFilterItem {
