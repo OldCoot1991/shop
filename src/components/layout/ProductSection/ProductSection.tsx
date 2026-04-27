@@ -9,6 +9,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import styles from "./ProductSection.module.css";
 import ApiProductCard from "@/components/ui/ApiProductCard/ApiProductCard";
+import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
 import {
   fetchProductsByCategory,
   selectCategoryProducts,
@@ -59,7 +60,9 @@ const ProductSection: React.FC<ProductSectionProps> = ({
   return (
     <section className={styles.section}>
       <div className={styles.headerRow}>
-        <h3 className={styles.title}>{title}</h3>
+        <h3 className={styles.title}>
+          <AutoTranslatable text={title} />
+        </h3>
         <Link
           href={
             categoryFilter ? `/api-catalog/${categoryFilter}` : "/api-catalog"

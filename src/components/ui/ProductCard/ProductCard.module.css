@@ -117,7 +117,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
-  text-transform: capitalize;
+  text-transform: none;
 }
 
 .ratingRow {

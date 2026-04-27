@@ -55,7 +55,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
-  text-transform: capitalize;
+  text-transform: none;
 }
 
 .catalogBtn:hover {
@@ -131,7 +131,7 @@
   transition: all 0.2s ease;
   background: transparent;
   border: 1px solid transparent;
-  text-transform: capitalize;
+  text-transform: none;
 }
 
 .catalogDropdownItem:hover {
@@ -171,7 +171,7 @@
 .actionText {
   font-size: 13px;
   font-weight: 400;
-  text-transform: capitalize;
+  text-transform: none;
 }
 
 .cartBadge {

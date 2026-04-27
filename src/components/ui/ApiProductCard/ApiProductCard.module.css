@@ -98,7 +98,7 @@
   text-overflow: ellipsis;
   display: block;
   line-height: 1.4;
-  text-transform: capitalize;
+  text-transform: none;
 }
 
 .topic {
