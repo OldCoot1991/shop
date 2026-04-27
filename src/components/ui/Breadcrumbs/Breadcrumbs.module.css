@@ -42,13 +42,42 @@
   white-space: nowrap;
 }
 
+.itemWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.mobileEllipsis {
+  display: none;
+  color: var(--color-muted);
+  margin: 0 4px;
+}
+
 @media (max-width: 600px) {
   .breadcrumb {
     margin-bottom: 20px;
     font-size: 13px;
+    flex-wrap: nowrap;
+    overflow: hidden;
   }
   
   .breadcrumbSep::before {
     margin: 0 6px;
   }
+
+  .collapsedMobile {
+    display: none !important;
+  }
+
+  .mobileEllipsis {
+    display: inline;
+  }
+
+  .breadcrumbCurrent {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
+

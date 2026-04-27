@@ -119,18 +119,31 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items: manualItems, className
         {t("breadcrumb_home")}
       </Link>
 
-      {dynamicItems.map((item, index) => (
-        <React.Fragment key={index}>
-          <span className={styles.breadcrumbSep} />
-          {item.isCurrent || !item.href ? (
-            <span className={styles.breadcrumbCurrent}>{item.label}</span>
-          ) : (
-            <Link href={item.href} className={styles.breadcrumbLink}>
-              {item.label}
-            </Link>
-          )}
-        </React.Fragment>
-      ))}
+      {dynamicItems.map((item, index) => {
+        const isCollapsed = dynamicItems.length > 2 && index > 0 && index < dynamicItems.length - 1;
+        
+        return (
+          <React.Fragment key={index}>
+            {/* On mobile, we hide middle segments and show an ellipsis or nothing */}
+            <span className={`${styles.breadcrumbSep} ${isCollapsed ? styles.collapsedMobile : ""}`} />
+            
+            <div className={`${styles.itemWrapper} ${isCollapsed ? styles.collapsedMobile : ""}`}>
+              {item.isCurrent || !item.href ? (
+                <span className={styles.breadcrumbCurrent}>{item.label}</span>
+              ) : (
+                <Link href={item.href} className={styles.breadcrumbLink}>
+                  {item.label}
+                </Link>
+              )}
+            </div>
+            
+            {/* Show ellipsis on mobile if we have collapsed segments */}
+            {index === 1 && dynamicItems.length > 2 && (
+              <span className={styles.mobileEllipsis}>...</span>
+            )}
+          </React.Fragment>
+        );
+      })}
     </nav>
   );
 };
