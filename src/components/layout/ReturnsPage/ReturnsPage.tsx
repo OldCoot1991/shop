@@ -14,10 +14,7 @@ const ReturnsPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <Breadcrumbs 
-          items={[{ label: t("breadcrumb_returns"), isCurrent: true }]} 
-          className={styles.breadcrumb}
-        />
+        <Breadcrumbs className={styles.breadcrumb} />
 
         <header className={styles.header}>
           <AutoTranslatable as="h1" className={styles.title} text="Правила возврата" />

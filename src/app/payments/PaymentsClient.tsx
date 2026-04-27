@@ -123,13 +123,7 @@ export default function PaymentsClient() {
 
   return (
     <div className={styles.container}>
-      <Breadcrumbs 
-        items={[
-          { label: t("breadcrumb_profile"), href: "/profile" },
-          { label: t("payments_title"), isCurrent: true }
-        ]}
-        className={styles.breadcrumb}
-      />
+      <Breadcrumbs className={styles.breadcrumb} />
       <h1 className={styles.pageTitle}>{t("payments_title")}</h1>
 
       {orders.length > 0 && (

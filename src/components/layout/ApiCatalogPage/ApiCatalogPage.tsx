@@ -27,8 +27,8 @@ const SORT_OPTIONS: { key: SortOption; labelKey: string }[] = [
 ];
 const SORT_API: Record<SortOption, string | undefined> = {
   popular: undefined,
-  price_asc: "price_asc",
-  price_desc: "price_desc",
+  price_asc: "priceup",
+  price_desc: "pricedown",
 };
 
 interface ApiCatalogPageProps {
@@ -108,12 +108,7 @@ export default function ApiCatalogPage({
 
   return (
     <div className={styles.page}>
-      <Breadcrumbs 
-        items={[
-          { label: translatedTitle.charAt(0).toUpperCase() + translatedTitle.slice(1), isCurrent: true }
-        ]} 
-        className={styles.breadcrumb}
-      />
+      <Breadcrumbs className={styles.breadcrumb} />
 
       {/* Breadcrumb - Title removed as requested */}
 

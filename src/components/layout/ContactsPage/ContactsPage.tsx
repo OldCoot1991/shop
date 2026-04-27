@@ -13,11 +13,7 @@ const ContactsPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <Breadcrumbs 
-          items={[
-            { label: t("breadcrumb_contacts"), isCurrent: true }
-          ]} 
-        />
+        <Breadcrumbs />
 
         <header className={styles.header}>
           <AutoTranslatable as="h1" className={styles.title} text="Контакты" />

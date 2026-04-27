@@ -209,9 +209,7 @@ export default function ProfilePage() {
     <div className={styles.page}>
       <div className={styles.container}>
         <div className={styles.breadcrumbWrapper}>
-          <Breadcrumbs 
-            items={[{ label: t("breadcrumb_profile"), isCurrent: true }]} 
-          />
+          <Breadcrumbs />
         </div>
         {/* ── Hero ── */}
         <div className={styles.heroCard}>
