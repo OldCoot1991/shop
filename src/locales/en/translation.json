@@ -214,5 +214,6 @@
     "breadcrumb_profile": "Profile",
     "breadcrumb_wishlist": "Wishlist",
     "breadcrumb_catalog": "Catalog",
-    "breadcrumb_payments": "My Orders"
+    "breadcrumb_payments": "My Orders",
+    "breadcrumb_product": "Product"
 }

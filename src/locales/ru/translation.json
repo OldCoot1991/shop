@@ -214,5 +214,6 @@
     "breadcrumb_profile": "Личный кабинет",
     "breadcrumb_wishlist": "Избранное",
     "breadcrumb_catalog": "Каталог",
-    "breadcrumb_payments": "Мои заказы"
+    "breadcrumb_payments": "Мои заказы",
+    "breadcrumb_product": "Товар"
 }

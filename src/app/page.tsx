@@ -28,6 +28,43 @@ export default function Home() {
     loadCategories();
   }, []);
 
+  // 1. Immediately reset scroll to top on mount if there's a hash to prevent browser's native jump
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash.startsWith("#category-")) {
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+      window.scrollTo(0, 0);
+    }
+  }, []);
+
+  // 2. Handle scrolling to a specific category after content is likely stabilized
+  useEffect(() => {
+    if (!isLoading && categories.length > 0 && typeof window !== "undefined") {
+      const hash = window.location.hash;
+      if (hash && hash.startsWith("#category-")) {
+        // Longer delay to allow sections to load products and stabilize their heights
+        const timer = setTimeout(() => {
+          const element = document.getElementById(hash.substring(1));
+          if (element) {
+            const isMobile = window.innerWidth <= 768;
+            const headerOffset = isMobile ? 200 : 110;
+            
+            // Re-calculate absolute position from document top
+            const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - headerOffset;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth"
+            });
+          }
+        }, 1200);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [isLoading, categories]);
+
   return (
     <main
       style={{ maxWidth: "1440px", margin: "0 auto", padding: "24px 16px" }}
@@ -43,6 +80,7 @@ export default function Home() {
             title={cat.name}
             categoryKey={`cat_${cat.id}`}
             categoryFilter={String(cat.id)}
+            sectionId={`category-${cat.id}`}
           />
         ))
       ) : (

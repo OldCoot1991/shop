@@ -9,6 +9,9 @@
   color: var(--color-muted);
   flex-wrap: wrap;
   gap: 0;
+  /* prevent breadcrumb from ever exceeding viewport width */
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .breadcrumbLink {
@@ -42,9 +45,17 @@
   white-space: nowrap;
 }
 
+/* Intermediate item with no link (e.g. "Каталог" when /api-catalog has no root page) */
+.breadcrumbLabel {
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
 .itemWrapper {
   display: flex;
   align-items: center;
+  /* allow flex children to shrink below content size */
+  min-width: 0;
 }
 
 .mobileEllipsis {
@@ -58,6 +69,8 @@
     margin-bottom: 20px;
     font-size: 13px;
     flex-wrap: nowrap;
+    /* clip overflow but do NOT hide — use max-width instead */
+    max-width: 100%;
     overflow: hidden;
   }
   
@@ -71,13 +84,44 @@
 
   .mobileEllipsis {
     display: inline;
+    flex-shrink: 0;
+  }
+
+  /* Allow the wrapper to shrink so long names don't push siblings off-screen */
+  .itemWrapper {
+    flex-shrink: 1;
+    min-width: 0;
+  }
+
+  .breadcrumbLink {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
   }
 
   .breadcrumbCurrent {
-    max-width: 150px;
+    /* use max-width relative to viewport instead of fixed 150px */
+    max-width: 40vw;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: inline-block;
+  }
+
+  .breadcrumbLabel {
+    max-width: 30vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  /* Home link — never shrink or clip */
+  .breadcrumbFirst {
+    flex-shrink: 0;
+    max-width: none;
+    overflow: visible;
   }
 }
 

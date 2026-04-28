@@ -138,6 +138,7 @@ export default function ApiProductDetail({ product }: ApiProductDetailProps) {
     <div className={styles.page}>
       <Breadcrumbs 
         items={[
+          { label: t("breadcrumb_catalog"), href: categoryId ? `/#category-${categoryId}` : "/" },
           ...(category ? [{ 
             label: category.charAt(0).toUpperCase() + category.slice(1), 
             href: categoryId ? `/api-catalog/${categoryId}` : "/api-catalog" 

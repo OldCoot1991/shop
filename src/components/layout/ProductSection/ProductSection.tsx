@@ -27,6 +27,8 @@ interface ProductSectionProps {
   topicFilter?: string;
   /** Max cards to show */
   limit?: number;
+  /** HTML id for anchor navigation (e.g. "category-2") */
+  sectionId?: string;
 }
 
 const ProductSection: React.FC<ProductSectionProps> = ({
@@ -35,6 +37,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
   categoryFilter,
   topicFilter,
   limit = 8,
+  sectionId,
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -58,7 +61,7 @@ const ProductSection: React.FC<ProductSectionProps> = ({
   const visible = items.slice(0, limit);
 
   return (
-    <section className={styles.section}>
+    <section id={sectionId} className={styles.section}>
       <div className={styles.headerRow}>
         <h3 className={styles.title}>
           <AutoTranslatable text={title} />

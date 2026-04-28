@@ -33,7 +33,11 @@ const STATIC_SEGMENTS: Record<string, string> = {
   wishlist: "breadcrumb_wishlist",
   "api-catalog": "breadcrumb_catalog",
   payments: "breadcrumb_payments",
+  product: "breadcrumb_product",
 };
+
+// Segments that have no standalone root page — never render as links
+const NON_LINKABLE_SEGMENTS = new Set(["product", "legal"]);
 
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items: manualItems, className = "" }) => {
   const { t } = useTranslation();
@@ -64,9 +68,23 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items: manualItems, className
 
         // 1. Check static mapping
         if (STATIC_SEGMENTS[segment]) {
+          // Special case for catalog: it should point to Home page.
+          // If the next segment is a category ID, link to that specific section.
+          let href = isLast ? undefined : currentPath;
+          if (segment === "api-catalog") {
+            const nextSegment = segments[i + 1];
+            if (nextSegment && !isNaN(Number(nextSegment))) {
+              href = `/#category-${nextSegment}`;
+            } else {
+              href = "/";
+            }
+          }
+
+          const canLink = !NON_LINKABLE_SEGMENTS.has(segment);
+          
           items.push({
             label: t(STATIC_SEGMENTS[segment]),
-            href: isLast ? undefined : currentPath,
+            href: !canLink ? undefined : href,
             isCurrent: isLast,
           });
           continue;
@@ -83,7 +101,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items: manualItems, className
             if (category) {
               items.push({
                 label: category.name.charAt(0).toUpperCase() + category.name.slice(1),
-                href: isLast ? undefined : currentPath,
+                href: isLast ? undefined : `/#category-${segment}`,
                 isCurrent: isLast,
               });
               continue;
@@ -95,9 +113,10 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items: manualItems, className
 
         // 3. Fallback: capitalize segment
         // (This part will usually be replaced by manual items for products)
+        const canLink = !NON_LINKABLE_SEGMENTS.has(segment);
         items.push({
           label: segment.charAt(0).toUpperCase() + segment.slice(1),
-          href: isLast ? undefined : currentPath,
+          href: isLast || !canLink ? undefined : currentPath,
           isCurrent: isLast,
         });
       }
@@ -128,12 +147,14 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items: manualItems, className
             <span className={`${styles.breadcrumbSep} ${isCollapsed ? styles.collapsedMobile : ""}`} />
             
             <div className={`${styles.itemWrapper} ${isCollapsed ? styles.collapsedMobile : ""}`}>
-              {item.isCurrent || !item.href ? (
+              {item.isCurrent ? (
                 <span className={styles.breadcrumbCurrent}>{item.label}</span>
-              ) : (
+              ) : item.href ? (
                 <Link href={item.href} className={styles.breadcrumbLink}>
                   {item.label}
                 </Link>
+              ) : (
+                <span className={styles.breadcrumbLabel}>{item.label}</span>
               )}
             </div>
             
