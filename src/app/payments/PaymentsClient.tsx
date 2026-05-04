@@ -149,15 +149,6 @@ export default function PaymentsClient() {
       <div className={styles.ordersList}>
         {[...orders]
           .filter((o) => filterStatus === "ALL" || o.status === filterStatus)
-          .sort((a, b) => {
-            const priority: Record<string, number> = {
-              PAID: 1,
-              CREATED: 2,
-              CANCELED: 3,
-              DELIVERED: 4,
-            };
-            return (priority[a.status] || 99) - (priority[b.status] || 99);
-          })
           .map((order) => {
           const config = statusConfig[order.status] || {
             label: order.status,
