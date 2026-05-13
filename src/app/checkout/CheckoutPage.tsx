@@ -10,6 +10,7 @@ import {
   Loader2,
   CreditCard,
   Package,
+  MapPin,
 } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/hooks/useAppStore";
 import {
@@ -22,6 +23,7 @@ import { getProductImageUrl } from "@/services/productService";
 import { createOrderAsync } from "@/lib/features/orders/orderSlice";
 import styles from "./CheckoutPage.module.css";
 import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
+import CdekWidget from "@/components/ui/CdekWidget/CdekWidget";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -35,6 +37,9 @@ export default function CheckoutPage() {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [isMapOpen, setIsMapOpen] = useState(false);
+  const [deliveryAddress, setDeliveryAddress] = useState<string | null>(null);
 
   // If not authenticated, send to login
   React.useEffect(() => {
@@ -188,8 +193,22 @@ export default function CheckoutPage() {
             </div>
             <div className={styles.summaryRow}>
               <AutoTranslatable as="span" text="Доставка" />
-              <AutoTranslatable as="span" text="по договорённости" />
+              <AutoTranslatable as="span" text={deliveryAddress ? "СДЭК" : "по договорённости"} />
             </div>
+
+            {deliveryAddress && (
+              <div className={styles.deliveryAddressInfo}>
+                <MapPin size={16} />
+                <span>{deliveryAddress}</span>
+              </div>
+            )}
+
+            <button
+              className={styles.chooseDeliveryBtn}
+              onClick={() => setIsMapOpen(true)}
+            >
+              <AutoTranslatable text={deliveryAddress ? "Изменить пункт выдачи" : "Выбрать пункт выдачи СДЭК"} />
+            </button>
 
             <hr className={styles.summaryDivider} />
 
@@ -223,6 +242,15 @@ export default function CheckoutPage() {
           </div>
         </div>
       </div>
+
+      <CdekWidget
+        isOpen={isMapOpen}
+        onClose={() => setIsMapOpen(false)}
+        onChoose={(address) => {
+          setDeliveryAddress(address);
+          setIsMapOpen(false);
+        }}
+      />
     </div>
   );
 }

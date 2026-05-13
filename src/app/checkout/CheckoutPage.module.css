@@ -170,6 +170,41 @@
   margin-bottom: 10px;
 }
 
+.deliveryAddressInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-text);
+  background: var(--color-surface-secondary, #f9fafb);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.deliveryAddressInfo span {
+  flex: 1;
+}
+
+.chooseDeliveryBtn {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+  margin-bottom: 10px;
+}
+.chooseDeliveryBtn:hover {
+  background: var(--color-surface-secondary, #f3f4f6);
+  border-color: var(--color-muted);
+}
+
 .summaryDivider {
   border: none;
   border-top: 1px solid var(--color-border);
