@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: var(--color-bg);
+  background: var(--color-body);
   padding: 32px 16px 80px;
 }
 
@@ -176,7 +176,8 @@
   gap: 8px;
   font-size: 13px;
   color: var(--color-text);
-  background: var(--color-surface-secondary, #f9fafb);
+  background: var(--color-card-hover);
+  border: 1px solid var(--color-border);
   padding: 12px;
   border-radius: 8px;
   margin-bottom: 16px;
@@ -192,7 +193,7 @@
   padding: 10px 16px;
   border: 1px solid var(--color-border);
   border-radius: 10px;
-  background: var(--color-surface, #fff);
+  background: var(--color-card-bg);
   color: var(--color-text);
   font-size: 14px;
   font-weight: 600;
@@ -201,7 +202,7 @@
   margin-bottom: 10px;
 }
 .chooseDeliveryBtn:hover {
-  background: var(--color-surface-secondary, #f3f4f6);
+  background: var(--color-card-hover);
   border-color: var(--color-muted);
 }
 
@@ -308,3 +309,55 @@
   animation: spin 0.8s linear infinite;
   color: var(--color-primary);
 }
+
+/* Recipient Form */
+.recipientForm {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--color-card-hover);
+  border: 1px solid var(--color-border);
+  padding: 16px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.formInput {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-card-bg);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.formInput:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(0, 91, 255, 0.15);
+}
+
+.formInput::placeholder {
+  color: var(--color-muted);
+  opacity: 0.6;
+}
+

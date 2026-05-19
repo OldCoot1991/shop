@@ -40,6 +40,56 @@ export default function CheckoutPage() {
 
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState<string | null>(null);
+  const [recipientName, setRecipientName] = useState("");
+  const [recipientPhone, setRecipientPhone] = useState("");
+  const [deliveryData, setDeliveryData] = useState<{
+    tariffCode: number;
+    code: string | number;
+    address: string;
+    price: number;
+  } | null>(null);
+
+  const deliveryPrice = deliveryData?.price || 0;
+  const grandTotal = total + deliveryPrice;
+
+  // Formatting phone number to "+7 (999) 999-99-99" while typing
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    const cleaned = val.replace(/\D/g, "");
+    let digits = cleaned;
+    
+    if (digits.startsWith("8")) {
+      digits = "7" + digits.slice(1);
+    } else if (digits.length > 0 && !digits.startsWith("7")) {
+      digits = "7" + digits;
+    } else if (digits.length === 0) {
+      setRecipientPhone("");
+      return;
+    }
+
+    digits = digits.slice(0, 11);
+
+    let formatted = "+7";
+    if (digits.length > 1) {
+      formatted += ` (${digits.slice(1, 4)}`;
+    }
+    if (digits.length > 4) {
+      formatted += `) ${digits.slice(4, 7)}`;
+    }
+    if (digits.length > 7) {
+      formatted += `-${digits.slice(7, 9)}`;
+    }
+    if (digits.length > 9) {
+      formatted += `-${digits.slice(9, 11)}`;
+    }
+    
+    setRecipientPhone(formatted);
+  };
+
+  const getCleanPhone = (formattedPhone: string) => {
+    const cleaned = formattedPhone.replace(/\D/g, "");
+    return `+${cleaned}`;
+  };
 
   // If not authenticated, send to login
   React.useEffect(() => {
@@ -56,13 +106,42 @@ export default function CheckoutPage() {
     setIsProcessing(true);
     setError(null);
     try {
-      const payload = items.map((i) => ({ id: i.id, quantity: i.quantity }));
+      const cartPayload = items.map((i) => ({ id: i.id, quantity: i.quantity }));
+
+      if (!deliveryAddress || !deliveryData) {
+        throw new Error("Пожалуйста, выберите пункт выдачи СДЭК для оформления заказа");
+      }
+
+      if (!recipientName.trim()) {
+        throw new Error("Пожалуйста, укажите имя и фамилию получателя");
+      }
+
+      if (recipientPhone.length < 18) {
+        throw new Error("Пожалуйста, введите корректный номер телефона получателя");
+      }
+
+      const parsedCode = Number(deliveryData.code);
+      const finalCode = isNaN(parsedCode) ? deliveryData.code : parsedCode;
+
+      const payload = {
+        cart: cartPayload,
+        delivery: {
+          tariffCode: deliveryData.tariffCode,
+          name: recipientName.trim(),
+          phone: getCleanPhone(recipientPhone),
+          code: finalCode,
+          address: deliveryData.address,
+        },
+      };
+
+      console.log("Sending checkout payload:", JSON.stringify(payload, null, 2));
       const billingUrl = await dispatch(createOrderAsync(payload)).unwrap();
       if (billingUrl) {
         window.location.href = billingUrl;
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Ошибка оформления заказа");
+      console.error("Checkout payment error:", err);
+      setError(typeof err === "string" ? err : (err instanceof Error ? err.message : "Ошибка оформления заказа"));
     } finally {
       setIsProcessing(false);
     }
@@ -193,7 +272,13 @@ export default function CheckoutPage() {
             </div>
             <div className={styles.summaryRow}>
               <AutoTranslatable as="span" text="Доставка" />
-              <AutoTranslatable as="span" text={deliveryAddress ? "СДЭК" : "по договорённости"} />
+              <span>
+                {deliveryPrice > 0 ? (
+                  `${deliveryPrice.toLocaleString("ru-RU")} ₽`
+                ) : (
+                  <AutoTranslatable text="по договорённости" />
+                )}
+              </span>
             </div>
 
             {deliveryAddress && (
@@ -202,6 +287,33 @@ export default function CheckoutPage() {
                 <span>{deliveryAddress}</span>
               </div>
             )}
+
+            <div className={styles.recipientForm}>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  <AutoTranslatable text="Имя и Фамилия получателя" />
+                </label>
+                <input
+                  type="text"
+                  className={styles.formInput}
+                  placeholder="Иван Иванов"
+                  value={recipientName}
+                  onChange={(e) => setRecipientName(e.target.value)}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  <AutoTranslatable text="Телефон получателя" />
+                </label>
+                <input
+                  type="text"
+                  className={styles.formInput}
+                  placeholder="+7 (928) 078-54-69"
+                  value={recipientPhone}
+                  onChange={handlePhoneChange}
+                />
+              </div>
+            </div>
 
             <button
               className={styles.chooseDeliveryBtn}
@@ -214,7 +326,7 @@ export default function CheckoutPage() {
 
             <div className={styles.summaryTotal}>
               <AutoTranslatable as="span" text="К оплате" />
-              <span>{total.toLocaleString("ru-RU")} <AutoTranslatable text="₽" /></span>
+              <span>{grandTotal.toLocaleString("ru-RU")} <AutoTranslatable text="₽" /></span>
             </div>
 
             {error && (
@@ -235,7 +347,7 @@ export default function CheckoutPage() {
               ) : (
                 <>
                   <CreditCard size={18} /> <AutoTranslatable text="Оплатить" />{" "}
-                  {total.toLocaleString("ru-RU")} <AutoTranslatable text="₽" />
+                  {grandTotal.toLocaleString("ru-RU")} <AutoTranslatable text="₽" />
                 </>
               )}
             </button>
@@ -246,8 +358,9 @@ export default function CheckoutPage() {
       <CdekWidget
         isOpen={isMapOpen}
         onClose={() => setIsMapOpen(false)}
-        onChoose={(address) => {
+        onChoose={(address, data) => {
           setDeliveryAddress(address);
+          setDeliveryData(data);
           setIsMapOpen(false);
         }}
       />

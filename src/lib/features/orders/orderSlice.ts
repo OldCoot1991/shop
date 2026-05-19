@@ -3,11 +3,13 @@ import {
     getOrdersRequest,
     getOrderByIdRequest,
     createOrderRegistrationRequest,
+    createOrderRegistrationV2Request,
     payOrderRequest,
     cancelOrderRequest,
     deleteOrderRequest,
     OrderItem,
     RegistrationPayload,
+    RegistrationV2Payload,
 } from '@/services/orderService';
 import { RootState } from '@/lib/store';
 
@@ -56,11 +58,20 @@ export const fetchOrderByIdAsync = createAsyncThunk<OrderItem, string, { rejectV
 );
 
 // Registration thunk (checkout)
-export const createOrderAsync = createAsyncThunk<string, RegistrationPayload[], { rejectValue: string }>(
+export const createOrderAsync = createAsyncThunk<
+    string,
+    RegistrationPayload[] | RegistrationV2Payload,
+    { rejectValue: string }
+>(
     'orders/createOrder',
-    async (products, { rejectWithValue }) => {
+    async (payload, { rejectWithValue }) => {
         try {
-            const billingUrl = await createOrderRegistrationRequest(products);
+            let billingUrl = "";
+            if (Array.isArray(payload)) {
+                billingUrl = await createOrderRegistrationRequest(payload);
+            } else {
+                billingUrl = await createOrderRegistrationV2Request(payload);
+            }
             return billingUrl;
         } catch (err) {
             return rejectWithValue(err instanceof Error ? err.message : 'Ошибка оформления заказа');

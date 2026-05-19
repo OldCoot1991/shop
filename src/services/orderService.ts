@@ -128,3 +128,42 @@ export async function createOrderRegistrationRequest(products: RegistrationPaylo
     const json: BillingResponse = await res.json();
     return json.data.billingUrl;
 }
+
+// 7. API v2 Registration (Checkout with CDEK Delivery)
+export interface DeliveryPayload {
+    tariffCode: number;
+    name: string;
+    phone: string;
+    code: string | number;
+    address: string;
+}
+
+export interface RegistrationV2Payload {
+    cart: RegistrationPayload[];
+    delivery: DeliveryPayload;
+}
+
+export async function createOrderRegistrationV2Request(payload: RegistrationV2Payload): Promise<string> {
+    const res = await fetch(`${API_BASE}/api/v2/orders/registration`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+        let errMsg = `Ошибка регистрации заказа: ${res.status}`;
+        try {
+            const errJson = await res.json();
+            if (errJson?.error?.title) {
+                errMsg = errJson.error.title;
+            }
+        } catch {}
+        throw new Error(errMsg);
+    }
+    const json: BillingResponse = await res.json();
+    return json.data.billingUrl;
+}
+
