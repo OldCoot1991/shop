@@ -338,12 +338,12 @@ export default function CheckoutPage() {
             <div className={styles.recipientForm}>
               <div className={styles.formGroup}>
                 <label className={styles.formLabel}>
-                  <AutoTranslatable text="Имя и Фамилия получателя" />
+                  <AutoTranslatable text="ФИО получателя" />
                 </label>
                 <input
                   type="text"
                   className={styles.formInput}
-                  placeholder="Иван Иванов"
+                  placeholder="Фамилия, имя и отчество"
                   value={recipientName}
                   onChange={(e) => setRecipientName(e.target.value)}
                 />
@@ -355,7 +355,7 @@ export default function CheckoutPage() {
                 <input
                   type="text"
                   className={styles.formInput}
-                  placeholder="+7 (928) 078-54-69"
+                  placeholder="+7 (900) 000-00-00"
                   value={recipientPhone}
                   onChange={handlePhoneChange}
                 />
