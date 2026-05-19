@@ -19,7 +19,7 @@ import {
   selectCartTotal,
   selectCartFetchStatus,
 } from "@/lib/features/cart/cartSlice";
-import { getProductImageUrl } from "@/services/productService";
+import { getProductImageUrl, fetchProductById } from "@/services/productService";
 import { createOrderAsync } from "@/lib/features/orders/orderSlice";
 import styles from "./CheckoutPage.module.css";
 import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
@@ -100,6 +100,53 @@ export default function CheckoutPage() {
 
   const useServerItems = fetchStatus === "succeeded";
   const items = useServerItems ? serverItems : localItems;
+
+  // Local state to cache full product details (including weight/dimensions) fetched from the catalog API
+  const [productsDetails, setProductsDetails] = React.useState<Record<string, any>>({});
+
+  // Fetch full details for each item in the cart to obtain correct weight/dimensions
+  React.useEffect(() => {
+    if (items.length === 0) return;
+    items.forEach((item) => {
+      if (!productsDetails[item.id]) {
+        fetchProductById(item.id)
+          .then((details) => {
+            if (details) {
+              setProductsDetails((prev) => ({
+                ...prev,
+                [item.id]: details,
+              }));
+            }
+          })
+          .catch((err) => {
+            console.warn(`Failed to fetch product details for ${item.id}:`, err);
+          });
+      }
+    });
+  }, [items, productsDetails]);
+
+  // Map cart items to CDEK goods format using full product details
+  const cdekGoods = React.useMemo(() => {
+    const goodsList: { length: number; width: number; height: number; weight: number }[] = [];
+    console.log("CDEK: Исходные товары из вашей корзины API:", items);
+    items.forEach((item) => {
+      // Find full product details which contain weight/dimensions
+      const detail = productsDetails[item.id] || item;
+
+      const length = ("length" in detail && typeof detail.length === "number" && detail.length > 0) ? detail.length : 10;
+      const width = ("width" in detail && typeof detail.width === "number" && detail.width > 0) ? detail.width : 10;
+      const height = ("height" in detail && typeof detail.height === "number" && detail.height > 0) ? detail.height : 10;
+      
+      // Get weight from full product details. If not loaded or empty, fallback to 100.
+      const weight = ("weight" in detail && typeof detail.weight === "number" && detail.weight > 0) ? detail.weight : 100;
+
+      for (let i = 0; i < item.quantity; i++) {
+        goodsList.push({ length, width, height, weight });
+      }
+    });
+    console.log("CDEK: Результат расчета для отправки (cdekGoods):", goodsList);
+    return goodsList;
+  }, [items, productsDetails]);
 
   const handlePay = async () => {
     if (items.length === 0) return;
@@ -363,6 +410,7 @@ export default function CheckoutPage() {
           setDeliveryData(data);
           setIsMapOpen(false);
         }}
+        goods={cdekGoods}
       />
     </div>
   );

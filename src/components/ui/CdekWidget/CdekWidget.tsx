@@ -5,6 +5,13 @@ import Script from "next/script";
 import styles from "./CdekWidget.module.css";
 import AutoTranslatable from "@/components/ui/AutoTranslatable/AutoTranslatable";
 
+interface CdekWidgetGoods {
+  length: number;
+  width: number;
+  height: number;
+  weight: number;
+}
+
 interface CdekWidgetProps {
   onChoose: (
     address: string,
@@ -13,11 +20,12 @@ interface CdekWidgetProps {
       code: string | number;
       address: string;
       price: number;
-    }
+    },
   ) => void;
   isOpen: boolean;
   onClose: () => void;
   defaultLocation?: string | number[];
+  goods?: CdekWidgetGoods[];
 }
 
 declare global {
@@ -31,10 +39,10 @@ export default function CdekWidget({
   isOpen,
   onClose,
   defaultLocation = "Нальчик",
+  goods,
 }: CdekWidgetProps) {
   const widgetRef = useRef<any>(null);
   const [isScriptLoaded, setIsScriptLoaded] = React.useState(false);
-  const initialized = useRef(false);
   const isWidgetReady = useRef(false);
 
   // Check if script is already globally available on mount
@@ -45,35 +53,56 @@ export default function CdekWidget({
     }
   }, []);
 
+  const goodsString = JSON.stringify(goods);
+
   useEffect(() => {
     // Initialize once when script is loaded.
     // The container is always in the DOM (never display:none) so Yandex Maps
     // always sees real dimensions – this prevents the onComponentMount crash.
-    if (isScriptLoaded && !initialized.current && window.CDEKWidget) {
-      initialized.current = true;
+    if (isScriptLoaded && window.CDEKWidget) {
       try {
-        console.log("Initializing CDEKWidget instance...");
+        console.log("Initializing CDEKWidget instance with goods:", goods);
+
+        // Clear the map container first to make sure no old widgets/maps are active
+        const mapContainer = document.getElementById("cdek-map");
+        if (mapContainer) {
+          mapContainer.innerHTML = "";
+        }
+
+        isWidgetReady.current = false;
+
         widgetRef.current = new window.CDEKWidget({
-          from: "Нальчик",
+          from: {
+            country_code: "RU",
+            city: "Москва",
+            postal_code: 117218,
+            code: 81,
+            address: "г. Москва, вн.тер.г. муниципальный округ Котловка, ул. Кржижановского, д. 29, к. 5, помещ. 4А/1/5",
+          },
           root: "cdek-map",
           apiKey: "be687d49-b83b-42e2-829d-7e684dce7b00",
           servicePath: "/cdek-proxy",
           defaultLocation: defaultLocation,
+          debug: true,
           tariffs: {
             office: [136],
+            pickup: [136],
           },
           hideDeliveryOptions: {
             door: true,
             office: false,
           },
-          goods: [
-            {
-              length: 10,
-              width: 10,
-              height: 10,
-              weight: 1,
-            },
-          ],
+          goods:
+            goods && goods.length > 0
+              ? goods
+              : [
+                  {
+                    length: 10,
+                    width: 10,
+                    height: 10,
+                    weight: 100,
+                  },
+                ],
           onReady: () => {
             console.log("CDEKWidget is fully loaded and ready!");
             isWidgetReady.current = true;
@@ -84,8 +113,16 @@ export default function CdekWidget({
               console.warn("Failed to set initial CDEK widget location:", e);
             }
           },
+          onCalculate: (tariffs: any, address: any) => {
+            console.log("CDEKWidget onCalculate:", tariffs, address);
+          },
           onChoose: (type: string, tariff: any, address: any) => {
-            console.log("CDEKWidget onChoose triggered:", type, tariff, address);
+            console.log(
+              "CDEKWidget onChoose triggered:",
+              type,
+              tariff,
+              address,
+            );
             let addressStr = "";
             let addressClean = "";
             if (type === "office") {
@@ -95,7 +132,8 @@ export default function CdekWidget({
               addressClean = `${address.city || ""}, ${address.formatted || address.name || ""}`;
               addressStr = `Курьер СДЭК: ${addressClean}`;
             } else {
-              addressClean = typeof address === "string" ? address : JSON.stringify(address);
+              addressClean =
+                typeof address === "string" ? address : JSON.stringify(address);
               addressStr = addressClean;
             }
 
@@ -103,11 +141,14 @@ export default function CdekWidget({
               addressStr += ` (Доставка: ${tariff.delivery_sum} ₽)`;
             }
 
-            const rawTariffCode = tariff?.tariff_code || tariff?.tariffCode || 136;
-            const parsedTariffCode = Number(rawTariffCode);
-            const tariffCode = isNaN(parsedTariffCode) ? 136 : parsedTariffCode;
+            // Force tariffCode to 136 for office/PVZ delivery
+            const tariffCode =
+              type === "office"
+                ? 136
+                : Number(tariff?.tariff_code || tariff?.tariffCode) || 136;
 
-            const rawCityCode = address?.city_code || address?.cityCode || address?.code || 78;
+            const rawCityCode =
+              address?.city_code || address?.cityCode || address?.code || 78;
             const parsedCityCode = Number(rawCityCode);
             const cityCode = isNaN(parsedCityCode) ? 78 : parsedCityCode;
 
@@ -125,10 +166,9 @@ export default function CdekWidget({
         });
       } catch (err) {
         console.error("Error creating CDEKWidget instance:", err);
-        initialized.current = false; // Allow recovery/re-initialization
       }
     }
-  }, [isScriptLoaded, defaultLocation]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isScriptLoaded, defaultLocation, goodsString]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Dynamically update location when widget is opened or defaultLocation changes.
   // Using updateLocation is only safe after the widget is fully ready (isWidgetReady.current is true).

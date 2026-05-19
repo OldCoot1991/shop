@@ -21,6 +21,10 @@ export interface CartApiProduct {
     quantity: number;
     images: CartApiImage[];
     attributes: CartApiAttribute[];
+    weight?: number;
+    length?: number;
+    width?: number;
+    height?: number;
 }
 
 export interface CartApiData {
